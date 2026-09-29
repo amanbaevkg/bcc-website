@@ -1,0 +1,62 @@
+# GitLab CI for bcc-web.
+# Secrets are GitLab CI/CD variables (masked + protected), never files in the repo.
+
+include:
+  - template: Jobs/SAST.gitlab-ci.yml
+  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
+
+stages: [test, build, e2e]
+
+default:
+  image: node:22-alpine
+  before_script:
+    - corepack enable
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile
+  cache:
+    key:
+      files: [pnpm-lock.yaml]
+    paths: [.pnpm-store]
+
+variables:
+  NEXT_TELEMETRY_DISABLED: '1'
+  SITE_ENV: staging
+
+quality:
+  stage: test
+  script:
+    - pnpm format:check
+    - pnpm lint
+    - pnpm typecheck
+    - pnpm i18n:check
+    - pnpm test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
+
+audit:
+  stage: test
+  script:
+    - pnpm audit --prod --audit-level high
+  allow_failure: true
+
+build:
+  stage: build
+  script:
+    - pnpm build
+  artifacts:
+    paths: [apps/web/.next]
+    exclude: [apps/web/.next/cache/**/*]
+    expire_in: 1 day
+
+e2e:
+  stage: e2e
+  image: mcr.microsoft.com/playwright:v1.63.0-noble
+  needs: [build]
+  script:
+    - pnpm --filter web exec playwright test
+  artifacts:
+    when: on_failure
+    paths: [apps/web/playwright-report, apps/web/test-results]
+    expire_in: 7 days

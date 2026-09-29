@@ -1,0 +1,45 @@
+{
+  "Meta": {
+    "siteName": "Business Center Capellen",
+    "tagline": "Flexibilitéit ass net just Komfort, et ass unternehmeresch Fräiheet."
+  },
+  "Common": {
+    "skipToContent": "Direkt op den Haaptinhalt",
+    "homeLink": "BCC – Business Center Capellen, Startsäit"
+  },
+  "Nav": {
+    "label": "Haaptmenü",
+    "about": "Iwwer eis",
+    "services": "Eis Servicer",
+    "contact": "Kontakt",
+    "cta": "Kontakt",
+    "openMenu": "Menü opmaachen",
+    "closeMenu": "Menü zoumaachen"
+  },
+  "LanguageSelect": {
+    "label": "Sprooch",
+    "button": "Sprooch wiesselen. Aktuell Sprooch: {language}"
+  },
+  "Footer": {
+    "getInTouch": "Kontaktéiert eis",
+    "quickLinks": "Séier Linken",
+    "follow": "Suivéiert eis",
+    "address": "Adress",
+    "language": "Sprooch",
+    "legal": "Rechtleches",
+    "privacy": "Dateschutzerklärung",
+    "legalNotice": "Impressum",
+    "country": "Lëtzebuerg",
+    "openMap": "A Google Maps opmaachen",
+    "rights": "©{year}. All Rechter virbehalen. BCC - Business Center Capellen | Mark vun der Cloud Power Luxembourg SA"
+  },
+  "Legal": {
+    "pendingTitle": "Inhalt gëtt juristesch iwwerpréift",
+    "pendingBody": "Dës Säit gëtt verëffentlecht, soubal den Text vum BCC geliwwert a fräigi ginn ass."
+  },
+  "NotFound": {
+    "title": "Säit net fonnt",
+    "body": "D’Säit, déi Dir sicht, gëtt et net oder se ass geplënnert.",
+    "back": "Zeréck op d’Startsäit"
+  }
+}

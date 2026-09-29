@@ -1,0 +1,18 @@
+.page {
+  padding-block: calc(var(--header-h) + 96px) 120px;
+  min-height: 60vh;
+}
+
+.title {
+  margin-top: 16px;
+  font-size: clamp(36px, 5vw, 64px);
+  font-stretch: 112%;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.body {
+  margin-top: 24px;
+  max-width: 60ch;
+  color: var(--ink-2);
+}

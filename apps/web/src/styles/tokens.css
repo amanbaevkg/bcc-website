@@ -1,0 +1,59 @@
+/*
+ * Design tokens. The CMS manages content only; colours, type and spacing live here.
+ * Palette "Capellen dusk": one tonal family from warm limestone to slate navy.
+ */
+:root {
+  color-scheme: light;
+
+  --night: #263441;
+  --navy: #33434f;
+  --slate: #5b6b78;
+  --haze: #d3d8d8;
+  --stone: #d2cabd;
+  --lime: #e3ddd3;
+  --paper: #efebe5;
+  --ink: #1f2a33;
+  --ink-2: #47525b;
+  --mute: #6f777c;
+  --light: #f3f1ec;
+  --light-2: #bcc4c8;
+  --cyan: #8ccad9; /* BCC cyan on dark grounds */
+  --cyan-deep: #2e7a8f; /* BCC cyan on light grounds */
+  --rule-d: rgb(243 241 236 / 16%);
+  --rule-l: rgb(31 42 51 / 14%);
+
+  --display: 'Archivo', 'Helvetica Neue', arial, sans-serif;
+  --serif: 'Newsreader', georgia, 'Times New Roman', serif;
+  --mono: 'IBM Plex Mono', ui-monospace, menlo, monospace;
+
+  --wrap: 1320px;
+  --gutter: 60px;
+  --header-h: 84px;
+  --header-h-solid: 68px;
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur: 0.45s;
+}
+
+/*
+ * Breakpoints (use in media queries; CSS custom properties cannot be used there):
+ *   xs  < 380     sm 380–599     md 600–899
+ *   lg  900–1199  xl 1200–1535   2xl ≥ 1536
+ */
+@media (width < 1200px) {
+  :root {
+    --gutter: 40px;
+  }
+}
+@media (width < 600px) {
+  :root {
+    --gutter: 20px;
+    --header-h: 68px;
+    --header-h-solid: 60px;
+  }
+}
+@media (width < 380px) {
+  :root {
+    --gutter: 16px;
+  }
+}

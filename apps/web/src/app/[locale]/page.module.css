@@ -1,0 +1,22 @@
+.hero {
+  min-height: min(100svh, 900px);
+  display: grid;
+  align-items: end;
+  padding-block: calc(var(--header-h) + 80px) 96px;
+  background: radial-gradient(120% 90% at 70% 30%, #4a5d6d 0%, #2c3b48 72%), var(--night);
+  color: var(--light);
+}
+
+.title {
+  font-size: clamp(44px, 8vw, 120px);
+  font-stretch: 125%;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+}
+
+.lead {
+  margin-top: 28px;
+  max-width: 34ch;
+  font: 300 italic clamp(20px, 2.2vw, 28px) / 1.35 var(--serif);
+  color: var(--light-2);
+}

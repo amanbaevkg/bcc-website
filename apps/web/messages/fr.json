@@ -1,0 +1,45 @@
+{
+  "Meta": {
+    "siteName": "Business Center Capellen",
+    "tagline": "La flexibilité n’est pas qu’une question de confort, c’est une liberté d’entreprendre."
+  },
+  "Common": {
+    "skipToContent": "Aller au contenu principal",
+    "homeLink": "BCC – Business Center Capellen, accueil"
+  },
+  "Nav": {
+    "label": "Principal",
+    "about": "À propos",
+    "services": "Nos services",
+    "contact": "Contactez-nous",
+    "cta": "Contact",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
+  },
+  "LanguageSelect": {
+    "label": "Langue",
+    "button": "Changer de langue. Langue actuelle : {language}"
+  },
+  "Footer": {
+    "getInTouch": "Nous contacter",
+    "quickLinks": "Liens rapides",
+    "follow": "Suivez-nous",
+    "address": "Adresse",
+    "language": "Langue",
+    "legal": "Informations légales",
+    "privacy": "Politique de confidentialité",
+    "legalNotice": "Mentions légales",
+    "country": "Luxembourg",
+    "openMap": "Ouvrir dans Google Maps",
+    "rights": "©{year}. Tous droits réservés. BCC - Business Center Capellen | Marque de Cloud Power Luxembourg SA"
+  },
+  "Legal": {
+    "pendingTitle": "Contenu en attente de validation juridique",
+    "pendingBody": "Cette page sera publiée dès que le texte aura été fourni et validé par BCC."
+  },
+  "NotFound": {
+    "title": "Page introuvable",
+    "body": "La page que vous recherchez n’existe pas ou a été déplacée.",
+    "back": "Retour à l’accueil"
+  }
+}
