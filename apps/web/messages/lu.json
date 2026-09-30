@@ -14,7 +14,8 @@
     "contact": "Kontakt",
     "cta": "Kontakt",
     "openMenu": "Menü opmaachen",
-    "closeMenu": "Menü zoumaachen"
+    "closeMenu": "Menü zoumaachen",
+    "news": "Neiegkeeten"
   },
   "LanguageSelect": {
     "label": "Sprooch",
@@ -111,5 +112,16 @@
   "Services": {
     "sizeCta": "Offert ufroen",
     "sizeLabel": "Privatbüro fir {size}. Offert ufroen"
+  },
+  "News": {
+    "title": "Neiegkeeten",
+    "intro": "Neiegkeeten aus dem Business Center Capellen.",
+    "emptyTitle": "Nach keng Neiegkeeten",
+    "emptyBody": "Nei Artikele stinn hei, soubal se verëffentlecht sinn.",
+    "readMore": "Artikel liesen",
+    "allNews": "All Neiegkeeten",
+    "testData": "Testdaten",
+    "inEnglish": "Op Englesch",
+    "author": "Auteur: {author}"
   }
 }

@@ -14,7 +14,8 @@
     "contact": "Contact Us",
     "cta": "Contact",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "news": "News"
   },
   "LanguageSelect": {
     "label": "Language",
@@ -111,5 +112,16 @@
   "Services": {
     "sizeCta": "Get a quote",
     "sizeLabel": "Private office for {size}. Get a quote"
+  },
+  "News": {
+    "title": "News",
+    "intro": "News and updates from Business Center Capellen.",
+    "emptyTitle": "No news yet",
+    "emptyBody": "New articles will appear here as soon as they are published.",
+    "readMore": "Read the article",
+    "allNews": "All news",
+    "testData": "Test data",
+    "inEnglish": "In English",
+    "author": "Author: {author}"
   }
 }

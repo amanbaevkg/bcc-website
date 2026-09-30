@@ -13,7 +13,7 @@ import styles from './MobileNav.module.css';
  * Full-screen menu below 900 px. A native modal <dialog> gives focus trapping,
  * Escape to close and an inert page behind it without extra code.
  */
-export function MobileNav() {
+export function MobileNav({ showNews }: { showNews: boolean }) {
   const t = useTranslations('Nav');
   const tl = useTranslations('LanguageSelect');
   const locale = useLocale();
@@ -60,7 +60,7 @@ export function MobileNav() {
 
           <nav aria-label={t('label')}>
             <ul className={styles.links}>
-              {navItems.map((item) => (
+              {navItems(showNews).map((item) => (
                 <li key={item.key}>
                   <Link href={item.href} aria-current={pathname === item.href ? 'page' : undefined}>
                     {t(item.key)}

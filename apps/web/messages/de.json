@@ -14,7 +14,8 @@
     "contact": "Kontakt",
     "cta": "Kontakt",
     "openMenu": "Menü öffnen",
-    "closeMenu": "Menü schließen"
+    "closeMenu": "Menü schließen",
+    "news": "Aktuelles"
   },
   "LanguageSelect": {
     "label": "Sprache",
@@ -111,5 +112,16 @@
   "Services": {
     "sizeCta": "Angebot anfordern",
     "sizeLabel": "Privatbüro für {size}. Angebot anfordern"
+  },
+  "News": {
+    "title": "Aktuelles",
+    "intro": "Neuigkeiten aus dem Business Center Capellen.",
+    "emptyTitle": "Noch keine Neuigkeiten",
+    "emptyBody": "Neue Beiträge erscheinen hier, sobald sie veröffentlicht sind.",
+    "readMore": "Artikel lesen",
+    "allNews": "Alle Neuigkeiten",
+    "testData": "Testdaten",
+    "inEnglish": "Auf Englisch",
+    "author": "Autor: {author}"
   }
 }

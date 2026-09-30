@@ -1,0 +1,42 @@
+.body {
+  display: grid;
+  gap: 24px;
+  max-width: 68ch;
+  font: 300 19px/1.7 var(--display);
+  color: var(--ink);
+}
+
+.body > p:first-child {
+  font-size: 23px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.body h2 {
+  margin-top: 28px;
+  font: 300 clamp(28px, 3vw, 38px) / 1.15 var(--display);
+  font-stretch: 112%;
+  letter-spacing: -0.02em;
+}
+
+.body h3 {
+  margin-top: 16px;
+  font: 500 20px/1.3 var(--display);
+}
+
+.body blockquote {
+  margin: 12px 0;
+  padding-left: 24px;
+  border-left: 2px solid var(--cyan-deep);
+  font: 300 italic clamp(24px, 2.4vw, 30px) / 1.35 var(--serif);
+}
+
+.body a {
+  color: var(--cyan-ink);
+  text-underline-offset: 3px;
+}
+
+.photo {
+  aspect-ratio: 3 / 2;
+  margin-block: 16px;
+}

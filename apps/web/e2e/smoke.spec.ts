@@ -167,6 +167,16 @@ test('about and services pages render, and office sizes open a pre-filled enquir
   await expect(page.getByRole('radio', { name: '3-4' })).toBeChecked();
 });
 
+test('news shows a clear empty state and stays out of the menu until something is published', async ({
+  page,
+}) => {
+  await page.goto('/fr/news');
+  await expect(page.getByRole('heading', { name: 'Pas encore d’actualités' })).toBeVisible();
+  await expect(page.locator('header nav a, footer a', { hasText: 'Actualités' })).toHaveCount(0);
+  const res = await page.goto('/en/news/does-not-exist');
+  expect(res?.status()).toBe(404);
+});
+
 test('security headers are present', async ({ request }) => {
   const res = await request.get('/en');
   const h = res.headers();
@@ -177,7 +187,14 @@ test('security headers are present', async ({ request }) => {
 });
 
 test('no horizontal scroll and no axe violations', async ({ page }) => {
-  for (const path of ['/en', '/lu/legal-notice', '/de/contact', '/fr/about', '/lu/services']) {
+  for (const path of [
+    '/en',
+    '/lu/legal-notice',
+    '/de/contact',
+    '/fr/about',
+    '/lu/services',
+    '/de/news',
+  ]) {
     await page.goto(path);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,

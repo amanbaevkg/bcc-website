@@ -9,7 +9,7 @@ import styles from './Footer.module.css';
 
 const socialLabels = { linkedin: 'LinkedIn', facebook: 'Facebook' } as const;
 
-export function Footer() {
+export function Footer({ showNews }: { showNews: boolean }) {
   const t = useTranslations('Footer');
   const tn = useTranslations('Nav');
   const tm = useTranslations('Meta');
@@ -39,7 +39,7 @@ export function Footer() {
           <div>
             <h2 className={styles.h}>{t('quickLinks')}</h2>
             <ul className={styles.list}>
-              {navItems.map((item) => (
+              {navItems(showNews).map((item) => (
                 <li key={item.key}>
                   <Link href={item.href}>{tn(item.key)}</Link>
                 </li>

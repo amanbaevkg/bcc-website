@@ -7,6 +7,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { SkipLink } from '@/components/layout/SkipLink';
 import { htmlLang, routing, type Locale } from '@/i18n/routing';
+import { getNewsList } from '@/lib/cms/news';
 import { env } from '@/lib/env';
 import '@/styles/globals.css';
 
@@ -39,6 +40,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
+  const showNews = (await getNewsList(locale as Locale)).length > 0;
 
   return (
     <html lang={htmlLang[locale as Locale]}>
@@ -54,11 +56,11 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body>
         <NextIntlClientProvider>
           <SkipLink />
-          <Header />
+          <Header showNews={showNews} />
           <main id="main" tabIndex={-1}>
             {children}
           </main>
-          <Footer />
+          <Footer showNews={showNews} />
         </NextIntlClientProvider>
       </body>
     </html>

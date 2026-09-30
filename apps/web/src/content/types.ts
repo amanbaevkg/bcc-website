@@ -145,3 +145,21 @@ export type ServicesPage = {
   offers: { title: Localized; items: { icon: ServiceIcon; title: Localized; body: Localized }[] };
   cta: { title: Localized; link: Link };
 };
+
+/** A Portable Text block from the CMS (rendered as React elements, never as raw HTML). */
+export type RichBlock = { _type: string; _key?: string; [key: string]: unknown };
+
+export type NewsSummary = {
+  slug: string;
+  title: string;
+  /** ISO date, YYYY-MM-DD. */
+  date: string;
+  excerpt: string;
+  cover?: ImageAsset;
+  /** Language of this version; differs from the page language when no translation exists yet. */
+  lang: Locale;
+  /** Test data, shown only outside production. */
+  fixture?: boolean;
+};
+
+export type NewsPost = NewsSummary & { body: RichBlock[]; author?: string };

@@ -16,7 +16,7 @@ import styles from './Header.module.css';
  * After scrolling it turns solid; it slides away while scrolling down and returns
  * when scrolling up or when anything inside it gets focus.
  */
-export function Header() {
+export function Header({ showNews }: { showNews: boolean }) {
   const t = useTranslations('Nav');
   const tc = useTranslations('Common');
   const pathname = usePathname();
@@ -57,7 +57,7 @@ export function Header() {
         </Link>
 
         <nav aria-label={t('label')} className={styles.nav}>
-          {navItems.map((item) => (
+          {navItems(showNews).map((item) => (
             <Link
               key={item.key}
               href={item.href}
@@ -75,7 +75,7 @@ export function Header() {
             {t('cta')}
             <Icon name="arrow" />
           </Link>
-          <MobileNav />
+          <MobileNav showNews={showNews} />
         </div>
       </div>
     </header>

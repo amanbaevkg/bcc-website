@@ -14,7 +14,8 @@
     "contact": "Contactez-nous",
     "cta": "Contact",
     "openMenu": "Ouvrir le menu",
-    "closeMenu": "Fermer le menu"
+    "closeMenu": "Fermer le menu",
+    "news": "Actualités"
   },
   "LanguageSelect": {
     "label": "Langue",
@@ -111,5 +112,16 @@
   "Services": {
     "sizeCta": "Demander un devis",
     "sizeLabel": "Bureau privé pour {size}. Demander un devis"
+  },
+  "News": {
+    "title": "Actualités",
+    "intro": "Les actualités du Business Center Capellen.",
+    "emptyTitle": "Pas encore d’actualités",
+    "emptyBody": "Les nouveaux articles apparaîtront ici dès leur publication.",
+    "readMore": "Lire l’article",
+    "allNews": "Toutes les actualités",
+    "testData": "Données de test",
+    "inEnglish": "En anglais",
+    "author": "Auteur : {author}"
   }
 }

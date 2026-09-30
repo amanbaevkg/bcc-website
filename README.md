@@ -97,6 +97,17 @@ Personal data is not written to the logs.
 The line under the form that links to the Privacy Policy must be checked by BCC's legal adviser together
 with the policy itself.
 
+## News
+
+News comes only from the CMS (“News” documents, one per language). Nothing is invented: until the
+first article is published, `/news` shows a short “no news yet” message and the menu has no News item;
+it appears by itself once there is an article. A post not yet translated is listed in English, marked
+as such. Articles are pre-rendered: set up a Sanity webhook that calls the host’s deploy hook so a newly
+published article goes online within a minute or two.
+
+To review the templates before there is real news, run a staging build with `NEWS_FIXTURES=1`: two
+example articles appear, each marked “Test data”. This is ignored when `SITE_ENV=production`.
+
 ## Launch gate
 
 `pnpm build` with `SITE_ENV=production` stops unless the Privacy Policy and Legal Notice exist in the
