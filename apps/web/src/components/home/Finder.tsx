@@ -66,8 +66,19 @@ type SelectProps = {
 /** Custom listbox (the design needs a styled popup). Keyboard: arrows, Home/End, Enter, Escape. */
 function Select({ label, value, options, onChange, disabled, placeholder }: SelectProps) {
   const id = useId();
-  const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(0);
+  const [open, setOpenState] = useState(false);
+  const [active, setActiveState] = useState(0);
+  // Mirrors of the state for key handlers: fast typing can outrun React's re-render.
+  const openRef = useRef(false);
+  const activeRef = useRef(0);
+  const setOpen = (v: boolean) => {
+    openRef.current = v;
+    setOpenState(v);
+  };
+  const setActive = (i: number) => {
+    activeRef.current = i;
+    setActiveState(i);
+  };
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -101,9 +112,10 @@ function Select({ label, value, options, onChange, disabled, placeholder }: Sele
 
   const onListKey = (e: React.KeyboardEvent) => {
     const last = options.length - 1;
+    const current = activeRef.current;
     const moves: Record<string, number> = {
-      ArrowDown: Math.min(active + 1, last),
-      ArrowUp: Math.max(active - 1, 0),
+      ArrowDown: Math.min(current + 1, last),
+      ArrowUp: Math.max(current - 1, 0),
       Home: 0,
       End: last,
     };
@@ -112,7 +124,7 @@ function Select({ label, value, options, onChange, disabled, placeholder }: Sele
       setActive(moves[e.key]);
     } else if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      choose(active);
+      choose(activeRef.current);
     } else if (e.key === 'Escape' || e.key === 'Tab') {
       if (e.key === 'Escape') e.preventDefault();
       setOpen(false);
@@ -132,8 +144,10 @@ function Select({ label, value, options, onChange, disabled, placeholder }: Sele
         aria-controls={`${id}-list`}
         aria-labelledby={`${id}-label ${id}-button`}
         disabled={disabled}
-        onClick={() => (open ? setOpen(false) : show())}
+        onClick={() => (openRef.current ? setOpen(false) : show())}
         onKeyDown={(e) => {
+          // Keys typed before focus reaches the open list still steer it.
+          if (openRef.current) return onListKey(e);
           if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
             e.preventDefault();
             show();
@@ -164,7 +178,7 @@ function Select({ label, value, options, onChange, disabled, placeholder }: Sele
             role="option"
             aria-selected={o.value === value}
             className={i === active ? styles.hl : undefined}
-            onPointerEnter={() => setActive(i)}
+            onPointerMove={() => activeRef.current !== i && setActive(i)}
             onClick={() => choose(i)}
           >
             {o.label}

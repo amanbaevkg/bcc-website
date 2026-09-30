@@ -154,7 +154,7 @@
 }
 
 .fTitle {
-  font-size: clamp(52px, 10vw, 146px);
+  font-size: clamp(40px, 10vw, 146px);
 }
 
 .fTitle span {

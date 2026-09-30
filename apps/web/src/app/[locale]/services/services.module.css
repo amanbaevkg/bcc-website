@@ -175,8 +175,8 @@
 .offersTitle {
   position: sticky;
   top: calc(var(--header-h-solid) + 48px);
-  max-width: 7ch;
-  font-size: clamp(44px, 5.6vw, 88px);
+  min-width: 0;
+  font-size: clamp(40px, 4.4vw, 72px);
 }
 
 .offerGrid {

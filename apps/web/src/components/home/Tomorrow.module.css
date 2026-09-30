@@ -32,20 +32,22 @@
 }
 
 .title {
-  font-size: clamp(56px, 9.4vw, 140px);
+  /* Large, but never wider than the longest line allows (wide caps are about 0.82em each). */
+  font-size: min(9.4vw, 140px, calc((100vw - 2 * var(--gutter)) / (var(--longest, 10) * 0.82)));
 }
 
 .title span {
   display: block;
+  /* The staggered indent shrinks when a line is long, so the line always fits. */
+  padding-left: clamp(0px, calc(100% - var(--len, 10) * 0.82em), var(--indent, 0px));
 }
 
-/* Stagger: second line indented, the serif line pushed to the middle. */
 .title span:nth-child(2) {
-  padding-left: 11%;
+  --indent: 11%;
 }
 
 .title span:nth-child(3) {
-  padding-left: 50%;
+  --indent: 50%;
 }
 
 .card {
@@ -70,10 +72,6 @@
     min-height: 720px;
   }
 
-  .title span:nth-child(3) {
-    padding-left: 30%;
-  }
-
   .card {
     left: var(--gutter);
     right: var(--gutter);
@@ -94,18 +92,5 @@
 
   .inner {
     padding-top: 96px;
-  }
-
-  /* Wide display type: size by viewport so the longest line fits a phone. */
-  .title {
-    font-size: 10.5vw;
-  }
-
-  .title span:nth-child(2) {
-    padding-left: 6%;
-  }
-
-  .title span:nth-child(3) {
-    padding-left: 20%;
   }
 }

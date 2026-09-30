@@ -13,6 +13,13 @@
   font-size: clamp(56px, 10vw, 146px);
 }
 
+/* On wide screens the gallery controls sit at the right of the title's last line: keep them clear. */
+@media (width >= 1200px) {
+  .title {
+    max-width: calc(100% - 300px);
+  }
+}
+
 /* The controls sit on the title's baseline, at the right. */
 .controlsRow {
   position: relative;

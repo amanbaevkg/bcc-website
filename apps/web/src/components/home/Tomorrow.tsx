@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import type { Locale } from '@/i18n/routing';
 import { pick, type HomePage } from '@/content/types';
 import { Photo } from '@/components/ui/Photo';
@@ -11,11 +12,15 @@ export function Tomorrow({ data, locale }: { data: HomePage['tomorrow']; locale:
       <Photo image={data.image} locale={locale} className={styles.bg} sizes="100vw" still />
       <div className={styles.shade} aria-hidden="true" />
       <div className={`wrap ${styles.inner}`}>
-        <h2 className={`xl ${styles.title}`}>
+        <h2
+          className={`xl ${styles.title}`}
+          style={{ '--longest': Math.max(...lines.map((l) => l.length)) } as CSSProperties}
+        >
           {lines.map((line, i) => (
             <span
               key={i}
               className={i === lines.length - 1 && lines.length > 1 ? 'serif-accent' : undefined}
+              style={{ '--len': line.length } as CSSProperties}
             >
               {line}
             </span>

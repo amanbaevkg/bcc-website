@@ -104,6 +104,9 @@ address {
 
 /* Display type: wide Archivo, light weight, tight tracking. Sizes are set per section. */
 .xl {
+  /* Long words (German, Luxembourgish) break by the page language's rules instead of overflowing. */
+  overflow-wrap: break-word;
+  hyphens: auto;
   font-family: var(--display);
   font-stretch: 125%;
   font-weight: 300;

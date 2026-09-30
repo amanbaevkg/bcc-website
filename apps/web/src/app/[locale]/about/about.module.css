@@ -20,7 +20,7 @@
 
 .factsGrid {
   display: grid;
-  grid-template-columns: 7fr 5fr;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   gap: 72px;
   align-items: start;
 }
@@ -95,13 +95,13 @@
 
 .featureGrid {
   display: grid;
-  grid-template-columns: 6fr 5fr;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
   gap: 80px;
   align-items: center;
 }
 
 .feature[data-flip] .featureGrid {
-  grid-template-columns: 5fr 6fr;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
 }
 
 .feature[data-flip] .featurePhoto {
@@ -113,13 +113,14 @@
 }
 
 .featureText {
+  min-width: 0;
   display: grid;
   gap: 26px;
   justify-items: start;
 }
 
 .featureTitle {
-  font-size: clamp(44px, 5.4vw, 80px);
+  font-size: clamp(34px, 4vw, 64px);
 }
 
 .featureBody {
