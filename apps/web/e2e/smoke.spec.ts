@@ -109,6 +109,38 @@ test('spaces gallery moves with the buttons', async ({ page }) => {
   await expect.poll(() => gallery.evaluate((g) => g.scrollLeft)).toBeGreaterThan(before);
 });
 
+test.describe('contact form', () => {
+  test('shows errors, then sends a valid enquiry', async ({ page }) => {
+    await page.goto('/en/contact?workspace=private-office&team=3');
+    const form = page.locator('form');
+    // Pre-filled from the home page finder.
+    await expect(page.getByRole('radio', { name: 'Private Office' })).toBeChecked();
+    await expect(page.getByRole('radio', { name: '3-4' })).toBeChecked();
+
+    await form.getByRole('button', { name: 'Send' }).click();
+    await expect(form.getByRole('alert')).toContainText('Please check the highlighted fields.');
+    await expect(page.getByLabel(/First name/)).toBeFocused();
+    await expect(page.getByText('Please choose at least one service.')).toBeVisible();
+
+    await page.getByLabel(/First name/).fill('Anna');
+    await page.getByLabel(/Last name/).fill('Muller');
+    await page.getByLabel(/^Email/).fill('anna@example.com');
+    await page.getByRole('checkbox', { name: 'Meeting Rooms' }).check();
+    // The API drops messages sent faster than a person could type.
+    await page.waitForTimeout(3200);
+    await form.getByRole('button', { name: 'Send' }).click();
+    await expect(page.getByRole('heading', { name: 'Thank you!' })).toBeFocused();
+  });
+
+  test('the API refuses requests from other sites', async ({ request }) => {
+    const res = await request.post('/api/contact', {
+      headers: { origin: 'https://evil.example', 'content-type': 'application/json' },
+      data: {},
+    });
+    expect(res.status()).toBe(403);
+  });
+});
+
 test('security headers are present', async ({ request }) => {
   const res = await request.get('/en');
   const h = res.headers();
@@ -119,7 +151,7 @@ test('security headers are present', async ({ request }) => {
 });
 
 test('no horizontal scroll and no axe violations', async ({ page }) => {
-  for (const path of ['/en', '/lu/legal-notice']) {
+  for (const path of ['/en', '/lu/legal-notice', '/de/contact']) {
     await page.goto(path);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,

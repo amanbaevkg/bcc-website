@@ -5,6 +5,10 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const isDev = process.env.NODE_ENV === 'development';
 // Images and videos come from Sanity's CDN once a project is configured.
 const cms = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ? ' https://cdn.sanity.io' : '';
+// Cloudflare Turnstile (contact form bot check) only when its site key is set.
+const turnstile = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+  ? ' https://challenges.cloudflare.com'
+  : '';
 
 /**
  * Content Security Policy. Trade-off documented in docs/security.md:
@@ -18,13 +22,13 @@ const cms = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ? ' https://cdn.sanity.io'
  */
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}${turnstile}`,
   "style-src 'self' 'unsafe-inline'",
   `img-src 'self' data: blob:${cms}`,
   "font-src 'self'",
   `media-src 'self'${cms}`,
-  "connect-src 'self'",
-  "frame-src 'none'",
+  `connect-src 'self'${turnstile}`,
+  turnstile ? `frame-src${turnstile}` : "frame-src 'none'",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

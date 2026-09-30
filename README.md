@@ -74,6 +74,29 @@ The CMS manages content only: section order, layout and styling stay in the code
 Hero videos in the repository (`public/media/hero`, ~26 MB) are the fallback; once the CMS holds the
 video they can be removed.
 
+## Contact form
+
+`/contact` posts to `/api/contact`, which validates with the same rules as the browser and then sends
+the enquiry through the provider chosen by `EMAIL_PROVIDER`:
+
+| Value           | Sends with                               | Needs                                                                 |
+| --------------- | ---------------------------------------- | --------------------------------------------------------------------- |
+| `log` (default) | nothing, writes a line to the server log | —                                                                     |
+| `smtp`          | the corporate mail server                | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD` |
+| `resend`        | Resend                                   | `RESEND_API_KEY`                                                      |
+| `postmark`      | Postmark                                 | `POSTMARK_SERVER_TOKEN`                                               |
+
+All of them also need `CONTACT_TO` (recipient, to be confirmed by BCC) and `CONTACT_FROM` (a sender on
+a domain the provider is allowed to send for). The visitor's address is set as reply-to.
+
+Spam protection: hidden honeypot field, minimum time on the form, 5 messages per 10 minutes per visitor
+(shared across servers when Upstash is configured), same-origin check, 16 KB body limit, and Cloudflare
+Turnstile when `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` are set.
+Personal data is not written to the logs.
+
+The line under the form that links to the Privacy Policy must be checked by BCC's legal adviser together
+with the policy itself.
+
 ## Launch gate
 
 `pnpm build` with `SITE_ENV=production` stops unless the Privacy Policy and Legal Notice exist in the
