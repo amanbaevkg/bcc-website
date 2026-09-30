@@ -18,7 +18,7 @@ apps/web            Next.js site (frontend + API routes)
   src/lib/env.ts    validated server environment (secrets are read only here)
   src/proxy.ts      language redirects, staging login, noindex outside production
   e2e/              Playwright browser tests
-apps/studio         Sanity Studio (phase 2)
+apps/studio         Sanity Studio: the content editor (schemas in apps/studio/schemaTypes)
 docs/               security notes and decisions
 ```
 
@@ -54,6 +54,30 @@ The `/lu/` prefix is kept for the URL, but pages declare the ISO code `lb` (`<ht
 
 UI texts live in `apps/web/messages/*.json`. Add a key to all four files; `pnpm i18n:check` enforces it.
 Page content (texts, services, news…) will come from the CMS per language.
+
+## Content (Sanity CMS)
+
+The site works without a CMS: `apps/web/src/content/fallback` holds the current content, copied from
+the live site. Once a Sanity project exists:
+
+1. Create the project at sanity.io (company account), dataset `production`. Check the data-processing
+   terms (DPA) for GDPR before adding personal data.
+2. Put the project ID in `apps/studio/.env` (`SANITY_STUDIO_PROJECT_ID`) and in the site's environment
+   (`NEXT_PUBLIC_SANITY_PROJECT_ID`). Both are public identifiers, not secrets.
+3. `pnpm --filter studio dev` opens the editor on http://localhost:3333; `pnpm --filter studio deploy`
+   publishes it at `<name>.sanity.studio`. Invite editors from sanity.io/manage (Editor role).
+
+Each home page section uses the CMS content once it is complete and the built-in content until then,
+so a half-filled CMS never breaks the page. Pages refresh from the CMS every 5 minutes.
+The CMS manages content only: section order, layout and styling stay in the code.
+
+Hero videos in the repository (`public/media/hero`, ~26 MB) are the fallback; once the CMS holds the
+video they can be removed.
+
+## Launch gate
+
+`pnpm build` with `SITE_ENV=production` stops unless the Privacy Policy and Legal Notice exist in the
+CMS in all four languages and are marked "Approved by BCC’s legal adviser". Staging builds are not affected.
 
 ## Environment variables
 

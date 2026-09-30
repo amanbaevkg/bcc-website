@@ -54,7 +54,9 @@ export type ClientLogo = { name: string; logo: ImageAsset; url?: string };
 export type Space = { image: ImageAsset; caption: Localized };
 
 export type Testimonial = {
+  /** Shown word for word; `lang` is the language it was written in. */
   quote: Localized;
+  lang?: Locale;
   name: string;
   role: Localized;
   company: string;

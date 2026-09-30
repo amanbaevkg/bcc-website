@@ -3,6 +3,8 @@ import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const isDev = process.env.NODE_ENV === 'development';
+// Images and videos come from Sanity's CDN once a project is configured.
+const cms = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ? ' https://cdn.sanity.io' : '';
 
 /**
  * Content Security Policy. Trade-off documented in docs/security.md:
@@ -12,16 +14,15 @@ const isDev = process.env.NODE_ENV === 'development';
  * and pinned with Subresource Integrity (experimental.sri). No page renders raw
  * HTML (ESLint forbids dangerouslySetInnerHTML), which is what the inline
  * allowance would otherwise expose.
- * Third-party origins (Sanity images, Turnstile, maps) are added in the phase
- * that introduces them.
+ * Third-party origins are added only when a feature needs them.
  */
 const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  `img-src 'self' data: blob:${cms}`,
   "font-src 'self'",
-  "media-src 'self'",
+  `media-src 'self'${cms}`,
   "connect-src 'self'",
   "frame-src 'none'",
   "object-src 'none'",
@@ -51,6 +52,9 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../..'),
   poweredByHeader: false,
   reactStrictMode: true,
+  images: {
+    remotePatterns: [{ protocol: 'https', hostname: 'cdn.sanity.io', pathname: '/images/**' }],
+  },
   experimental: {
     sri: { algorithm: 'sha256' },
     // [locale]/layout.tsx is the root layout, so URLs outside a language get this page.

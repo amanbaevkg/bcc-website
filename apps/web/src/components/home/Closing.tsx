@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import type { Locale } from '@/i18n/routing';
+import { htmlLang, type Locale } from '@/i18n/routing';
 import { pick, type HomePage } from '@/content/types';
 import { Button } from '@/components/ui/Button';
 import { Star } from '@/components/ui/Icon';
@@ -38,7 +38,7 @@ export function Testimonials({ data, locale }: { data: HomePage['testimonials'];
         <div className={styles.vList}>
           {data.items.map((q) => (
             <figure key={q.name + q.company} className={styles.voice}>
-              <blockquote lang="en">{pick(q.quote, locale)}</blockquote>
+              <blockquote lang={htmlLang[q.lang ?? 'en']}>{pick(q.quote, locale)}</blockquote>
               <figcaption className={styles.who}>
                 <span
                   className={styles.stars}
