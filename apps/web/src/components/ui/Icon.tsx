@@ -2,6 +2,8 @@ import type { SVGProps } from 'react';
 
 const paths = {
   arrow: 'M5 12h13M13 6l6 6-6 6',
+  arrowLeft: 'M21 12H4M10 6l-6 6 6 6',
+  arrowUpRight: 'M6 18L18 6M8.5 6H18v9.5',
   chevron: 'M6 9l6 6 6-6',
   menu: 'M4 8h16M4 16h16',
   close: 'M6 6l12 12M18 6L6 18',
@@ -41,6 +43,17 @@ export function SocialIcon({ network }: { network: keyof typeof social }) {
   return (
     <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
       <path fill="currentColor" d={social[network]} />
+    </svg>
+  );
+}
+
+export function Star() {
+  return (
+    <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true" focusable="false">
+      <path
+        fill="currentColor"
+        d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"
+      />
     </svg>
   );
 }

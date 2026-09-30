@@ -41,5 +41,20 @@
     "title": "Page introuvable",
     "body": "La page que vous recherchez n’existe pas ou a été déplacée.",
     "back": "Retour à l’accueil"
+  },
+  "Home": {
+    "workspaceLabel": "Choisissez votre espace de travail",
+    "finderLabel": "Trouvez votre espace de travail",
+    "teamSize": "Taille de l’équipe",
+    "persons": "{count, plural, one {# personne} other {# personnes}}",
+    "notApplicable": "Non applicable",
+    "ringText": "TRAVAILLONS ENSEMBLE",
+    "galleryLabel": "Galerie de nos espaces",
+    "previous": "Espace précédent",
+    "next": "Espace suivant",
+    "rating": "Noté {rating} sur 5",
+    "clientsLabel": "Nos clients",
+    "pauseVideo": "Mettre la vidéo en pause",
+    "playVideo": "Lire la vidéo"
   }
 }

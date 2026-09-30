@@ -1,20 +1,35 @@
-import { useTranslations } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
-import { use } from 'react';
-import styles from './page.module.css';
+import { Coworking, PrivateOffices } from '@/components/home/Offers';
+import { Final, FindMore, Testimonials } from '@/components/home/Closing';
+import { Hero } from '@/components/home/Hero';
+import { Spaces } from '@/components/home/Spaces';
+import { Tomorrow } from '@/components/home/Tomorrow';
+import { Trust } from '@/components/home/Trust';
+import type { Locale } from '@/i18n/routing';
+import { getHomePage } from '@/lib/cms';
 
-// Phase 1 placeholder. The home sections from the approved mockup arrive in phase 2.
-export default function HomePage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = use(params);
-  setRequestLocale(locale);
-  const t = useTranslations('Meta');
+// The section order is fixed by design; the CMS only fills them.
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: raw } = await params;
+  setRequestLocale(raw);
+  const locale = raw as Locale;
+  const home = await getHomePage();
 
   return (
-    <section className={styles.hero} data-header-overlay>
-      <div className="wrap">
-        <h1 className={styles.title}>{t('siteName')}</h1>
-        <p className={styles.lead}>{t('tagline')}</p>
-      </div>
-    </section>
+    <>
+      <Hero hero={home.hero} locale={locale} />
+      <Coworking offer={home.coworking} locale={locale} />
+      <PrivateOffices
+        offer={home.privateOffices}
+        servicesLink={home.servicesLink}
+        locale={locale}
+      />
+      <Trust trust={home.trust} locale={locale} />
+      <Tomorrow data={home.tomorrow} locale={locale} />
+      <Spaces data={home.spaces} locale={locale} />
+      <FindMore data={home.findMore} locale={locale} />
+      <Testimonials data={home.testimonials} locale={locale} />
+      <Final data={home.final} locale={locale} />
+    </>
   );
 }

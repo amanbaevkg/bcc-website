@@ -1,0 +1,86 @@
+/**
+ * Content types shared by the fallback content and the Sanity queries.
+ * They mirror the CMS schemas in apps/studio, so a section never knows where its data came from.
+ *
+ * Short texts are localized per field (EN/FR/DE/LU side by side, as in the CMS);
+ * a missing translation falls back to English.
+ */
+import type { Locale } from '@/i18n/routing';
+
+export type Localized<T = string> = { en: T } & Partial<Record<Exclude<Locale, 'en'>, T>>;
+
+export function pick<T>(value: Localized<T>, locale: Locale): T {
+  return value[locale] ?? value.en;
+}
+
+export type ImageAsset = {
+  src: string;
+  width: number;
+  height: number;
+  alt: Localized;
+  /** Focal point, 0–1 from the top-left. Keeps the subject in frame when a slot crops the photo. */
+  hotspot?: { x: number; y: number };
+};
+
+export type VideoAsset = {
+  /** Largest first. The player picks by screen width: ≥1200 → 1080p, ≥600 → 720p, else 480p. */
+  sources: { src: string; height: 1080 | 720 | 480; type: 'video/mp4' | 'video/webm' }[];
+  poster: ImageAsset;
+};
+
+/** Internal paths are written without the language prefix ("/contact"); the site adds it. */
+export type Link = { label: Localized; href: string };
+
+/** Rich-ish text for short paragraphs: plain strings and bold runs only. */
+export type TextRun = string | { strong: string };
+export type RichLine = Localized<TextRun[]>;
+
+export type WorkspaceType = {
+  id: string;
+  name: Localized;
+  /** Whether the "team size" field applies (only private offices are sized by team). */
+  hasTeamSize: boolean;
+};
+
+export type Offer = {
+  title: Localized;
+  href: string;
+  body: RichLine;
+  images: ImageAsset[];
+};
+
+export type ClientLogo = { name: string; logo: ImageAsset; url?: string };
+
+export type Space = { image: ImageAsset; caption: Localized };
+
+export type Testimonial = {
+  quote: Localized;
+  name: string;
+  role: Localized;
+  company: string;
+  rating: 1 | 2 | 3 | 4 | 5;
+};
+
+export type HomePage = {
+  hero: {
+    eyebrow: Localized;
+    title: Localized;
+    /** The part of the title set in italic serif, e.g. "Capellen". Must appear in the title. */
+    titleAccent?: Localized;
+    subtitle: Localized;
+    video: VideoAsset;
+    workspaceTypes: WorkspaceType[];
+    teamSizes: number[];
+    cta: Link;
+    ring: Link;
+  };
+  coworking: Offer;
+  privateOffices: Offer;
+  servicesLink: Link;
+  trust: { title: Localized; clients: ClientLogo[] };
+  tomorrow: { lines: Localized<string[]>; card: Localized; image: ImageAsset };
+  spaces: { title: Localized; items: Space[]; moreLink: Link };
+  findMore: { title: Localized; cta: Link };
+  testimonials: { title: Localized; items: Testimonial[] };
+  final: { lines: Localized<string[]>; cta: Link; image: ImageAsset };
+};

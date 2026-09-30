@@ -1,0 +1,207 @@
+.spaces {
+  --inset: max(var(--gutter), (100vw - var(--wrap)) / 2);
+  padding-block: 240px 150px;
+  background: var(--lime);
+  overflow: hidden;
+}
+
+.head {
+  position: relative;
+}
+
+.title {
+  font-size: clamp(56px, 10vw, 146px);
+}
+
+/* The controls sit on the title's baseline, at the right. */
+.controlsRow {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -84px;
+  margin-bottom: 72px;
+}
+
+.ctrl {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.count {
+  margin-right: 14px;
+  font: 500 13px/1 var(--mono);
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+}
+
+.navBtn {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--rule-l);
+  border-radius: 50%;
+  color: var(--ink);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.navBtn:hover:not(:disabled) {
+  background: var(--night);
+  color: var(--light);
+}
+
+.navBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.about {
+  background: var(--night);
+  border-color: var(--night);
+  color: var(--light);
+}
+
+.about:hover {
+  background: var(--cyan-deep) !important;
+  border-color: var(--cyan-deep);
+}
+
+.gallery {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-inline: var(--inset) var(--gutter);
+  padding-bottom: 12px;
+  scrollbar-width: none;
+}
+
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery:focus-visible {
+  outline-offset: -4px;
+}
+
+.item {
+  flex: none;
+  margin: 0;
+  display: grid;
+  gap: 16px;
+  scroll-snap-align: start;
+  scroll-margin-left: var(--inset);
+}
+
+.item figcaption {
+  color: var(--ink-2);
+}
+
+.frame {
+  width: 100%;
+}
+
+/* A six-step rhythm of widths, heights and offsets that repeats for any number of photos. */
+.item:nth-child(6n + 1) {
+  width: 780px;
+}
+.item:nth-child(6n + 1) .frame {
+  height: 540px;
+}
+.item:nth-child(6n + 2) {
+  width: 420px;
+  margin-top: 96px;
+}
+.item:nth-child(6n + 2) .frame {
+  height: 540px;
+}
+.item:nth-child(6n + 3) {
+  width: 460px;
+}
+.item:nth-child(6n + 3) .frame {
+  height: 620px;
+}
+.item:nth-child(6n + 4) {
+  width: 720px;
+  margin-top: 130px;
+}
+.item:nth-child(6n + 4) .frame {
+  height: 480px;
+}
+.item:nth-child(6n + 5) {
+  width: 620px;
+  margin-top: 40px;
+}
+.item:nth-child(6n + 5) .frame {
+  height: 420px;
+}
+.item:nth-child(6n) {
+  width: 440px;
+  margin-top: 150px;
+}
+.item:nth-child(6n) .frame {
+  height: 560px;
+}
+
+.progress {
+  position: relative;
+  height: 1px;
+  margin-top: 56px;
+  background: var(--rule-l);
+}
+
+.progress span {
+  position: absolute;
+  top: -1px;
+  height: 3px;
+  background: var(--night);
+  transition:
+    left 0.3s ease,
+    width 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery {
+    scroll-behavior: auto;
+  }
+}
+
+@media (width < 1200px) {
+  .controlsRow {
+    margin-top: 32px;
+    margin-bottom: 48px;
+    justify-content: flex-start;
+  }
+}
+
+@media (width < 900px) {
+  .spaces {
+    padding-block: 160px 90px;
+  }
+
+  .item {
+    width: 78vw !important;
+    margin-top: 0 !important;
+  }
+
+  .item .frame {
+    height: auto !important;
+    aspect-ratio: 4 / 3;
+  }
+
+  .item:nth-child(even) .frame {
+    aspect-ratio: 4 / 5;
+  }
+
+  .navBtn {
+    width: 48px;
+    height: 48px;
+  }
+}

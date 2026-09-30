@@ -1,0 +1,111 @@
+.tomorrow {
+  position: relative;
+  min-height: 1000px;
+  color: var(--light);
+  isolation: isolate;
+  overflow-x: clip;
+}
+
+.bg {
+  position: absolute !important;
+  inset: 0;
+  z-index: -2;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgb(30 43 55 / 72%) 0%,
+    rgb(30 43 55 / 50%) 45%,
+    rgb(30 43 55 / 20%) 75%,
+    rgb(30 43 55 / 30%) 100%
+  );
+}
+
+.inner {
+  position: relative;
+  min-height: inherit;
+  padding-block: 110px 0;
+}
+
+.title {
+  font-size: clamp(56px, 9.4vw, 140px);
+}
+
+.title span {
+  display: block;
+}
+
+/* Stagger: second line indented, the serif line pushed to the middle. */
+.title span:nth-child(2) {
+  padding-left: 11%;
+}
+
+.title span:nth-child(3) {
+  padding-left: 50%;
+}
+
+.card {
+  position: absolute;
+  z-index: 3;
+  right: var(--gutter);
+  bottom: -120px;
+  width: min(520px, calc(100% - 2 * var(--gutter)));
+  padding: 52px 52px 56px;
+  background: var(--lime);
+  color: var(--ink);
+}
+
+.card p {
+  font: 300 27px/1.35 var(--display);
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
+@media (width < 900px) {
+  .tomorrow {
+    min-height: 720px;
+  }
+
+  .title span:nth-child(3) {
+    padding-left: 30%;
+  }
+
+  .card {
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    padding: 28px;
+    bottom: -80px;
+  }
+
+  .card p {
+    font-size: 21px;
+  }
+}
+
+@media (width < 600px) {
+  .tomorrow {
+    min-height: 600px;
+  }
+
+  .inner {
+    padding-top: 96px;
+  }
+
+  /* Wide display type: size by viewport so the longest line fits a phone. */
+  .title {
+    font-size: 10.5vw;
+  }
+
+  .title span:nth-child(2) {
+    padding-left: 6%;
+  }
+
+  .title span:nth-child(3) {
+    padding-left: 20%;
+  }
+}

@@ -1,0 +1,20 @@
+.photo {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  background: var(--stone);
+}
+
+.photo img {
+  object-fit: cover;
+  filter: saturate(0.82) contrast(1.04);
+  transition: transform 1.2s var(--ease-out);
+}
+
+.photo:not(.still):hover img {
+  transform: scale(1.035);
+}
+
+.still img {
+  filter: saturate(0.85) contrast(1.02);
+}

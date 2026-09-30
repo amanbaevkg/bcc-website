@@ -41,5 +41,20 @@
     "title": "Seite nicht gefunden",
     "body": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
     "back": "Zur Startseite"
+  },
+  "Home": {
+    "workspaceLabel": "Wählen Sie Ihren Arbeitsplatz",
+    "finderLabel": "Finden Sie Ihren Arbeitsplatz",
+    "teamSize": "Teamgröße",
+    "persons": "{count, plural, one {# Person} other {# Personen}}",
+    "notApplicable": "Nicht zutreffend",
+    "ringText": "ARBEITEN SIE MIT UNS",
+    "galleryLabel": "Galerie unserer Räume",
+    "previous": "Vorheriger Raum",
+    "next": "Nächster Raum",
+    "rating": "Bewertet mit {rating} von 5",
+    "clientsLabel": "Unsere Kunden",
+    "pauseVideo": "Hintergrundvideo anhalten",
+    "playVideo": "Hintergrundvideo abspielen"
   }
 }

@@ -41,5 +41,20 @@
     "title": "Säit net fonnt",
     "body": "D’Säit, déi Dir sicht, gëtt et net oder se ass geplënnert.",
     "back": "Zeréck op d’Startsäit"
+  },
+  "Home": {
+    "workspaceLabel": "Wielt Ären Aarbechtsplaz",
+    "finderLabel": "Fannt Ären Aarbechtsplaz",
+    "teamSize": "Gréisst vum Team",
+    "persons": "{count, plural, one {# Persoun} other {# Persounen}}",
+    "notApplicable": "Net zoutreffend",
+    "ringText": "SCHAFFT MAT EIS",
+    "galleryLabel": "Galerie vun eise Raim",
+    "previous": "Viregte Raum",
+    "next": "Nächste Raum",
+    "rating": "Bewäert mat {rating} vu 5",
+    "clientsLabel": "Eis Clienten",
+    "pauseVideo": "Hannergrondvideo pauséieren",
+    "playVideo": "Hannergrondvideo ofspillen"
   }
 }

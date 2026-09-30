@@ -41,5 +41,20 @@
     "title": "Page not found",
     "body": "The page you are looking for does not exist or has moved.",
     "back": "Back to the homepage"
+  },
+  "Home": {
+    "workspaceLabel": "Choose your workspace",
+    "finderLabel": "Find your workspace",
+    "teamSize": "Team size",
+    "persons": "{count, plural, one {# person} other {# persons}}",
+    "notApplicable": "Not applicable",
+    "ringText": "WORK WITH US",
+    "galleryLabel": "Our spaces gallery",
+    "previous": "Previous space",
+    "next": "Next space",
+    "rating": "Rated {rating} out of 5",
+    "clientsLabel": "Our clients",
+    "pauseVideo": "Pause background video",
+    "playVideo": "Play background video"
   }
 }

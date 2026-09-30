@@ -76,6 +76,39 @@ test('unknown pages return a server-rendered 404 in all languages', async ({ pag
   await expect(page).toHaveURL(/\/de$/);
 });
 
+test('workspace finder passes the choice to the contact page', async ({ page }) => {
+  await page.goto('/en');
+  const workspace = page.getByRole('button', { name: /Choose your workspace/ });
+  await workspace.click();
+  await page.getByRole('option', { name: 'Co-Working Space' }).click();
+  await expect(workspace).toContainText('Co-Working Space');
+  await expect(page.getByRole('button', { name: /Team size/ })).toBeDisabled();
+  await expect(page.getByRole('link', { name: 'Get a Quote' })).toHaveAttribute(
+    'href',
+    '/en/contact?workspace=coworking',
+  );
+
+  // Keyboard: open, move down, choose.
+  await workspace.focus();
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Home');
+  await page.keyboard.press('Enter');
+  await expect(workspace).toContainText('Private Offices');
+  await expect(page.getByRole('link', { name: 'Get a Quote' })).toHaveAttribute(
+    'href',
+    '/en/contact?workspace=private-office&team=1',
+  );
+});
+
+test('spaces gallery moves with the buttons', async ({ page }) => {
+  await page.goto('/en');
+  const gallery = page.getByRole('region', { name: 'Our spaces gallery' });
+  await gallery.scrollIntoViewIfNeeded();
+  const before = await gallery.evaluate((g) => g.scrollLeft);
+  await page.getByRole('button', { name: 'Next space' }).click();
+  await expect.poll(() => gallery.evaluate((g) => g.scrollLeft)).toBeGreaterThan(before);
+});
+
 test('security headers are present', async ({ request }) => {
   const res = await request.get('/en');
   const h = res.headers();

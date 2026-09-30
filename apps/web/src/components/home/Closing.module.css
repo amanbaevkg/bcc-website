@@ -1,0 +1,224 @@
+/* ---- find more ---- */
+.findmore {
+  padding-block: 130px;
+  background: linear-gradient(180deg, var(--lime) 0%, var(--stone) 100%);
+}
+
+.fmInner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 48px;
+}
+
+.fmTitle {
+  max-width: 12ch;
+  font-size: clamp(44px, 6.8vw, 108px);
+}
+
+/* ---- testimonials ---- */
+.voices {
+  padding-block: 170px;
+  background: linear-gradient(180deg, var(--stone) 0%, var(--haze) 26%, var(--haze) 100%);
+}
+
+.vInner {
+  display: grid;
+  grid-template-columns: 4fr 8fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.vHead {
+  position: sticky;
+  top: 140px;
+  display: grid;
+  gap: 28px;
+}
+
+.vTitle {
+  font-size: clamp(40px, 5vw, 76px);
+}
+
+.qmark {
+  height: 110px;
+  font: 300 220px/0.6 var(--serif);
+  color: var(--cyan-deep);
+}
+
+.vList {
+  display: grid;
+}
+
+.voice {
+  margin: 0;
+  padding-block: 56px;
+  display: grid;
+  gap: 30px;
+  border-top: 1px solid var(--rule-l);
+}
+
+.voice:last-child {
+  border-bottom: 1px solid var(--rule-l);
+}
+
+.voice blockquote {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 1.32;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+
+/* Rhythm of three: large quote; author left; author right. */
+.voice:nth-child(3n + 1) blockquote {
+  font-size: 38px;
+  line-height: 1.28;
+}
+
+.voice:nth-child(3n + 2),
+.voice:nth-child(3n) {
+  grid-template-columns: 1fr 1.6fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.voice:nth-child(3n + 2) .who {
+  order: -1;
+}
+
+.voice:nth-child(3n) {
+  grid-template-columns: 1.6fr 1fr;
+}
+
+.who {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+
+.stars {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 6px;
+  color: var(--cyan-deep);
+}
+
+.co {
+  font: 500 12.5px/1.3 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.nm {
+  font-size: 15.5px;
+  color: var(--ink-2);
+}
+
+/* ---- final call to action ---- */
+.final {
+  position: relative;
+  min-height: 860px;
+  color: var(--light);
+  isolation: isolate;
+  display: flex;
+}
+
+.bg {
+  position: absolute !important;
+  inset: 0;
+  z-index: -2;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    rgb(30 43 55 / 85%) 0%,
+    rgb(30 43 55 / 50%) 50%,
+    rgb(30 43 55 / 20%) 100%
+  );
+}
+
+.fInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 56px;
+  padding-block: 120px;
+}
+
+.fTitle {
+  font-size: clamp(52px, 10vw, 146px);
+}
+
+.fTitle span {
+  display: block;
+}
+
+.fTitle span + span {
+  padding-left: 12%;
+}
+
+@media (width < 1200px) {
+  .voice blockquote,
+  .voice:nth-child(3n + 1) blockquote {
+    font-size: 28px;
+  }
+}
+
+@media (width < 900px) {
+  .findmore {
+    padding-block: 96px;
+  }
+
+  .fmInner,
+  .vInner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .voices {
+    padding-block: 160px 96px;
+  }
+
+  .vHead {
+    position: static;
+    gap: 16px;
+  }
+
+  .qmark {
+    height: 70px;
+    font-size: 150px;
+  }
+
+  .voice,
+  .voice:nth-child(3n + 2),
+  .voice:nth-child(3n) {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding-block: 40px;
+  }
+
+  .voice:nth-child(3n + 2) .who {
+    order: 0;
+  }
+
+  .voice blockquote,
+  .voice:nth-child(3n + 1) blockquote {
+    font-size: 23px;
+  }
+
+  .final {
+    min-height: 640px;
+  }
+
+  .shade {
+    background: linear-gradient(180deg, rgb(30 43 55 / 70%) 0%, rgb(30 43 55 / 55%) 100%);
+  }
+}

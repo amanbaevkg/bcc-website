@@ -1,0 +1,143 @@
+.band {
+  padding-block: 96px;
+  background: linear-gradient(180deg, #f6f3ee 0%, var(--paper) 100%);
+  border-top: 1px solid rgb(255 255 255 / 60%);
+}
+
+.trust {
+  display: grid;
+  grid-template-columns: 3fr 9fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.trust h2 {
+  font-size: clamp(34px, 3.4vw, 50px);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.trust h2::after {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 2px;
+  margin-top: 22px;
+  background: var(--cyan-deep);
+}
+
+.marquee,
+.still {
+  min-width: 0;
+  overflow: hidden;
+  padding-block: 16px 30px;
+}
+
+.marquee {
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+}
+
+.marquee .track {
+  animation: marquee calc(var(--n, 7) * 8.5s) linear infinite;
+}
+
+.marquee:hover .track,
+.marquee:focus-within .track {
+  animation-play-state: paused;
+}
+
+.still .track {
+  width: auto;
+}
+
+.track ul {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.still ul {
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.track li {
+  display: grid;
+  place-items: center;
+  width: 250px;
+  height: 132px;
+  background: #fbfaf7;
+  border: 1px solid rgb(31 42 51 / 8%);
+  box-shadow: 0 18px 30px -26px rgb(20 30 40 / 45%);
+  transition:
+    background-color 0.4s ease,
+    box-shadow 0.4s ease,
+    transform 0.4s var(--ease-out);
+}
+
+.marquee li {
+  margin-right: 14px;
+}
+
+.track li:hover {
+  background: #fff;
+  transform: translateY(-4px);
+  box-shadow: 0 26px 40px -26px rgb(20 30 40 / 50%);
+}
+
+.track img {
+  width: auto;
+  height: 50px;
+  max-width: 190px;
+  object-fit: contain;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Reduced motion: no loop; the logos become a row the visitor can scroll. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+    mask-image: none;
+  }
+
+  .marquee .track {
+    animation: none;
+  }
+
+  .marquee ul[aria-hidden] {
+    display: none;
+  }
+}
+
+@media (width < 900px) {
+  .band {
+    padding-block: 72px;
+  }
+
+  .trust {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .track li {
+    width: 180px;
+    height: 100px;
+  }
+
+  .track img {
+    height: 40px;
+    max-width: 140px;
+  }
+}
