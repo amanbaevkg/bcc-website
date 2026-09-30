@@ -7,6 +7,7 @@ import { Photo } from '@/components/ui/Photo';
 import { homeFallback } from '@/content/fallback/home';
 import { siteFallback } from '@/content/site';
 import type { Locale } from '@/i18n/routing';
+import { pageMetadata } from '@/lib/seo';
 import styles from './contact.module.css';
 
 type Props = { params: Promise<{ locale: string }> };
@@ -14,7 +15,12 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Contact' });
-  return { title: t('metaTitle'), description: t('introBody') };
+  return pageMetadata({
+    locale: locale as Locale,
+    path: '/contact',
+    title: t('metaTitle'),
+    description: t('introBody'),
+  });
 }
 
 export default async function ContactPage({ params }: Props) {

@@ -7,7 +7,10 @@ import { Icon } from '@/components/ui/Icon';
 import { Photo } from '@/components/ui/Photo';
 import { Link } from '@/i18n/navigation';
 import { htmlLang, routing, type Locale } from '@/i18n/routing';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { getNewsParams, getNewsPost } from '@/lib/cms/news';
+import { env } from '@/lib/env';
+import { pageMetadata } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -26,18 +29,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const post = await getNewsPost(locale as Locale, slug);
   if (!post) return {};
-  return {
+  // An English post shown on a French page points search engines at the English original.
+  return pageMetadata({
+    locale: post.lang,
+    locales: [post.lang],
+    path: `/news/${post.slug}`,
     title: post.title,
     description: post.excerpt,
-    robots: post.fixture ? { index: false } : undefined,
-    openGraph: {
-      type: 'article',
-      publishedTime: post.date,
-      images: post.cover
-        ? [{ url: post.cover.src, width: post.cover.width, height: post.cover.height }]
-        : undefined,
+    noindex: post.fixture,
+    type: 'article',
+    publishedTime: post.date,
+    image: post.cover && {
+      url: post.cover.src,
+      width: post.cover.width,
+      height: post.cover.height,
     },
-  };
+  });
 }
 
 export default async function NewsArticle({ params }: Props) {
@@ -52,6 +59,20 @@ export default async function NewsArticle({ params }: Props) {
 
   return (
     <article className={styles.article}>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'NewsArticle',
+          headline: post.title,
+          description: post.excerpt,
+          datePublished: post.date,
+          inLanguage: htmlLang[post.lang],
+          image: post.cover ? [new URL(post.cover.src, env().SITE_URL).toString()] : undefined,
+          author: post.author ? { '@type': 'Person', name: post.author } : undefined,
+          publisher: { '@id': `${env().SITE_URL}/#business` },
+          mainEntityOfPage: `${env().SITE_URL}/${post.lang}/news/${post.slug}`,
+        }}
+      />
       <header className={styles.articleHead} data-header-overlay>
         <div className="wrap">
           <Link href="/news" className={styles.back}>

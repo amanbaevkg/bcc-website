@@ -6,6 +6,7 @@ import { PageHero } from '@/components/page/PageHero';
 import { Button } from '@/components/ui/Button';
 import type { Locale } from '@/i18n/routing';
 import { getNewsList } from '@/lib/cms/news';
+import { pageMetadata } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -13,12 +14,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'News' });
   const posts = await getNewsList(locale as Locale);
-  return {
+  return pageMetadata({
+    locale: locale as Locale,
+    path: '/news',
     title: t('title'),
     description: t('intro'),
     // An empty list is not worth indexing.
-    robots: posts.length ? undefined : { index: false },
-  };
+    noindex: posts.length === 0,
+  });
 }
 
 export default async function NewsPage({ params }: Props) {

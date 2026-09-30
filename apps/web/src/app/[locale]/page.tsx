@@ -5,8 +5,21 @@ import { Hero } from '@/components/home/Hero';
 import { Spaces } from '@/components/home/Spaces';
 import { Tomorrow } from '@/components/home/Tomorrow';
 import { Trust } from '@/components/home/Trust';
+import type { Metadata } from 'next';
+import { pick } from '@/content/types';
 import type { Locale } from '@/i18n/routing';
+import { pageMetadata } from '@/lib/seo';
 import { getHomePage } from '@/lib/cms';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const locale = (await params).locale as Locale;
+  const home = await getHomePage();
+  return pageMetadata({ locale, path: '', description: pick(home.hero.subtitle, locale) });
+}
 
 // The section order is fixed by design; the CMS only fills them.
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {

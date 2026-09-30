@@ -8,7 +8,9 @@ import { Header } from '@/components/layout/Header';
 import { SkipLink } from '@/components/layout/SkipLink';
 import { htmlLang, routing, type Locale } from '@/i18n/routing';
 import { getNewsList } from '@/lib/cms/news';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { env } from '@/lib/env';
+import { defaultOgImage, organizationJsonLd } from '@/lib/seo';
 import '@/styles/globals.css';
 
 type Props = { children: ReactNode; params: Promise<{ locale: string }> };
@@ -28,6 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: { default: t('siteName'), template: `%s | ${t('siteName')}` },
     description: t('tagline'),
     robots: env().SITE_ENV === 'production' ? undefined : { index: false, follow: false },
+    openGraph: { siteName: t('siteName'), images: [defaultOgImage] },
   };
 }
 
@@ -54,6 +57,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         />
       </head>
       <body>
+        <JsonLd data={organizationJsonLd(env().SITE_URL)} />
         <NextIntlClientProvider>
           <SkipLink />
           <Header showNews={showNews} />

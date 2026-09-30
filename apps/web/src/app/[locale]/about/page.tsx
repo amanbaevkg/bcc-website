@@ -6,6 +6,7 @@ import { Photo } from '@/components/ui/Photo';
 import { pick } from '@/content/types';
 import type { Locale } from '@/i18n/routing';
 import { getAboutPage } from '@/lib/cms';
+import { pageMetadata } from '@/lib/seo';
 import styles from './about.module.css';
 
 type Props = { params: Promise<{ locale: string }> };
@@ -14,7 +15,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Nav' });
   const about = await getAboutPage();
-  return { title: t('about'), description: pick(about.hero.body, locale as Locale) };
+  return pageMetadata({
+    locale: locale as Locale,
+    path: '/about',
+    title: t('about'),
+    description: pick(about.hero.body, locale as Locale),
+    image: {
+      url: about.hero.image.src,
+      width: about.hero.image.width,
+      height: about.hero.image.height,
+    },
+  });
 }
 
 export default async function AboutPage({ params }: Props) {

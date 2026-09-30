@@ -10,6 +10,7 @@ import { pick } from '@/content/types';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { getServicesPage } from '@/lib/cms';
+import { pageMetadata } from '@/lib/seo';
 import styles from './services.module.css';
 
 type Props = { params: Promise<{ locale: string }> };
@@ -18,10 +19,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Nav' });
   const s = await getServicesPage();
-  return {
+  return pageMetadata({
+    locale: locale as Locale,
+    path: '/services',
     title: t('services'),
     description: s.hero.body.map((b) => pick(b, locale as Locale)).join(' '),
-  };
+  });
 }
 
 export default async function ServicesPage({ params }: Props) {

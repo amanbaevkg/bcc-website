@@ -177,6 +177,50 @@ test('news shows a clear empty state and stays out of the menu until something i
   expect(res?.status()).toBe(404);
 });
 
+test('SEO: canonical, language alternates, social preview and structured data', async ({
+  page,
+}) => {
+  await page.goto('/de/services');
+  const head = page.locator('head');
+  await expect(head.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/de\/services$/);
+  for (const [lang, path] of [
+    ['en', '/en/services'],
+    ['fr', '/fr/services'],
+    ['lb', '/lu/services'],
+    ['x-default', '/en/services'],
+  ]) {
+    await expect(head.locator(`link[rel="alternate"][hreflang="${lang}"]`)).toHaveAttribute(
+      'href',
+      new RegExp(`${path}$`),
+    );
+  }
+  await expect(head.locator('meta[property="og:locale"]')).toHaveAttribute('content', 'de_LU');
+  await expect(head.locator('meta[property="og:image"]').first()).toHaveAttribute(
+    'content',
+    /\/og\/default\.jpg$/,
+  );
+  const ld = JSON.parse(
+    (await page.locator('script[type="application/ld+json"]').first().textContent()) ?? '{}',
+  );
+  expect(ld).toMatchObject({
+    '@type': 'LocalBusiness',
+    telephone: '+35220600820',
+    address: { postalCode: 'L-8311' },
+  });
+});
+
+test('SEO: sitemap lists every language with alternates; staging robots block crawling', async ({
+  request,
+}) => {
+  const sitemap = await (await request.get('/sitemap.xml')).text();
+  for (const url of ['/en', '/fr/about', '/de/services', '/lu/contact'])
+    expect(sitemap).toContain(url + '</loc>');
+  expect(sitemap).toContain('hreflang="lb"');
+  expect(sitemap).not.toContain('/privacy');
+  const robots = await (await request.get('/robots.txt')).text();
+  expect(robots).toMatch(/Disallow: \//);
+});
+
 test('security headers are present', async ({ request }) => {
   const res = await request.get('/en');
   const h = res.headers();
