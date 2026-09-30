@@ -57,10 +57,23 @@ test('language dropdown works with the keyboard', async ({ page, isMobile }) => 
   await expect(button).toBeFocused();
 });
 
-test('unknown pages return 404 inside the site chrome', async ({ page }) => {
-  const res = await page.goto('/fr/does-not-exist');
-  expect(res?.status()).toBe(404);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page introuvable');
+test('unknown pages return a server-rendered 404 in all languages', async ({ page, request }) => {
+  // The text must be in the HTML itself, not added later by JavaScript.
+  const raw = await request.get('/fr/does-not-exist');
+  expect(raw.status()).toBe(404);
+  const html = await raw.text();
+  for (const text of [
+    'Page not found',
+    'Page introuvable',
+    'Seite nicht gefunden',
+    'Säit net fonnt',
+  ]) {
+    expect(html).toContain(text);
+  }
+
+  await page.goto('/de/does-not-exist');
+  await page.getByRole('link', { name: /Zur Startseite/ }).click();
+  await expect(page).toHaveURL(/\/de$/);
 });
 
 test('security headers are present', async ({ request }) => {

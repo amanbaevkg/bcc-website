@@ -12,6 +12,9 @@ import '@/styles/globals.css';
 
 type Props = { children: ReactNode; params: Promise<{ locale: string }> };
 
+// Only the four languages exist; any other first segment falls through to global-not-found.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }

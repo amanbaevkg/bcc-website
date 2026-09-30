@@ -53,6 +53,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   experimental: {
     sri: { algorithm: 'sha256' },
+    // [locale]/layout.tsx is the root layout, so URLs outside a language get this page.
+    globalNotFound: true,
   },
   async headers() {
     return [
