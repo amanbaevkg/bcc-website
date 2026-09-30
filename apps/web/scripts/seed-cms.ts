@@ -3,7 +3,7 @@
  * hero videos) into the Sanity project, so editors start from the live website.
  *
  *   SANITY_API_WRITE_TOKEN=… pnpm --filter web seed:cms            # only creates what is missing
- *   SANITY_API_WRITE_TOKEN=… pnpm --filter web seed:cms --replace  # overwrites these documents
+ *   SANITY_API_WRITE_TOKEN=… pnpm --filter web seed:cms --replace  # overwrites these documents and discards their drafts
  *   pnpm --filter web seed:cms --dry-run                           # shows what would be written
  *
  * The token needs Editor rights. Create it at sanity.io/manage → API → Tokens, keep it in your
@@ -370,12 +370,15 @@ async function main() {
   }
   const tx = client.transaction();
   for (const d of docs) {
-    if (replace) tx.createOrReplace(d);
-    else tx.createIfNotExists(d);
+    if (replace) {
+      tx.createOrReplace(d);
+      // An unpublished Studio draft would otherwise keep showing the old content.
+      tx.delete(`drafts.${d._id}`);
+    } else tx.createIfNotExists(d);
   }
   await tx.commit();
   console.log(
-    `Done: ${docs.length} documents ${replace ? 'written' : 'created where missing'} and published.`,
+    `Done: ${docs.length} documents ${replace ? 'written (drafts discarded)' : 'created where missing'} and published.`,
   );
 }
 
