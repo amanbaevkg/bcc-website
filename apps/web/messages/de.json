@@ -36,7 +36,9 @@
   },
   "Legal": {
     "pendingTitle": "Inhalt wird rechtlich geprüft",
-    "pendingBody": "Diese Seite wird veröffentlicht, sobald der Text von BCC bereitgestellt und freigegeben wurde."
+    "pendingBody": "Diese Seite wird veröffentlicht, sobald der Text von BCC bereitgestellt und freigegeben wurde.",
+    "updated": "Zuletzt aktualisiert: {date}",
+    "draft": "Entwurf, noch nicht freigegeben (erst nach Freigabe öffentlich)"
   },
   "NotFound": {
     "title": "Seite nicht gefunden",

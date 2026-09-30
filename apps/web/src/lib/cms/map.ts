@@ -66,17 +66,23 @@ export function richLine(value: SanityLocalizedBlock): RichLine | undefined {
   return line;
 }
 
-/** Headline lines stored as a list of localized strings → one list of lines per language. */
-export function lines(
-  value: SanityLocalized[] | null | undefined,
-): Localized<string[]> | undefined {
-  const items = (value ?? []).map(localized);
-  if (!items.length || items.some((i) => !i)) return undefined;
-  const out: Localized<string[]> = { en: items.map((i) => i!.en) };
-  for (const l of ['fr', 'de', 'lu'] as const) {
-    if (items.every((i) => i![l])) out[l] = items.map((i) => i![l]!);
-  }
-  return out;
+/** Headline stored as one text per language, a line per row → one list of lines per language. */
+export function lines(value: SanityLocalized): Localized<string[]> | undefined {
+  const text = localized(value);
+  if (!text) return undefined;
+  const split = (t: string) =>
+    t
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter(Boolean);
+  const out: Localized<string[]> = { en: split(text.en) };
+  for (const l of ['fr', 'de', 'lu'] as const) if (text[l]) out[l] = split(text[l]!);
+  return out.en.length ? out : undefined;
+}
+
+/** A list of localized strings (e.g. highlights) → Localized[]; incomplete items are dropped. */
+export function localizedList(value: SanityLocalized[] | null | undefined): Localized[] {
+  return (value ?? []).map(localized).filter((v): v is Localized => !!v);
 }
 
 export const compact = <T>(list: (T | undefined)[]): T[] => list.filter((x): x is T => !!x);

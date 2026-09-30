@@ -178,13 +178,10 @@ export const homePage = defineType({
       type: 'object',
       group: 'closing',
       fields: [
-        defineField({
-          name: 'lines',
-          title: 'Headline lines',
-          type: 'array',
-          description: 'Two or three short lines. The last line is set in italic.',
-          of: [{ type: 'internationalizedArrayString' }],
-          validation: (r) => r.required().min(1).max(3),
+        localized('lines', 'Headline', {
+          multiline: true,
+          max: 60,
+          description: 'Two or three short lines, one per row. The last line is set in italic.',
         }),
         localized('card', 'Card text', { max: 140, multiline: true }),
         image('image', 'Background photo', {
@@ -248,13 +245,10 @@ export const homePage = defineType({
       type: 'object',
       group: 'closing',
       fields: [
-        defineField({
-          name: 'lines',
-          title: 'Headline lines',
-          type: 'array',
-          description: 'Two short lines. The second is set in italic.',
-          of: [{ type: 'internationalizedArrayString' }],
-          validation: (r) => r.required().min(1).max(2),
+        localized('lines', 'Headline', {
+          multiline: true,
+          max: 60,
+          description: 'Two short lines, one per row. The second is set in italic.',
         }),
         defineField({ name: 'cta', title: 'Button', type: 'link' }),
         image('image', 'Background photo', {

@@ -129,48 +129,6 @@ export const testimonial = defineType({
 
 /* Documents below have one document per language, linked by the translation plugin. */
 
-export const service = defineType({
-  name: 'service',
-  title: 'Service',
-  type: 'document',
-  fields: [
-    languageField,
-    defineField({
-      name: 'title',
-      title: 'Name',
-      type: 'string',
-      validation: (r) => r.required().max(60),
-    }),
-    slugField,
-    defineField({
-      name: 'summary',
-      title: 'Short description',
-      type: 'text',
-      rows: 3,
-      validation: (r) => r.required().max(200),
-    }),
-    defineField({ name: 'body', title: 'Text', type: 'richText' }),
-    defineField({
-      name: 'icon',
-      title: 'Icon',
-      type: 'string',
-      options: {
-        list: ['office', 'desk', 'meeting', 'mail', 'address', 'parking', 'phone', 'support'],
-      },
-    }),
-    image('image', 'Photo', { minWidth: 1600, description: 'Horizontal 3:2.', required: false }),
-    defineField({
-      name: 'showOnHome',
-      title: 'Show on the home page',
-      type: 'boolean',
-      initialValue: true,
-    }),
-    order,
-    defineField({ name: 'seo', title: 'Search engines', type: 'seo' }),
-  ],
-  preview: { select: { title: 'title', subtitle: 'language', media: 'image' } },
-});
-
 export const newsPost = defineType({
   name: 'newsPost',
   title: 'News',

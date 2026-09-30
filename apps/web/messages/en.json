@@ -36,7 +36,9 @@
   },
   "Legal": {
     "pendingTitle": "Content pending legal review",
-    "pendingBody": "This page will be published once the text has been provided and approved by BCC."
+    "pendingBody": "This page will be published once the text has been provided and approved by BCC.",
+    "updated": "Last updated: {date}",
+    "draft": "Draft awaiting approval (not visible on the live site until approved)"
   },
   "NotFound": {
     "title": "Page not found",

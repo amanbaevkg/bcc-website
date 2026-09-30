@@ -1,25 +1,16 @@
 import type { Metadata } from 'next';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { LegalPlaceholder } from '@/components/layout/LegalPlaceholder';
+import { setRequestLocale } from 'next-intl/server';
+import { LegalPage, legalMetadata } from '@/components/layout/LegalPage';
 import type { Locale } from '@/i18n/routing';
-import { pageMetadata } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'Footer' });
-  // Placeholder until BCC approves the text: kept out of search results.
-  return pageMetadata({
-    locale: locale as Locale,
-    path: '/legal-notice',
-    title: t('legalNotice'),
-    noindex: true,
-  });
+  return legalMetadata('legal-notice', (await params).locale as Locale);
 }
 
 export default async function Page({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <LegalPlaceholder titleKey="legalNotice" />;
+  return <LegalPage kind="legal-notice" locale={locale as Locale} />;
 }

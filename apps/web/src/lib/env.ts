@@ -30,6 +30,8 @@ const schema = z.object({
 
   // Sanity (phase 2). The read token is only needed for drafts/preview.
   SANITY_API_READ_TOKEN: z.string().optional(),
+  // Shared secret the Sanity webhook sends so only Sanity can trigger a refresh.
+  SANITY_REVALIDATE_SECRET: z.string().min(24).optional(),
 });
 
 export type Env = z.infer<typeof schema>;
@@ -38,7 +40,9 @@ let cached: Env | undefined;
 
 export function env(): Env {
   if (!cached) {
-    const parsed = schema.safeParse(process.env);
+    // "NAME=" in an env file means "not set", not "set to empty": drop empty values before checking.
+    const defined = Object.fromEntries(Object.entries(process.env).filter(([, v]) => v !== ''));
+    const parsed = schema.safeParse(defined);
     if (!parsed.success) {
       throw new Error(`Invalid environment variables:\n${z.prettifyError(parsed.error)}`);
     }

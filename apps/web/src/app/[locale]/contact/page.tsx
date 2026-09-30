@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Photo } from '@/components/ui/Photo';
 import { homeFallback } from '@/content/fallback/home';
-import { siteFallback } from '@/content/site';
+import { getSiteInfo } from '@/lib/cms/site';
 import type { Locale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
 import styles from './contact.module.css';
@@ -29,7 +29,7 @@ export default async function ContactPage({ params }: Props) {
   const locale = raw as Locale;
   const t = await getTranslations('Contact');
   const tf = await getTranslations('Footer');
-  const site = siteFallback;
+  const site = await getSiteInfo();
 
   const cards = [
     {

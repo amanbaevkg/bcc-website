@@ -36,7 +36,9 @@
   },
   "Legal": {
     "pendingTitle": "Contenu en attente de validation juridique",
-    "pendingBody": "Cette page sera publiée dès que le texte aura été fourni et validé par BCC."
+    "pendingBody": "Cette page sera publiée dès que le texte aura été fourni et validé par BCC.",
+    "updated": "Dernière mise à jour : {date}",
+    "draft": "Brouillon en attente de validation (invisible sur le site public avant validation)"
   },
   "NotFound": {
     "title": "Page introuvable",

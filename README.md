@@ -57,45 +57,41 @@ Page content (texts, services, news…) will come from the CMS per language.
 
 ## Content (Sanity CMS)
 
-The site works without a CMS: `apps/web/src/content/fallback` holds the current content, copied from
-the live site. Once a Sanity project exists:
+BCC's Sanity project: **`8bx4pgzw`**, dataset `production` (public identifiers, not secrets).
+Editors change texts, photos, videos, logos, testimonials, news and contact details; section order,
+layout and styling stay in the code. Every part of a page uses the CMS content once it is complete
+and the built-in content (`apps/web/src/content/fallback`) otherwise, so an empty or half-filled CMS
+never breaks the site, and a CMS outage serves the built-in content.
 
-1. Create the project at sanity.io (company account), dataset `production`. Check the data-processing
-   terms (DPA) for GDPR before adding personal data.
-2. Put the project ID in `apps/studio/.env` (`SANITY_STUDIO_PROJECT_ID`) and in the site's environment
-   (`NEXT_PUBLIC_SANITY_PROJECT_ID`). Both are public identifiers, not secrets.
-3. `pnpm --filter studio dev` opens the editor on http://localhost:3333; `pnpm --filter studio deploy`
-   publishes it at `<name>.sanity.studio`. Invite editors from sanity.io/manage (Editor role).
+| In the Studio                               | On the site                                                                 |
+| ------------------------------------------- | --------------------------------------------------------------------------- |
+| Home page, About Us page, Our Services page | the three pages, all four languages side by side                            |
+| Site settings                               | phone, e-mail, address, map link, social links, footer tagline              |
+| Client logo, Space photo, Testimonial       | “They trust us”, “Our spaces”, testimonials                                 |
+| News                                        | /news (one document per language)                                           |
+| Legal page                                  | Privacy Policy and Legal Notice (one per language; must be marked approved) |
 
-Each home page section uses the CMS content once it is complete and the built-in content until then,
-so a half-filled CMS never breaks the page. Pages refresh from the CMS every 5 minutes.
-The CMS manages content only: section order, layout and styling stay in the code.
+**Open the Studio locally:** `pnpm --filter studio dev` → http://localhost:3333 (log in with the
+Sanity account). **Publish it for staff:** `pnpm --filter studio deploy` → `<name>.sanity.studio`.
+Invite editors at sanity.io/manage → Members (role Editor).
+
+**First import of the current content** (once): create a token at sanity.io/manage → API → Tokens
+(permission Editor), then
+
+```sh
+SANITY_API_WRITE_TOKEN=<token> pnpm --filter web seed:cms
+```
+
+It uploads the photos, logos and hero videos and creates the documents that do not exist yet
+(`--replace` overwrites them, `--dry-run` only lists them). Delete the token afterwards.
+
+**Refresh after publishing:** pages re-read the CMS at most every 5 minutes. For an instant refresh,
+add a webhook at sanity.io/manage → API → Webhooks: URL `https://<site>/api/revalidate`, trigger on
+create/update/delete, HTTP header `Authorization: Bearer <SANITY_REVALIDATE_SECRET>`. New News articles
+need a rebuild: point a second webhook (filter `_type == "newsPost"`) at the host's deploy hook.
 
 Hero videos in the repository (`public/media/hero`, ~26 MB) are the fallback; once the CMS holds the
 video they can be removed.
-
-## Contact form
-
-`/contact` posts to `/api/contact`, which validates with the same rules as the browser and then sends
-the enquiry through the provider chosen by `EMAIL_PROVIDER`:
-
-| Value           | Sends with                               | Needs                                                                 |
-| --------------- | ---------------------------------------- | --------------------------------------------------------------------- |
-| `log` (default) | nothing, writes a line to the server log | —                                                                     |
-| `smtp`          | the corporate mail server                | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD` |
-| `resend`        | Resend                                   | `RESEND_API_KEY`                                                      |
-| `postmark`      | Postmark                                 | `POSTMARK_SERVER_TOKEN`                                               |
-
-All of them also need `CONTACT_TO` (recipient, to be confirmed by BCC) and `CONTACT_FROM` (a sender on
-a domain the provider is allowed to send for). The visitor's address is set as reply-to.
-
-Spam protection: hidden honeypot field, minimum time on the form, 5 messages per 10 minutes per visitor
-(shared across servers when Upstash is configured), same-origin check, 16 KB body limit, and Cloudflare
-Turnstile when `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` are set.
-Personal data is not written to the logs.
-
-The line under the form that links to the Privacy Policy must be checked by BCC's legal adviser together
-with the policy itself.
 
 ## News
 

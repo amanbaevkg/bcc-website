@@ -36,7 +36,9 @@
   },
   "Legal": {
     "pendingTitle": "Den Inhalt gëtt juristesch iwwerpréift",
-    "pendingBody": "Dës Säit gëtt verëffentlecht, soubal den Text vum BCC geliwwert a fräiginn ass."
+    "pendingBody": "Dës Säit gëtt verëffentlecht, soubal den Text vum BCC geliwwert a fräiginn ass.",
+    "updated": "Lescht aktualiséiert: {date}",
+    "draft": "Entworf, nach net fräiginn (eréischt no der Fräigab ëffentlech)"
   },
   "NotFound": {
     "title": "Säit net fonnt",

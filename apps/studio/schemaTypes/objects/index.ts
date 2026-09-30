@@ -122,3 +122,12 @@ export const localizedBlock = defineType({
     })),
   ],
 });
+
+/** One translated line inside a list (Sanity cannot store a list directly inside a list). */
+export const localizedLine = defineType({
+  name: 'localizedLine',
+  title: 'Line',
+  type: 'object',
+  fields: [localized('text', 'Text', { max: 120 })],
+  preview: { select: { title: 'text.0.value' } },
+});

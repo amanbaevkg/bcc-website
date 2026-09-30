@@ -7,7 +7,8 @@ import { languages } from './schemaTypes/languages';
 import { schemaTypes, singletonTypes, translatedTypes } from './schemaTypes';
 
 // Public identifiers, not secrets. Set them in apps/studio/.env (see .env.example).
-const projectId = process.env.SANITY_STUDIO_PROJECT_ID ?? 'missing-project-id';
+// Public identifier of BCC's Sanity project (not a secret); override with SANITY_STUDIO_PROJECT_ID.
+const projectId = process.env.SANITY_STUDIO_PROJECT_ID || '8bx4pgzw';
 const dataset = process.env.SANITY_STUDIO_DATASET ?? 'production';
 
 export default defineConfig({
@@ -25,6 +26,14 @@ export default defineConfig({
               .title('Home page')
               .id('homePage')
               .child(S.document().schemaType('homePage').documentId('homePage')),
+            S.listItem()
+              .title('About Us page')
+              .id('aboutPage')
+              .child(S.document().schemaType('aboutPage').documentId('aboutPage')),
+            S.listItem()
+              .title('Our Services page')
+              .id('servicesPage')
+              .child(S.document().schemaType('servicesPage').documentId('servicesPage')),
             S.listItem()
               .title('Site settings')
               .id('siteSettings')

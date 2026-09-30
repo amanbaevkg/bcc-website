@@ -30,8 +30,11 @@ describe('CMS mapping', () => {
     expect(localized(loc(''))).toBeUndefined();
   });
 
-  it('only offers a language for headline lines when every line is translated', () => {
-    expect(lines([loc('A', 'Á'), loc('B')])).toEqual({ en: ['A', 'B'] });
+  it('splits headline text into lines per language', () => {
+    expect(lines(loc('BUILDING\nTOMORROW’S\n NOW ', 'BÂTIR\nDEMAIN'))).toEqual({
+      en: ['BUILDING', 'TOMORROW’S', 'NOW'],
+      fr: ['BÂTIR', 'DEMAIN'],
+    });
   });
 
   it('keeps bold runs from block text', () => {

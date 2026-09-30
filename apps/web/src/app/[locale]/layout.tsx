@@ -8,6 +8,7 @@ import { Header } from '@/components/layout/Header';
 import { SkipLink } from '@/components/layout/SkipLink';
 import { htmlLang, routing, type Locale } from '@/i18n/routing';
 import { getNewsList } from '@/lib/cms/news';
+import { getSiteInfo } from '@/lib/cms/site';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { env } from '@/lib/env';
 import { defaultOgImage, organizationJsonLd } from '@/lib/seo';
@@ -43,7 +44,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
-  const showNews = (await getNewsList(locale as Locale)).length > 0;
+  const [news, site] = await Promise.all([getNewsList(locale as Locale), getSiteInfo()]);
+  const showNews = news.length > 0;
 
   return (
     <html lang={htmlLang[locale as Locale]}>
@@ -57,14 +59,14 @@ export default async function LocaleLayout({ children, params }: Props) {
         />
       </head>
       <body>
-        <JsonLd data={organizationJsonLd(env().SITE_URL)} />
+        <JsonLd data={organizationJsonLd(env().SITE_URL, site)} />
         <NextIntlClientProvider>
           <SkipLink />
-          <Header showNews={showNews} />
+          <Header showNews={showNews} contact={{ email: site.email, phone: site.phone }} />
           <main id="main" tabIndex={-1}>
             {children}
           </main>
-          <Footer showNews={showNews} />
+          <Footer showNews={showNews} site={site} />
         </NextIntlClientProvider>
       </body>
     </html>

@@ -2,26 +2,29 @@ import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { htmlLang, localeNames, routing } from '@/i18n/routing';
-import { siteFallback } from '@/content/site';
+import { pick } from '@/content/types';
+import type { Locale } from '@/i18n/routing';
+import type { SiteInfo } from '@/lib/cms/site';
 import { Icon, SocialIcon } from '@/components/ui/Icon';
 import { navItems } from './navItems';
 import styles from './Footer.module.css';
 
 const socialLabels = { linkedin: 'LinkedIn', facebook: 'Facebook' } as const;
 
-export function Footer({ showNews }: { showNews: boolean }) {
+export function Footer({ showNews, site }: { showNews: boolean; site: SiteInfo }) {
   const t = useTranslations('Footer');
   const tn = useTranslations('Nav');
   const tm = useTranslations('Meta');
   const tc = useTranslations('Common');
   const locale = useLocale();
-  const site = siteFallback;
 
   return (
     <footer className={styles.footer}>
       <div className="wrap">
         <div className={styles.top}>
-          <p className={styles.tagline}>{tm('tagline')}</p>
+          <p className={styles.tagline}>
+            {site.tagline ? pick(site.tagline, locale as Locale) : tm('tagline')}
+          </p>
           <Link href="/" className={styles.logo} aria-label={tc('homeLink')}>
             <Image src="/images/bcc-logo.png" alt="" width={569} height={257} />
           </Link>

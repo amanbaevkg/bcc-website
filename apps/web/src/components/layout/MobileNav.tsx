@@ -4,7 +4,6 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
 import { Link, usePathname } from '@/i18n/navigation';
 import { htmlLang, localeNames, routing } from '@/i18n/routing';
-import { siteFallback } from '@/content/site';
 import { Icon } from '@/components/ui/Icon';
 import { navItems } from './navItems';
 import styles from './MobileNav.module.css';
@@ -13,7 +12,13 @@ import styles from './MobileNav.module.css';
  * Full-screen menu below 900 px. A native modal <dialog> gives focus trapping,
  * Escape to close and an inert page behind it without extra code.
  */
-export function MobileNav({ showNews }: { showNews: boolean }) {
+export function MobileNav({
+  showNews,
+  contact,
+}: {
+  showNews: boolean;
+  contact: { email: string; phone: { display: string; href: string } };
+}) {
   const t = useTranslations('Nav');
   const tl = useTranslations('LanguageSelect');
   const locale = useLocale();
@@ -91,8 +96,8 @@ export function MobileNav({ showNews }: { showNews: boolean }) {
           </div>
 
           <div className={styles.contact}>
-            <a href={`mailto:${siteFallback.email}`}>{siteFallback.email}</a>
-            <a href={siteFallback.phone.href}>{siteFallback.phone.display}</a>
+            <a href={`mailto:${contact.email}`}>{contact.email}</a>
+            <a href={contact.phone.href}>{contact.phone.display}</a>
           </div>
         </div>
       </dialog>

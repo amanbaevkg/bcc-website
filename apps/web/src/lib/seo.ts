@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { siteFallback } from '@/content/site';
 import { htmlLang, ogLocale, routing, type Locale } from '@/i18n/routing';
+import type { SiteInfo } from '@/lib/cms/site';
 
 /**
  * Search and sharing metadata shared by every page: canonical URL, the same page in the other
@@ -63,8 +64,7 @@ export function pageMetadata(opts: {
 }
 
 /** schema.org data describing BCC, from the site's own contact details (nothing added). */
-export function organizationJsonLd(siteUrl: string) {
-  const s = siteFallback;
+export function organizationJsonLd(siteUrl: string, s: SiteInfo) {
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
