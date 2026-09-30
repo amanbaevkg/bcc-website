@@ -1,6 +1,9 @@
 import { defineField, type Rule, type SlugRule } from 'sanity';
 
-type LocalizedValue = { _key: string; value?: string }[] | undefined;
+type LocalizedValue = { _key: string; language?: string; value?: string }[] | undefined;
+
+/** Items store the language in `language` (plugin v5); older items kept it in `_key`. */
+const langOf = (v: { _key: string; language?: string }) => v.language ?? v._key;
 
 /**
  * A short text with a value per language (EN/FR/DE/LU side by side).
@@ -29,14 +32,14 @@ export function localized(
       .join(' '),
     validation: (rule: Rule) => [
       rule.custom((value: LocalizedValue) => {
-        const en = value?.find((v) => v._key === 'en')?.value?.trim();
+        const en = value?.find((v) => langOf(v) === 'en')?.value?.trim();
         if (required && !en) return 'English is required.';
         const tooLong = value?.find((v) => max && (v.value?.length ?? 0) > max);
-        return tooLong ? `${tooLong._key.toUpperCase()}: longer than ${max} characters.` : true;
+        return tooLong ? `${langOf(tooLong).toUpperCase()}: longer than ${max} characters.` : true;
       }),
       rule
         .custom((value: LocalizedValue) => {
-          const filled = new Set(value?.filter((v) => v.value?.trim()).map((v) => v._key));
+          const filled = new Set(value?.filter((v) => v.value?.trim()).map(langOf));
           const missing = ['fr', 'de', 'lu'].filter((l) => filled.has('en') && !filled.has(l));
           return missing.length
             ? `Translation missing: ${missing.join(', ').toUpperCase()}. The English text is shown instead.`

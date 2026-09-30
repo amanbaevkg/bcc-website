@@ -19,7 +19,7 @@ export const link = defineType({
   title: 'Link',
   type: 'object',
   fields: [
-    localized('label', 'Label', { max: 30 }),
+    localized('label', 'Label', { max: 40 }),
     defineField({
       name: 'href',
       title: 'Target',

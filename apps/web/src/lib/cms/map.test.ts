@@ -30,6 +30,15 @@ describe('CMS mapping', () => {
     expect(localized(loc(''))).toBeUndefined();
   });
 
+  it('reads the language from `language` (plugin v5) before `_key`', () => {
+    expect(
+      localized([
+        { _key: 'a1', language: 'en', value: 'Hello' },
+        { _key: 'b2', language: 'de', value: 'Hallo' },
+      ]),
+    ).toEqual({ en: 'Hello', de: 'Hallo' });
+  });
+
   it('splits headline text into lines per language', () => {
     expect(lines(loc('BUILDING\nTOMORROW’S\n NOW ', 'BÂTIR\nDEMAIN'))).toEqual({
       en: ['BUILDING', 'TOMORROW’S', 'NOW'],

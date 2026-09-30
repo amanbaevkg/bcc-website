@@ -41,7 +41,12 @@ function L(value: Localized | undefined, kind: 'string' | 'text' = 'string') {
   if (!value) return undefined;
   const type =
     kind === 'string' ? 'internationalizedArrayStringValue' : 'internationalizedArrayTextValue';
-  return LANGS.filter((l) => value[l]).map((l) => ({ _key: l, _type: type, value: value[l] }));
+  return LANGS.filter((l) => value[l]).map((l) => ({
+    _key: l,
+    _type: type,
+    language: l,
+    value: value[l],
+  }));
 }
 
 function linesText(value: Localized<string[]>) {

@@ -6,11 +6,13 @@ import type { ImageAsset, Link, Localized, RichLine, TextRun } from '@/content/t
  * to the built-in content section by section.
  */
 
-export type SanityLocalized = { _key: string; value?: string }[] | null | undefined;
+/** Items store the language in `language` (plugin v5); older items kept it in `_key`. */
+export type SanityLocalized =
+  { _key: string; language?: string; value?: string }[] | null | undefined;
 
 export function localized(value: SanityLocalized): Localized | undefined {
   const out: Record<string, string> = {};
-  for (const v of value ?? []) if (v.value?.trim()) out[v._key] = v.value;
+  for (const v of value ?? []) if (v.value?.trim()) out[v.language ?? v._key] = v.value;
   return out.en ? (out as Localized) : undefined;
 }
 
