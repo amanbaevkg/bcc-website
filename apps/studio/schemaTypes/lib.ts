@@ -33,10 +33,17 @@ export function localized(
     validation: (rule: Rule) => [
       rule.custom((value: LocalizedValue) => {
         const en = value?.find((v) => langOf(v) === 'en')?.value?.trim();
-        if (required && !en) return 'English is required.';
-        const tooLong = value?.find((v) => max && (v.value?.length ?? 0) > max);
-        return tooLong ? `${langOf(tooLong).toUpperCase()}: longer than ${max} characters.` : true;
+        return required && !en ? 'English is required.' : true;
       }),
+      // Lengths are layout guidance, not hard limits: warn, never block publishing.
+      rule
+        .custom((value: LocalizedValue) => {
+          const tooLong = value?.find((v) => max && (v.value?.length ?? 0) > max);
+          return tooLong
+            ? `${langOf(tooLong).toUpperCase()}: longer than ${max} characters; check that it still fits on the page.`
+            : true;
+        })
+        .warning(),
       rule
         .custom((value: LocalizedValue) => {
           const filled = new Set(value?.filter((v) => v.value?.trim()).map(langOf));
@@ -69,14 +76,17 @@ export function image(
     type: 'imageWithAlt',
     description: `${description} Minimum ${minWidth}${minHeight ? `×${minHeight}` : ''} px. JPG or WebP. Set the hotspot on the subject.`,
     validation: (rule: Rule) => {
-      const base = rule.custom((value: { asset?: { _ref?: string } } | undefined) => {
-        if (!value?.asset) return true;
-        const size = assetSize(value.asset._ref);
-        if (size && (size.width < minWidth || size.height < minHeight)) {
-          return `Image is ${size.width}×${size.height} px; at least ${minWidth}${minHeight ? `×${minHeight}` : ''} px is needed so it stays sharp.`;
-        }
-        return true;
-      });
+      // A smaller photo still works, so this warns instead of blocking publishing.
+      const base = rule
+        .custom((value: { asset?: { _ref?: string } } | undefined) => {
+          if (!value?.asset) return true;
+          const size = assetSize(value.asset._ref);
+          if (size && (size.width < minWidth || size.height < minHeight)) {
+            return `Image is ${size.width}×${size.height} px; ${minWidth}${minHeight ? `×${minHeight}` : ''} px or more keeps it sharp on large screens.`;
+          }
+          return true;
+        })
+        .warning();
       return required ? [rule.required(), base] : [base];
     },
   });
