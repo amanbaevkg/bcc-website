@@ -58,7 +58,7 @@ export const homeFallback: HomePage = {
         ' from a place that feels right. Our coworking spaces give you a ',
         { strong: 'real business address' },
         ', flexible offices, and a community that inspires you to do more. ',
-        { strong: 'From basic package to all-inclusive packages, you decide' },
+        { strong: 'From basic to all-inclusive packages, you decide' },
         '.',
       ],
     },

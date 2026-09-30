@@ -31,7 +31,7 @@
     "legalNotice": "Impressum",
     "country": "Luxemburg",
     "openMap": "In Google Maps öffnen",
-    "rights": "©{year}. Alle Rechte vorbehalten. BCC - Business Center Capellen | Marke der Cloud Power Luxembourg SA"
+    "rights": "©{year}. Alle Rechte vorbehalten. BCC – Business Center Capellen | Marke der Cloud Power Luxembourg SA"
   },
   "Legal": {
     "pendingTitle": "Inhalt wird rechtlich geprüft",
@@ -95,7 +95,7 @@
     "errRequired": "Bitte füllen Sie dieses Feld aus.",
     "errEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
     "errPhone": "Bitte geben Sie eine gültige Telefonnummer ein.",
-    "errServices": "Bitte wählen Sie mindestens eine Leistung.",
+    "errServices": "Bitte wählen Sie mindestens eine Leistung aus.",
     "errTooLong": "Dieser Text ist zu lang.",
     "errInvalid": "Dieses Feld enthält unzulässige Zeichen.",
     "errSummary": "Bitte prüfen Sie die markierten Felder.",

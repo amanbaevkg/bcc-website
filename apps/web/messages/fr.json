@@ -31,7 +31,7 @@
     "legalNotice": "Mentions légales",
     "country": "Luxembourg",
     "openMap": "Ouvrir dans Google Maps",
-    "rights": "©{year}. Tous droits réservés. BCC - Business Center Capellen | Marque de Cloud Power Luxembourg SA"
+    "rights": "©{year}. Tous droits réservés. BCC – Business Center Capellen | Marque de Cloud Power Luxembourg SA"
   },
   "Legal": {
     "pendingTitle": "Contenu en attente de validation juridique",
@@ -47,15 +47,15 @@
     "finderLabel": "Trouvez votre espace de travail",
     "teamSize": "Taille de l’équipe",
     "persons": "{count, plural, one {# personne} other {# personnes}}",
-    "notApplicable": "Non applicable",
+    "notApplicable": "Sans objet",
     "ringText": "TRAVAILLONS ENSEMBLE",
     "galleryLabel": "Galerie de nos espaces",
     "previous": "Espace précédent",
     "next": "Espace suivant",
     "rating": "Noté {rating} sur 5",
     "clientsLabel": "Nos clients",
-    "pauseVideo": "Mettre la vidéo en pause",
-    "playVideo": "Lire la vidéo"
+    "pauseVideo": "Mettre la vidéo de fond en pause",
+    "playVideo": "Lire la vidéo de fond"
   },
   "Contact": {
     "metaTitle": "Contact",
@@ -83,7 +83,7 @@
     "serviceDomiciliation": "Création d’entreprise/Domiciliation",
     "serviceAccounting": "Assistance comptable",
     "serviceParking": "Place de parking privée",
-    "serviceMail": "Service de transfert du courrier",
+    "serviceMail": "Réexpédition du courrier",
     "serviceMeetingRooms": "Salles de réunion",
     "servicePrivateCloud": "Cloud privé",
     "serviceOther": "Autre",
@@ -91,7 +91,7 @@
     "optional": "facultatif",
     "privacyNote": "La manière dont nous traitons vos données est décrite dans notre <link>politique de confidentialité</link>.",
     "submit": "Envoyer",
-    "sending": "Envoi…",
+    "sending": "Envoi en cours…",
     "errRequired": "Veuillez remplir ce champ.",
     "errEmail": "Veuillez saisir une adresse e-mail valide.",
     "errPhone": "Veuillez saisir un numéro de téléphone valide.",

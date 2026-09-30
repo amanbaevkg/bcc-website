@@ -31,7 +31,7 @@
     "legalNotice": "Legal Notice",
     "country": "Luxembourg",
     "openMap": "Open in Google Maps",
-    "rights": "©{year}. All rights reserved. BCC - Business Center Capellen | Trademark of Cloud Power Luxembourg SA"
+    "rights": "©{year}. All rights reserved. BCC – Business Center Capellen | Trademark of Cloud Power Luxembourg SA"
   },
   "Legal": {
     "pendingTitle": "Content pending legal review",
@@ -46,7 +46,7 @@
     "workspaceLabel": "Choose your workspace",
     "finderLabel": "Find your workspace",
     "teamSize": "Team size",
-    "persons": "{count, plural, one {# person} other {# persons}}",
+    "persons": "{count, plural, one {# person} other {# people}}",
     "notApplicable": "Not applicable",
     "ringText": "WORK WITH US",
     "galleryLabel": "Our spaces gallery",
