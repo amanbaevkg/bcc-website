@@ -79,7 +79,11 @@ test('unknown pages return a server-rendered 404 in all languages', async ({ pag
 test('workspace finder passes the choice to the contact page', async ({ page }) => {
   await page.goto('/en');
   const workspace = page.getByRole('button', { name: /Choose your workspace/ });
-  await workspace.click();
+  // The page is static HTML first; retry until React has hydrated the button.
+  await expect(async () => {
+    await workspace.click();
+    await expect(page.getByRole('listbox')).toBeVisible({ timeout: 500 });
+  }).toPass();
   await page.getByRole('option', { name: 'Co-Working Space' }).click();
   await expect(workspace).toContainText('Co-Working Space');
   await expect(page.getByRole('button', { name: /Team size/ })).toBeDisabled();
@@ -117,7 +121,11 @@ test.describe('contact form', () => {
     await expect(page.getByRole('radio', { name: 'Private Office' })).toBeChecked();
     await expect(page.getByRole('radio', { name: '3-4' })).toBeChecked();
 
-    await form.getByRole('button', { name: 'Send' }).click();
+    // Retry until React has hydrated the form (the page is static HTML first).
+    await expect(async () => {
+      await form.getByRole('button', { name: 'Send' }).click();
+      await expect(form.getByRole('alert')).toBeVisible({ timeout: 500 });
+    }).toPass();
     await expect(form.getByRole('alert')).toContainText('Please check the highlighted fields.');
     await expect(page.getByLabel(/First name/)).toBeFocused();
     await expect(page.getByText('Please choose at least one service.')).toBeVisible();
@@ -141,6 +149,24 @@ test.describe('contact form', () => {
   });
 });
 
+test('about and services pages render, and office sizes open a pre-filled enquiry', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto('/en/about');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Your business evolves');
+  // On phones the main navigation lives in the menu dialog instead of the header.
+  if (!isMobile) {
+    await expect(page.locator('header nav a[aria-current="page"]').first()).toHaveText('About Us');
+  }
+
+  await page.goto('/en/services');
+  await expect(page.getByRole('heading', { name: 'What we offer' })).toBeVisible();
+  await page.getByRole('link', { name: /Private office for 3 people/ }).click();
+  await expect(page).toHaveURL(/\/en\/contact\?workspace=private-office&team=3$/);
+  await expect(page.getByRole('radio', { name: '3-4' })).toBeChecked();
+});
+
 test('security headers are present', async ({ request }) => {
   const res = await request.get('/en');
   const h = res.headers();
@@ -151,7 +177,7 @@ test('security headers are present', async ({ request }) => {
 });
 
 test('no horizontal scroll and no axe violations', async ({ page }) => {
-  for (const path of ['/en', '/lu/legal-notice', '/de/contact']) {
+  for (const path of ['/en', '/lu/legal-notice', '/de/contact', '/fr/about', '/lu/services']) {
     await page.goto(path);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,

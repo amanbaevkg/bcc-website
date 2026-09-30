@@ -1,0 +1,312 @@
+/* ---- choose your player ---- */
+.choose {
+  padding-block: 130px 140px;
+  scroll-margin-top: var(--header-h-solid);
+}
+
+.chooseTitle {
+  font-size: clamp(48px, 8vw, 128px);
+  margin-bottom: 80px;
+}
+
+.coworking {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 0;
+  align-items: center;
+}
+
+.cwPhoto {
+  height: clamp(380px, 48vw, 700px);
+}
+
+.cwText {
+  position: relative;
+  z-index: 2;
+  margin-left: -96px;
+  padding: 56px 0 56px 56px;
+  display: grid;
+  gap: 22px;
+  justify-items: start;
+  background: var(--paper);
+  box-shadow: 0 30px 60px -40px rgb(30 43 55 / 35%);
+}
+
+.kicker {
+  color: var(--cyan-ink);
+}
+
+.offerTitle {
+  font-size: clamp(40px, 4.6vw, 72px);
+}
+
+.body {
+  max-width: 38ch;
+  font: 300 19px/1.6 var(--display);
+  color: var(--ink-2);
+}
+
+.body strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.highlight {
+  margin: 4px 0;
+  max-width: 34ch;
+  padding-left: 20px;
+  border-left: 2px solid var(--cyan-deep);
+  font: 300 italic 23px/1.4 var(--serif);
+  color: var(--ink);
+}
+
+.audience {
+  font-size: 15.5px;
+  color: var(--ink-2);
+}
+
+/* Private offices: navy panel with one tile per team size. */
+.private {
+  margin-top: 120px;
+  padding: 64px;
+  background: linear-gradient(160deg, #3a4a57 0%, var(--navy) 60%, #2e3d4a 100%);
+  color: var(--light);
+}
+
+.pvHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 32px;
+  margin-bottom: 48px;
+}
+
+.pvPhoto {
+  flex: none;
+  width: 220px;
+  height: 160px;
+}
+
+.sizes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--rule-d);
+  border: 1px solid var(--rule-d);
+}
+
+.size {
+  height: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto 1fr;
+  gap: 4px 16px;
+  padding: 28px;
+  background: var(--navy);
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.size:hover {
+  background: #3e505e;
+}
+
+.sizeNum {
+  grid-row: 1 / span 2;
+  font-size: 72px;
+  color: var(--cyan);
+}
+
+.sizeUnit {
+  align-self: end;
+  font: 500 12px/1.3 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.sizeNote {
+  align-self: start;
+  color: var(--light-2);
+  font-size: 15px;
+}
+
+.sizeCta {
+  grid-column: 1 / -1;
+  align-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  font: 500 12px/1.3 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--light-2);
+}
+
+.sizeCta svg {
+  transition: transform 0.3s ease;
+}
+
+.size:hover .sizeCta {
+  color: var(--light);
+}
+
+.size:hover .sizeCta svg {
+  transform: translate(3px, -3px);
+}
+
+/* ---- what we offer ---- */
+.offers {
+  padding-block: 130px;
+  background: linear-gradient(180deg, var(--lime) 0%, var(--stone) 100%);
+}
+
+/* Title on the left, services in two columns: an even number of items always fills the rows. */
+.offersGrid {
+  display: grid;
+  grid-template-columns: 4fr 8fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.offersTitle {
+  position: sticky;
+  top: calc(var(--header-h-solid) + 48px);
+  max-width: 7ch;
+  font-size: clamp(44px, 5.6vw, 88px);
+}
+
+.offerGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 40px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.offer {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 14px;
+  padding-block: 36px 40px;
+  border-top: 1px solid var(--rule-l);
+}
+
+.icon {
+  color: var(--cyan-deep);
+}
+
+.offerName {
+  font: 400 23px/1.25 var(--display);
+  letter-spacing: -0.01em;
+}
+
+.offer p {
+  color: var(--ink-2);
+}
+
+/* ---- closing call to action ---- */
+.cta {
+  padding-block: 130px;
+  background: linear-gradient(180deg, #2e3d4a 0%, var(--night) 100%);
+  color: var(--light);
+}
+
+.ctaInner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 48px;
+}
+
+.ctaTitle {
+  max-width: 16ch;
+  font-size: clamp(40px, 5.6vw, 84px);
+}
+
+@media (width < 1200px) {
+  .cwText {
+    margin-left: -64px;
+    padding: 40px 0 40px 40px;
+  }
+
+  .private {
+    padding: 48px;
+  }
+}
+
+@media (width < 900px) {
+  .choose {
+    padding-block: 80px;
+  }
+
+  .chooseTitle {
+    margin-bottom: 48px;
+  }
+
+  .coworking,
+  .ctaInner,
+  .offersGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .offersGrid {
+    gap: 40px;
+  }
+
+  .offersTitle {
+    position: static;
+    max-width: none;
+  }
+
+  .cwPhoto {
+    height: auto;
+    aspect-ratio: 4 / 3;
+    margin-inline: calc(-1 * var(--gutter));
+  }
+
+  .cwText {
+    margin: 0;
+    padding: 32px 0 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .private {
+    margin-top: 72px;
+    margin-inline: calc(-1 * var(--gutter));
+    padding: 48px var(--gutter);
+  }
+
+  .pvPhoto {
+    display: none;
+  }
+
+  .sizes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .offers,
+  .cta {
+    padding-block: 80px;
+  }
+}
+
+@media (width < 600px) {
+  .sizes,
+  .offerGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .size {
+    padding: 22px;
+  }
+
+  .sizeNum {
+    font-size: 56px;
+  }
+}

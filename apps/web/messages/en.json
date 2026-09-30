@@ -107,5 +107,9 @@
     "sendAnother": "Send another message",
     "ctaTitle": "Ready to take your business to the next level?",
     "ctaBody": "Schedule a visit with our team and let’s make things happen!"
+  },
+  "Services": {
+    "sizeCta": "Get a quote",
+    "sizeLabel": "Private office for {size}. Get a quote"
   }
 }

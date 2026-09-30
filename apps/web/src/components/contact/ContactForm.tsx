@@ -231,6 +231,9 @@ export function ContactForm({ fallbackEmail }: { fallbackEmail: string }) {
     <form
       className={styles.form}
       onSubmit={onSubmit}
+      // Before JavaScript loads, a submit must never put personal data into the URL.
+      method="post"
+      action="/api/contact"
       noValidate
       aria-labelledby="contact-form-title"
     >

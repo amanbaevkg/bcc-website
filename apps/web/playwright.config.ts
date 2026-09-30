@@ -28,6 +28,7 @@ export default defineConfig({
         command: `pnpm start -p ${port}`,
         port,
         reuseExistingServer: !process.env.CI,
-        env: { SITE_ENV: 'staging' },
+        // The test suite sends many enquiries; the production limit would block it.
+        env: { SITE_ENV: 'staging', CONTACT_RATE_LIMIT: '1000' },
       },
 });

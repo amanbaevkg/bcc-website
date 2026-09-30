@@ -107,5 +107,9 @@
     "sendAnother": "Eng aner Noriicht schécken",
     "ctaTitle": "Prett, fir Är Firma op den nächsten Niveau ze bréngen?",
     "ctaBody": "Maacht e Rendez-vous fir eng Visite mat eisem Team a loosst eis lassleeën!"
+  },
+  "Services": {
+    "sizeCta": "Offert ufroen",
+    "sizeLabel": "Privatbüro fir {size}. Offert ufroen"
   }
 }

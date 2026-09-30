@@ -86,3 +86,62 @@ export type HomePage = {
   testimonials: { title: Localized; items: Testimonial[] };
   final: { lines: Localized<string[]>; cta: Link; image: ImageAsset };
 };
+
+export type AboutPage = {
+  hero: {
+    eyebrow: Localized;
+    title: Localized;
+    titleAccent?: Localized;
+    body: Localized;
+    image: ImageAsset;
+  };
+  highlights: Localized[];
+  location: Localized;
+  audience: Localized;
+  figures: { value: string; label: Localized }[];
+  features: {
+    title: Localized;
+    body: Localized;
+    note?: Localized;
+    image: ImageAsset;
+    cta?: Link;
+  }[];
+  visit: { eyebrow: Localized; title: Localized; cta: Link; image: ImageAsset };
+};
+
+export type ServiceIcon =
+  | 'wifi'
+  | 'reception'
+  | 'meeting'
+  | 'kitchen'
+  | 'supplies'
+  | 'parking'
+  | 'cloud'
+  | 'mail'
+  | 'handshake'
+  | 'more';
+
+export type ServicesPage = {
+  hero: { eyebrow: Localized; title: Localized; body: Localized[] };
+  choose: {
+    title: Localized;
+    coworking: {
+      title: Localized;
+      kicker: Localized;
+      body: RichLine;
+      packages: Localized;
+      highlight: Localized;
+      audience: Localized;
+      cta: Link;
+      image: ImageAsset;
+    };
+    privateOffices: {
+      title: Localized;
+      sizes: number[];
+      sizeNote: Localized;
+      image: ImageAsset;
+    };
+  };
+  offers: { title: Localized; items: { icon: ServiceIcon; title: Localized; body: Localized }[] };
+  cta: { title: Localized; link: Link };
+};

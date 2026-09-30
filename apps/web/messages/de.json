@@ -107,5 +107,9 @@
     "sendAnother": "Weitere Nachricht senden",
     "ctaTitle": "Bereit, Ihr Unternehmen auf die nächste Stufe zu bringen?",
     "ctaBody": "Vereinbaren Sie einen Besichtigungstermin mit unserem Team und lassen Sie uns loslegen!"
+  },
+  "Services": {
+    "sizeCta": "Angebot anfordern",
+    "sizeLabel": "Privatbüro für {size}. Angebot anfordern"
   }
 }

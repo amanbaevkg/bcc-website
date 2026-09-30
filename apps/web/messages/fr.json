@@ -107,5 +107,9 @@
     "sendAnother": "Envoyer un autre message",
     "ctaTitle": "Prêt à faire passer votre entreprise à la vitesse supérieure ?",
     "ctaBody": "Planifiez une visite avec notre équipe et passons à l’action !"
+  },
+  "Services": {
+    "sizeCta": "Demander un devis",
+    "sizeLabel": "Bureau privé pour {size}. Demander un devis"
   }
 }

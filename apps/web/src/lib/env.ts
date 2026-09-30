@@ -22,7 +22,8 @@ const schema = z.object({
   RESEND_API_KEY: z.string().optional(),
   POSTMARK_SERVER_TOKEN: z.string().optional(),
 
-  // Bot protection and rate limiting (phase 3).
+  // Bot protection and rate limiting. CONTACT_RATE_LIMIT = messages per visitor per 10 minutes.
+  CONTACT_RATE_LIMIT: z.coerce.number().int().positive().default(5),
   TURNSTILE_SECRET_KEY: z.string().optional(),
   UPSTASH_REDIS_REST_URL: z.url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),

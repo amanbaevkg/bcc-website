@@ -19,6 +19,7 @@
   --light-2: #bcc4c8;
   --cyan: #8ccad9; /* BCC cyan on dark grounds */
   --cyan-deep: #2e7a8f; /* BCC cyan on light grounds */
+  --cyan-ink: #226577; /* BCC cyan for small text on light grounds (WCAG AA) */
   --rule-d: rgb(243 241 236 / 16%);
   --rule-l: rgb(31 42 51 / 14%);
 

@@ -1,6 +1,8 @@
 import 'server-only';
+import { aboutFallback } from '@/content/fallback/about';
 import { homeFallback } from '@/content/fallback/home';
-import type { HomePage } from '@/content/types';
+import { servicesFallback } from '@/content/fallback/services';
+import type { AboutPage, HomePage, ServicesPage } from '@/content/types';
 import { routing, type Locale } from '@/i18n/routing';
 import {
   compact,
@@ -243,4 +245,17 @@ export async function getHomePage(): Promise<HomePage> {
     console.error('[cms] home page query failed, using fallback content', error);
     return homeFallback;
   }
+}
+
+/*
+ * About and Services use the built-in content for now. Their CMS documents (the flexible "page"
+ * builder from the plan) arrive with the About/Services editing stage; the pages already read
+ * through these functions, so nothing else changes then.
+ */
+export async function getAboutPage(): Promise<AboutPage> {
+  return aboutFallback;
+}
+
+export async function getServicesPage(): Promise<ServicesPage> {
+  return servicesFallback;
 }

@@ -7,8 +7,6 @@ import { env } from '@/lib/env';
 
 export const dynamic = 'force-dynamic';
 
-// 5 messages per 10 minutes per visitor.
-const LIMIT = 5;
 const WINDOW_SEC = 600;
 let limiter: RateLimiter | undefined;
 
@@ -16,8 +14,13 @@ function getLimiter(): RateLimiter {
   const e = env();
   limiter ??=
     e.UPSTASH_REDIS_REST_URL && e.UPSTASH_REDIS_REST_TOKEN
-      ? upstashLimiter(e.UPSTASH_REDIS_REST_URL, e.UPSTASH_REDIS_REST_TOKEN, LIMIT, WINDOW_SEC)
-      : memoryLimiter(LIMIT, WINDOW_SEC);
+      ? upstashLimiter(
+          e.UPSTASH_REDIS_REST_URL,
+          e.UPSTASH_REDIS_REST_TOKEN,
+          e.CONTACT_RATE_LIMIT,
+          WINDOW_SEC,
+        )
+      : memoryLimiter(e.CONTACT_RATE_LIMIT, WINDOW_SEC);
   return limiter;
 }
 
