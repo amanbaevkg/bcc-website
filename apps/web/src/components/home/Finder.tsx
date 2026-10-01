@@ -94,6 +94,11 @@ function Select({ label, value, options, onChange, disabled, placeholder }: Sele
     return () => document.removeEventListener('pointerdown', onPointer);
   }, [open]);
 
+  // Keep the highlighted option visible when the arrow keys move past the scrolled area.
+  useEffect(() => {
+    if (open) document.getElementById(`${id}-opt-${active}`)?.scrollIntoView({ block: 'nearest' });
+  }, [open, active, id]);
+
   const show = () => {
     setActive(
       Math.max(

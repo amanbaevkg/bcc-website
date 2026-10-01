@@ -1,5 +1,7 @@
 .hero {
   position: relative;
+  /* Above the next section, so an open finder list can extend past the hero. */
+  z-index: 2;
   min-height: 840px;
   height: min(100svh, 960px);
   color: var(--light);
@@ -182,7 +184,11 @@
   margin: 0;
   padding: 8px;
   list-style: none;
-  background: rgb(239 235 229 / 97%);
+  /* Long lists (many team sizes) scroll inside the popup instead of running off screen. */
+  max-height: min(19.5rem, 48svh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: rgb(239 235 229);
   color: var(--ink);
   border-radius: 18px;
   box-shadow: 0 30px 60px -20px rgb(20 30 40 / 45%);
