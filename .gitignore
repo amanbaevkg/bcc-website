@@ -28,5 +28,7 @@ blob-report/
 *.log
 .vercel
 .netlify
-.sanity/
+# admin data in local development (database and uploads)
+apps/web/data/
+apps/web/media/
 .pnpm-store

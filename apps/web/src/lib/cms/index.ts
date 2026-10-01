@@ -4,115 +4,73 @@ import type { HomePage } from '@/content/types';
 import { routing, type Locale } from '@/i18n/routing';
 import {
   compact,
+  fileUrl,
   image,
   lines,
   link,
   localized,
   richLine,
-  type SanityImage,
-  type SanityLink,
-  type SanityLocalized,
-  type SanityLocalizedBlock,
+  type CmsLink,
+  type CmsLocalized,
+  type CmsMedia,
+  type CmsRichLine,
 } from './map';
-import { sanityFetch } from './sanity';
+import { cmsQuery } from './payload';
 
 /**
- * Content access for pages. Without a Sanity project (NEXT_PUBLIC_SANITY_PROJECT_ID),
- * everything comes from src/content/fallback. With one, each section uses the CMS data
- * when it is complete and the built-in content otherwise, so a half-filled CMS never
- * breaks the page.
+ * Content access for pages. Everything comes from the admin (/admin, Payload); each section
+ * uses the admin's content when it is complete and the built-in content otherwise, so a
+ * half-filled page never breaks the site (and the site works before the first import).
  */
 
-const IMG = '{ alt, hotspot, asset->{ url, metadata { dimensions } } }';
-
-const homeQuery = `*[_id == "homePage"][0]{
-  hero {
-    eyebrow, title, titleAccent, subtitle, cta, ring, teamSizes,
-    workspaceTypes[] { id, name, hasTeamSize },
-    video {
-      "mp4_1080": mp4_1080.asset->url,
-      "mp4_720": mp4_720.asset->url,
-      "mp4_480": mp4_480.asset->url,
-      poster ${IMG}
-    }
-  },
-  coworking { title, href, body, images[] ${IMG} },
-  privateOffices { title, href, body, images[] ${IMG} },
-  servicesLink,
-  trust {
-    title,
-    "clients": select(
-      count(clients) > 0 => clients[]->,
-      *[_type == "clientLogo" && active != false] | order(order asc)
-    ) { name, url, "logo": logo { asset->{ url, metadata { dimensions } } } }
-  },
-  tomorrow { lines, card, image ${IMG} },
-  spaces {
-    title, moreLink,
-    "items": select(
-      count(items) > 0 => items[]->,
-      *[_type == "space"] | order(order asc)
-    ) { caption, image ${IMG} }
-  },
-  findMore { title, cta },
-  testimonials {
-    title,
-    "items": select(
-      count(items) > 0 => items[]->,
-      *[_type == "testimonial"] | order(order asc)
-    ) { quote, quoteLanguage, name, role, company, rating }
-  },
-  final { lines, cta, image ${IMG} }
-}`;
-
 type Offer = {
-  title?: SanityLocalized;
-  href?: string;
-  body?: SanityLocalizedBlock;
-  images?: SanityImage[];
+  title?: CmsLocalized;
+  href?: string | null;
+  body?: CmsRichLine;
+  images?: CmsMedia[] | null;
 };
 
 type HomeDoc = {
   hero?: {
-    eyebrow?: SanityLocalized;
-    title?: SanityLocalized;
-    titleAccent?: SanityLocalized;
-    subtitle?: SanityLocalized;
-    cta?: SanityLink;
-    ring?: SanityLink;
-    teamSizes?: number[];
-    workspaceTypes?: { id?: string; name?: SanityLocalized; hasTeamSize?: boolean }[];
-    video?: { mp4_1080?: string; mp4_720?: string; mp4_480?: string; poster?: SanityImage };
+    eyebrow?: CmsLocalized;
+    title?: CmsLocalized;
+    titleAccent?: CmsLocalized;
+    subtitle?: CmsLocalized;
+    cta?: CmsLink;
+    ring?: CmsLink;
+    teamSizes?: number[] | null;
+    workspaceTypes?: { code?: string | null; name?: CmsLocalized; hasTeamSize?: boolean | null }[];
+    video?: { mp4_1080?: CmsMedia; mp4_720?: CmsMedia; mp4_480?: CmsMedia; poster?: CmsMedia };
   };
   coworking?: Offer;
   privateOffices?: Offer;
-  servicesLink?: SanityLink;
+  servicesLink?: CmsLink;
   trust?: {
-    title?: SanityLocalized;
-    clients?: { name?: string; url?: string; logo?: SanityImage }[];
+    title?: CmsLocalized;
+    clients?: { name?: string | null; url?: string | null; logo?: CmsMedia }[];
   };
-  tomorrow?: { lines?: SanityLocalized; card?: SanityLocalized; image?: SanityImage };
+  tomorrow?: { lines?: CmsLocalized; card?: CmsLocalized; image?: CmsMedia };
   spaces?: {
-    title?: SanityLocalized;
-    moreLink?: SanityLink;
-    items?: { caption?: SanityLocalized; image?: SanityImage }[];
+    title?: CmsLocalized;
+    moreLink?: CmsLink;
+    items?: { caption?: CmsLocalized; image?: CmsMedia }[];
   };
-  findMore?: { title?: SanityLocalized; cta?: SanityLink };
+  findMore?: { title?: CmsLocalized; cta?: CmsLink };
   testimonials?: {
-    title?: SanityLocalized;
+    title?: CmsLocalized;
     items?: {
-      quote?: string;
-      quoteLanguage?: string;
-      name?: string;
-      role?: SanityLocalized;
-      company?: string;
-      rating?: number;
+      quote?: string | null;
+      quoteLanguage?: string | null;
+      name?: string | null;
+      role?: CmsLocalized;
+      company?: string | null;
+      rating?: number | null;
     }[];
   };
-  final?: { lines?: SanityLocalized; cta?: SanityLink; image?: SanityImage };
+  final?: { lines?: CmsLocalized; cta?: CmsLink; image?: CmsMedia };
 };
 
-const isLocale = (v?: string): v is Locale => routing.locales.includes(v as Locale);
+const isLocale = (v?: string | null): v is Locale => routing.locales.includes(v as Locale);
 
 function offer(doc: Offer | undefined, fb: HomePage['coworking']): HomePage['coworking'] {
   const title = localized(doc?.title);
@@ -134,20 +92,18 @@ export function mapHome(doc: HomeDoc | null): HomePage {
   const heroVideo = (() => {
     const v = h?.video;
     const poster = image(v?.poster);
-    const sources = compact([
-      v?.mp4_1080
-        ? { src: v.mp4_1080, height: 1080 as const, type: 'video/mp4' as const }
-        : undefined,
-      v?.mp4_720 ? { src: v.mp4_720, height: 720 as const, type: 'video/mp4' as const } : undefined,
-      v?.mp4_480 ? { src: v.mp4_480, height: 480 as const, type: 'video/mp4' as const } : undefined,
-    ]);
+    const src = (m: CmsMedia, height: 1080 | 720 | 480) => {
+      const url = fileUrl(m);
+      return url ? { src: url, height, type: 'video/mp4' as const } : undefined;
+    };
+    const sources = compact([src(v?.mp4_1080, 1080), src(v?.mp4_720, 720), src(v?.mp4_480, 480)]);
     return poster && sources.length ? { poster, sources } : fb.hero.video;
   })();
 
   const workspaceTypes = compact(
     (h?.workspaceTypes ?? []).map((w) => {
       const name = localized(w.name);
-      return w.id && name ? { id: w.id, name, hasTeamSize: !!w.hasTeamSize } : undefined;
+      return w.code && name ? { id: w.code, name, hasTeamSize: !!w.hasTeamSize } : undefined;
     }),
   );
 
@@ -155,7 +111,7 @@ export function mapHome(doc: HomeDoc | null): HomePage {
     (doc.trust?.clients ?? []).map((c) => {
       const logo = image(c.logo);
       return c.name && logo
-        ? { name: c.name, url: c.url, logo: { ...logo, alt: { en: c.name } } }
+        ? { name: c.name, url: c.url ?? undefined, logo: { ...logo, alt: { en: c.name } } }
         : undefined;
     }),
   );
@@ -235,11 +191,49 @@ export function mapHome(doc: HomeDoc | null): HomePage {
   };
 }
 
+type ListDoc = Record<string, unknown> & { active?: boolean | null };
+
+/** The home page plus the lists it shows (all of them unless the page picks some). */
 export async function getHomePage(): Promise<HomePage> {
   try {
-    return mapHome(await sanityFetch<HomeDoc>(homeQuery));
+    const doc = await cmsQuery('home', async (p) => {
+      const home = (await p.findGlobal({
+        slug: 'home',
+        locale: 'all',
+        depth: 2,
+        draft: false,
+      })) as Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+      const all = async (collection: string) =>
+        (
+          await p.find({
+            collection: collection as never,
+            locale: 'all',
+            depth: 1,
+            limit: 100,
+            sort: 'order',
+            pagination: false,
+          })
+        ).docs as ListDoc[];
+      const picked = (v: unknown) =>
+        Array.isArray(v) && v.length && typeof v[0] === 'object' ? (v as ListDoc[]) : null;
+      return {
+        ...home,
+        trust: {
+          ...home.trust,
+          clients:
+            picked(home.trust?.clients) ??
+            (await all('client-logos')).filter((c) => c.active !== false),
+        },
+        spaces: { ...home.spaces, items: picked(home.spaces?.items) ?? (await all('spaces')) },
+        testimonials: {
+          ...home.testimonials,
+          items: picked(home.testimonials?.items) ?? (await all('testimonials')),
+        },
+      } as HomeDoc;
+    });
+    return mapHome(doc);
   } catch (error) {
-    // A CMS outage must not take the site down: log it and serve the built-in content.
+    // A database problem must not take the site down: log it and serve the built-in content.
     console.error('[cms] home page query failed, using fallback content', error);
     return homeFallback;
   }

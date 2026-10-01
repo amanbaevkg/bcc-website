@@ -1,10 +1,10 @@
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { NextConfig } from 'next';
+import { withPayload } from '@payloadcms/next/withPayload';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const isDev = process.env.NODE_ENV === 'development';
-// Images and videos come from Sanity's CDN once a project is configured.
-const cms = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ? ' https://cdn.sanity.io' : '';
 // Cloudflare Turnstile (contact form bot check) only when its site key is set.
 const turnstile = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
   ? ' https://challenges.cloudflare.com'
@@ -24,9 +24,9 @@ const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}${turnstile}`,
   "style-src 'self' 'unsafe-inline'",
-  `img-src 'self' data: blob:${cms}`,
+  "img-src 'self' data: blob:",
   "font-src 'self'",
-  `media-src 'self'${cms}`,
+  "media-src 'self'",
   `connect-src 'self'${turnstile}`,
   turnstile ? `frame-src${turnstile}` : "frame-src 'none'",
   "object-src 'none'",
@@ -53,12 +53,9 @@ const nextConfig: NextConfig = {
   // Self-contained server for Docker / plain Node hosting. Vercel and Netlify ignore it.
   output: 'standalone',
   // Trace files from the monorepo root so workspace packages are included.
-  outputFileTracingRoot: path.join(__dirname, '../..'),
+  outputFileTracingRoot: path.join(path.dirname(fileURLToPath(import.meta.url)), '../..'),
   poweredByHeader: false,
   reactStrictMode: true,
-  images: {
-    remotePatterns: [{ protocol: 'https', hostname: 'cdn.sanity.io', pathname: '/images/**' }],
-  },
   experimental: {
     sri: { algorithm: 'sha256' },
     // [locale]/layout.tsx is the root layout, so URLs outside a language get this page.
@@ -76,4 +73,4 @@ const nextConfig: NextConfig = {
 };
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
-export default withNextIntl(nextConfig);
+export default withPayload(withNextIntl(nextConfig));

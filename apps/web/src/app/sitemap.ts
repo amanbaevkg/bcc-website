@@ -8,6 +8,9 @@ import { languageAlternates } from '@/lib/seo';
  * Legal pages join once they are approved (they are noindex placeholders until then);
  * News joins once an article is published.
  */
+// Built on request: it lists news articles from the admin's database.
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.SITE_URL ?? 'http://localhost:3000';
   const abs = (langs: Record<string, string>) =>

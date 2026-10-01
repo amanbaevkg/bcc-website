@@ -1,6 +1,6 @@
 /**
  * Fallback site details, copied from businesscentercapellen.lu.
- * Used until the Sanity "Site settings" document exists; the CMS then overrides them.
+ * Used until the Site settings in the admin are filled in; the admin then overrides them.
  */
 export const siteFallback = {
   name: 'Business Center Capellen',

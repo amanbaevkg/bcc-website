@@ -1,8 +1,8 @@
 import 'server-only';
 import { siteFallback } from '@/content/site';
 import type { Localized } from '@/content/types';
-import { localized, type SanityLocalized } from './map';
-import { sanityFetch } from './sanity';
+import { localized, type CmsLocalized } from './map';
+import { readGlobal } from './payload';
 
 /** Contact details and social links; the CMS "Site settings" override the built-in values. */
 export type SiteInfo = {
@@ -17,12 +17,12 @@ export type SiteInfo = {
 };
 
 type SettingsDoc = {
-  email?: string;
-  phone?: string;
-  address?: { street?: string; postalCode?: string; city?: string };
-  mapUrl?: string;
-  social?: { network?: string; url?: string }[];
-  tagline?: SanityLocalized;
+  email?: string | null;
+  phone?: string | null;
+  address?: { street?: string | null; postalCode?: string | null; city?: string | null };
+  mapUrl?: string | null;
+  social?: { network?: string | null; url?: string | null }[] | null;
+  tagline?: CmsLocalized;
 };
 
 const known = ['linkedin', 'facebook'] as const;
@@ -58,11 +58,7 @@ export function mapSite(doc: SettingsDoc | null): SiteInfo {
 
 export async function getSiteInfo(): Promise<SiteInfo> {
   try {
-    return mapSite(
-      await sanityFetch<SettingsDoc>(
-        `*[_id == "siteSettings"][0]{ email, phone, address, mapUrl, social[]{ network, url }, tagline }`,
-      ),
-    );
+    return mapSite(await readGlobal<SettingsDoc>('site-settings', 0));
   } catch (error) {
     console.error('[cms] site settings query failed, using built-in details', error);
     return mapSite(null);

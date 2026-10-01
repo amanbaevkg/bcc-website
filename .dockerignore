@@ -2,7 +2,6 @@
 # The dev setup mounts the source at run time, so nothing here is hidden from development.
 **/node_modules
 **/.next
-**/.sanity
 **/dist
 **/.turbo
 .pnpm-store

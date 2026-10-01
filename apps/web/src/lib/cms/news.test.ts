@@ -1,35 +1,31 @@
 import { describe, expect, it } from 'vitest';
 import { formatDate } from '@/components/news/date';
-import { pickForLocale } from './news';
+import { inLocale } from './news';
 
-const doc = (slug: string, language: string, group: string, date = '2026-09-01') => ({
+const body = { root: { children: [] } };
+const post = (slug: string, titles: Record<string, string>, date = '2026-09-01') => ({
   slug,
-  language,
-  group,
-  date,
-  title: `${slug} title`,
-  excerpt: `${slug} teaser`,
+  date: `${date}T00:00:00.000Z`,
+  title: titles,
+  excerpt: Object.fromEntries(Object.keys(titles).map((l) => [l, `${slug} teaser ${l}`])),
+  body: { en: body },
 });
 
 describe('news per language', () => {
-  it('prefers the page language and falls back to English, newest first', () => {
-    const list = pickForLocale(
-      [
-        doc('opening', 'en', 'g1', '2026-09-10'),
-        doc('ouverture', 'fr', 'g1', '2026-09-10'),
-        doc('parking', 'en', 'g2', '2026-09-20'),
-        doc('only-german', 'de', 'g3'),
-      ],
-      'fr',
-    );
-    expect(list.map((p) => [p.slug, p.lang])).toEqual([
-      ['parking', 'en'],
-      ['ouverture', 'fr'],
-    ]);
+  it('shows the page language and falls back to English', () => {
+    expect(inLocale(post('opening', { en: 'Opening', fr: 'Ouverture' }), 'fr')).toMatchObject({
+      title: 'Ouverture',
+      lang: 'fr',
+      date: '2026-09-01',
+    });
+    expect(inLocale(post('parking', { en: 'Parking' }), 'de')).toMatchObject({
+      title: 'Parking',
+      lang: 'en',
+    });
   });
 
   it('skips posts missing required fields', () => {
-    expect(pickForLocale([{ slug: 'x', language: 'en', group: 'g' }], 'en')).toEqual([]);
+    expect(inLocale({ slug: 'x', title: { en: 'X' } }, 'en')).toBeUndefined();
   });
 });
 

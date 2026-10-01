@@ -1,7 +1,7 @@
 # Local development with hot reload:
-#   docker compose up --build        → website http://localhost:3000, admin (Sanity Studio) http://localhost:3333
-#   docker compose up --build web    → website only
+#   docker compose up --build        → website http://localhost:3000, admin http://localhost:3000/admin
 # Settings: copy .env.example to .env (optional). .env is never committed.
+# The admin's database and uploads are kept in apps/web/data and apps/web/media (not committed).
 # Development only; the production image is the Dockerfile's last stage (see README → Deployment).
 
 x-dev: &dev
@@ -18,7 +18,6 @@ x-dev: &dev
     # Dependencies and the build cache stay inside Docker (Linux builds, never mixed with your machine's).
     - node_modules:/repo/node_modules
     - web_node_modules:/repo/apps/web/node_modules
-    - studio_node_modules:/repo/apps/studio/node_modules
     - next_cache:/repo/apps/web/.next
 
 services:
@@ -32,28 +31,19 @@ services:
     depends_on:
       install:
         condition: service_completed_successfully
-    command: pnpm --filter web exec next dev --hostname 0.0.0.0 --port 3000
+    working_dir: /repo/apps/web
+    command: pnpm exec next dev --hostname 0.0.0.0 --port 3000
     ports:
       - '3000:3000'
     environment:
       SITE_ENV: ${SITE_ENV:-development}
       SITE_URL: ${SITE_URL:-http://localhost:3000}
-      NEXT_PUBLIC_SANITY_PROJECT_ID: ${NEXT_PUBLIC_SANITY_PROJECT_ID:-8bx4pgzw}
-      NEXT_PUBLIC_SANITY_DATASET: ${NEXT_PUBLIC_SANITY_DATASET:-production}
-    restart: unless-stopped
-
-  studio:
-    <<: *dev
-    depends_on:
-      install:
-        condition: service_completed_successfully
-    command: pnpm --filter studio exec sanity dev --host 0.0.0.0 --port 3333
-    ports:
-      - '3333:3333'
+      # Development-only signing key; the live server gets its own secret value.
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:-local-development-only-secret-0123456789}
+      DATABASE_URL: ${DATABASE_URL:-file:./data/payload.db}
     restart: unless-stopped
 
 volumes:
   node_modules:
   web_node_modules:
-  studio_node_modules:
   next_cache:

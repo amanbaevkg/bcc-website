@@ -251,3 +251,13 @@ test('no horizontal scroll and no axe violations', async ({ page }) => {
     ).toEqual([]);
   }
 });
+
+test('the admin asks for a sign-in and its data is not public', async ({ page, request }) => {
+  await page.goto('/admin');
+  await expect(page).toHaveURL(/\/admin\/login/);
+  await expect(page.locator('input[name="email"]')).toBeVisible();
+  await expect(page.locator('input[name="password"]')).toBeVisible();
+  for (const path of ['/api/users', '/api/globals/home', '/api/legal-pages']) {
+    expect((await request.get(path)).status(), path).toBe(403);
+  }
+});

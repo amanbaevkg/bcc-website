@@ -42,7 +42,7 @@ export async function LegalPage({ kind, locale }: { kind: Kind; locale: Locale }
           </p>
         )}
         <div className={styles.text}>
-          <RichBody blocks={doc.body} locale={locale} />
+          <RichBody doc={doc.body} locale={locale} />
         </div>
       </div>
     </section>

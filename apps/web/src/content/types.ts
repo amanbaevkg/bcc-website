@@ -1,6 +1,6 @@
 /**
- * Content types shared by the fallback content and the Sanity queries.
- * They mirror the CMS schemas in apps/studio, so a section never knows where its data came from.
+ * Content types shared by the fallback content and the admin (Payload) content.
+ * They mirror the admin's fields (src/payload), so a section never knows where its data came from.
  *
  * Short texts are localized per field (EN/FR/DE/LU side by side, as in the CMS);
  * a missing translation falls back to English.
@@ -146,8 +146,8 @@ export type ServicesPage = {
   cta: { title: Localized; link: Link };
 };
 
-/** A Portable Text block from the CMS (rendered as React elements, never as raw HTML). */
-export type RichBlock = { _type: string; _key?: string; [key: string]: unknown };
+/** Rich text from the admin's editor (Lexical JSON), rendered as React elements, never raw HTML. */
+export type RichDoc = { root: { children?: unknown[]; [key: string]: unknown } };
 
 export type NewsSummary = {
   slug: string;
@@ -162,7 +162,7 @@ export type NewsSummary = {
   fixture?: boolean;
 };
 
-export type NewsPost = NewsSummary & { body: RichBlock[]; author?: string };
+export type NewsPost = NewsSummary & { body: RichDoc; author?: string };
 
 export type ContactPage = {
   gallery: { title: Localized; photos: ImageAsset[] };

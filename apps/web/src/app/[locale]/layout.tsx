@@ -18,6 +18,9 @@ type Props = { children: ReactNode; params: Promise<{ locale: string }> };
 
 // Only the four languages exist; any other first segment falls through to global-not-found.
 export const dynamicParams = false;
+// Pages are rendered on request from the admin's content (cached until the next save there),
+// so an edit shows at once and the build needs no database.
+export const dynamic = 'force-dynamic';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

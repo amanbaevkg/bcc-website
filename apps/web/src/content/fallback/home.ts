@@ -1,7 +1,7 @@
 import type { HomePage, Localized } from '../types';
 
 /**
- * Home page content used until the Sanity "Home page" document exists.
+ * Home page content used until the admin's Home page is filled in (and imported into it on first start).
  * English is copied from businesscentercapellen.lu (see the approved mockup);
  * FR/DE/LU are translations (terms in translations/glossary.md).
  * Testimonials stay in the language they were written in.

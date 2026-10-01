@@ -1,7 +1,7 @@
 {
   "name": "bcc-web",
   "private": true,
-  "description": "Business Center Capellen website: Next.js front end, API routes and Sanity CMS studio.",
+  "description": "Business Center Capellen website: Next.js front end, API routes and the built-in admin (Payload CMS).",
   "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": ">=22.12 <23"

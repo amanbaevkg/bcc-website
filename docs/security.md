@@ -25,13 +25,28 @@ Tested on Next.js 16.3 (Playwright, `e2e/smoke.spec.ts`):
 Chosen: pre-rendered pages, `script-src 'self' 'unsafe-inline'`, plus these controls:
 
 - External scripts only from our own origin, pinned with Subresource Integrity (`experimental.sri`).
-- ESLint forbids `dangerouslySetInnerHTML` and `eval`; CMS rich text is rendered as React elements
+- ESLint forbids `dangerouslySetInnerHTML` and `eval`; the admin's rich text is rendered as React elements
   (Portable Text), never as raw HTML. This removes the injection path the inline allowance would expose.
 - `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`, `frame-ancestors 'none'`.
-- Third-party origins are added one by one, only when a feature needs them (Sanity CDN images, Turnstile).
+- Third-party origins are added one by one, only when a feature needs them (Turnstile).
 
 If a later requirement demands a nonce-based CSP, it can be added in `src/proxy.ts` (see the Next.js CSP
 guide); the cost is dynamic rendering of every page.
+
+## Admin (`/admin`, Payload CMS)
+
+- Sign-in with e-mail and password; passwords are hashed by Payload (PBKDF2). Five wrong attempts lock
+  an account for 10 minutes; sessions last 8 hours in an HTTP-only cookie (`Secure` in production,
+  `SameSite=Lax`), and Payload checks the request origin against `SITE_URL` (CSRF).
+- Roles: **Admin** manages users and the legal pages; **Editor** changes content only and sees only their
+  own account. The REST API under `/api/*` answers only signed-in users (except uploaded files, which
+  the public pages show); the website reads content on the server through Payload's local API.
+- The first admin comes from `PAYLOAD_ADMIN_EMAIL` / `PAYLOAD_ADMIN_PASSWORD` on the first start, so the
+  public "create first user" page never appears on a live server. Remove both variables afterwards.
+- `PAYLOAD_SECRET` (32+ random characters) signs sessions; the server does not start without it.
+- No outside service: no Gravatar, no telemetry, GraphQL disabled.
+- Data: `/data/payload.db` and `/data/media` on the server. Back them up; whoever can read the volume can
+  read the content and the password hashes.
 
 ## Staging
 

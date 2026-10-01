@@ -1,7 +1,7 @@
 import type { ContactPage, Localized } from '../types';
 
 /**
- * Contact page photos used until the Sanity "Contact page" document exists.
+ * Contact page photos used until the admin's Contact page is filled in (and imported into it on first start).
  * The 20 photos are the gallery from the contact page of businesscentercapellen.lu,
  * resized to 2000 px; alt texts describe what each photo shows.
  */

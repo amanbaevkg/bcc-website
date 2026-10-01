@@ -29,6 +29,15 @@ export default defineConfig({
         port,
         reuseExistingServer: !process.env.CI,
         // The test suite sends many enquiries; the production limit would block it.
-        env: { SITE_ENV: 'staging', CONTACT_RATE_LIMIT: '1000' },
+        // The admin starts on a throw-away database with test-only credentials.
+        env: {
+          SITE_ENV: 'staging',
+          CONTACT_RATE_LIMIT: '1000',
+          DATABASE_URL: 'file:./test-results/e2e.db',
+          PAYLOAD_MEDIA_DIR: './test-results/media',
+          PAYLOAD_SECRET: process.env.PAYLOAD_SECRET ?? 'e2e-only-secret-not-used-anywhere-else',
+          PAYLOAD_ADMIN_EMAIL: 'e2e@example.com',
+          PAYLOAD_ADMIN_PASSWORD: 'e2e-only-password',
+        },
       },
 });

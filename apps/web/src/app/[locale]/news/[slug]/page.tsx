@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { formatDate } from '@/components/news/date';
 import styles from '@/components/news/News.module.css';
@@ -6,24 +7,18 @@ import { RichBody } from '@/components/news/RichBody';
 import { Icon } from '@/components/ui/Icon';
 import { Photo } from '@/components/ui/Photo';
 import { Link } from '@/i18n/navigation';
-import { htmlLang, routing, type Locale } from '@/i18n/routing';
+import { htmlLang, type Locale } from '@/i18n/routing';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { getNewsParams, getNewsPost } from '@/lib/cms/news';
+import { getNewsPost } from '@/lib/cms/news';
 import { env } from '@/lib/env';
 import { pageMetadata } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
 /*
- * Articles are pre-rendered. Unknown slugs match no page and get the full 404 (see
- * app/global-not-found.tsx); a newly published article appears after the next build,
- * which a Sanity webhook can trigger through the host's deploy hook.
+ * Articles are read from the admin on request (cached until the next save there), so a newly
+ * published article appears at once. An unknown slug gets the 404 page.
  */
-export const dynamicParams = false;
-
-export async function generateStaticParams() {
-  return getNewsParams(routing.locales);
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
@@ -53,8 +48,7 @@ export default async function NewsArticle({ params }: Props) {
   const locale = raw as Locale;
   const t = await getTranslations('News');
   const post = await getNewsPost(locale, slug);
-  // Only reachable for pre-rendered slugs, so a post is always found.
-  if (!post) return null;
+  if (!post) notFound();
   const lang = post.lang !== locale ? htmlLang[post.lang] : undefined;
 
   return (
@@ -106,7 +100,7 @@ export default async function NewsArticle({ params }: Props) {
         </div>
       )}
       <div className={`wrap ${styles.articleBody}`} lang={lang}>
-        <RichBody blocks={post.body} locale={locale} />
+        <RichBody doc={post.body} locale={locale} />
         {post.author && <p className={styles.author}>{t('author', { author: post.author })}</p>}
         <Link href="/news" className={styles.back2}>
           <Icon name="arrowLeft" />

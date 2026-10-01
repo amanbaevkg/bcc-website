@@ -1,12 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { homeFallback } from '@/content/fallback/home';
+import { paragraphs } from '@/payload/lexical';
 import { mapHome } from './index';
-import { lines, localized, richLine } from './map';
+import { image, lines, localized, richLine } from './map';
 
-const loc = (en: string, fr?: string) => [
-  { _key: 'en', value: en },
-  ...(fr ? [{ _key: 'fr', value: fr }] : []),
-];
+/* The admin (Payload) returns texts with locale "all" as { en, fr, de, lu }. */
+const loc = (en: string, fr?: string) => ({ en, ...(fr ? { fr } : {}) });
+const photo = (url: string) => ({
+  url,
+  width: 2000,
+  height: 1500,
+  alt: loc('A room'),
+  focalX: 30,
+  focalY: 70,
+});
 
 describe('CMS mapping', () => {
   it('uses the built-in content when there is no document', () => {
@@ -23,20 +30,11 @@ describe('CMS mapping', () => {
   });
 
   it('converts per-language values and ignores empty translations', () => {
-    expect(localized([...loc('Hello', 'Bonjour'), { _key: 'de', value: ' ' }])).toEqual({
+    expect(localized({ en: 'Hello', fr: 'Bonjour', de: ' ', lu: null })).toEqual({
       en: 'Hello',
       fr: 'Bonjour',
     });
-    expect(localized(loc(''))).toBeUndefined();
-  });
-
-  it('reads the language from `language` (plugin v5) before `_key`', () => {
-    expect(
-      localized([
-        { _key: 'a1', language: 'en', value: 'Hello' },
-        { _key: 'b2', language: 'de', value: 'Hallo' },
-      ]),
-    ).toEqual({ en: 'Hello', de: 'Hallo' });
+    expect(localized({ en: '', fr: 'Bonjour' })).toBeUndefined();
   });
 
   it('splits headline text into lines per language', () => {
@@ -46,11 +44,20 @@ describe('CMS mapping', () => {
     });
   });
 
-  it('keeps bold runs from block text', () => {
-    const body = {
-      en: [{ children: [{ text: 'Grow', marks: ['strong'] }, { text: ' fast' }] }],
-    };
+  it('keeps bold runs from the rich-text editor', () => {
+    const body = { en: paragraphs([{ strong: 'Grow' }, ' fast']) };
     expect(richLine(body)).toEqual({ en: [{ strong: 'Grow' }, ' fast'] });
+  });
+
+  it('turns an uploaded photo into an image with its focal point', () => {
+    expect(image(photo('/api/media/file/a.jpg'))).toEqual({
+      src: '/api/media/file/a.jpg',
+      width: 2000,
+      height: 1500,
+      alt: { en: 'A room' },
+      hotspot: { x: 0.3, y: 0.7 },
+    });
+    expect(image(12)).toBeUndefined();
   });
 
   it('skips incomplete gallery items and clamps ratings', () => {
@@ -58,15 +65,7 @@ describe('CMS mapping', () => {
       spaces: {
         items: [
           { caption: loc('Kitchen') },
-          {
-            caption: loc('Lounge'),
-            image: {
-              asset: {
-                url: 'https://cdn.sanity.io/x.jpg',
-                metadata: { dimensions: { width: 2000, height: 1500 } },
-              },
-            },
-          },
+          { caption: loc('Lounge'), image: photo('/api/media/file/l.jpg') },
         ],
       },
       testimonials: {

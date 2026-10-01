@@ -1,7 +1,8 @@
 # bcc-web
 
 Website for **BCC – Business Center Capellen**, built with Next.js (App Router), React, TypeScript and Node.js.
-Four languages (EN default, FR, DE, LU) from one codebase; content will be managed in Sanity (phase 2).
+Four languages (EN default, FR, DE, LU) from one codebase; texts and photos are edited in the built-in
+admin at `/admin` (Payload CMS, data in one SQLite file on the same server, no outside service).
 
 > **Not live.** Nothing may be published on the production domain until every item in the
 > [launch checklist](#launch-checklist) is done. The current live BCC website is not touched by this repository.
@@ -13,12 +14,13 @@ apps/web            Next.js site (frontend + API routes)
   messages/         UI text per language (en, fr, de, lu)
   src/app/[locale]  pages; every page exists once and is rendered for all languages
   src/components    layout (header, language selector, mobile menu, footer) and UI parts
-  src/content       fallback content used until the CMS is connected
+  src/content       built-in content: imported into the admin on first start, and the fallback
+  src/payload       the admin: pages, lists, users, first-start import (payload.config.ts wires it)
+  src/migrations    database schema changes, applied on start in production
   src/i18n          language routing (next-intl)
   src/lib/env.ts    validated server environment (secrets are read only here)
   src/proxy.ts      language redirects, staging login, noindex outside production
   e2e/              Playwright browser tests
-apps/studio         Sanity Studio: the content editor (schemas in apps/studio/schemaTypes)
 docs/               security notes and decisions
 ```
 
@@ -45,17 +47,17 @@ cp .env.example .env          # optional: settings for local work; .env is never
 docker compose up --build     # first start: a few minutes; later starts: seconds
 ```
 
-| Address               | What                                                                    |
-| --------------------- | ----------------------------------------------------------------------- |
-| http://localhost:3000 | the website, redirects to `/en` (also `/fr`, `/de`, `/lu`)              |
-| http://localhost:3333 | the admin (Sanity Studio), local copy; sign in with your Sanity account |
+| Address                     | What                                                       |
+| --------------------------- | ---------------------------------------------------------- |
+| http://localhost:3000       | the website, redirects to `/en` (also `/fr`, `/de`, `/lu`) |
+| http://localhost:3000/admin | the admin; on the first visit create your local account    |
 
 - **Hot reload:** the project folder is mounted into the container, so saving a file reloads the page.
   Dependencies and the Next.js cache live in Docker volumes, separate from anything installed on your machine.
 - **Settings:** everything in `.env` reaches both services (see [Environment variables](#environment-variables)).
-  Without a `.env` the site runs in development mode with the shared Sanity project and the contact form
-  writing messages to the log instead of sending them (`EMAIL_PROVIDER=log`).
-- **Website only:** `docker compose up --build web`.
+  Without a `.env` the site runs in development mode: the admin's database and uploads go to
+  `apps/web/data` and `apps/web/media` (not committed; delete them to start again from the built-in
+  content), and the contact form writes messages to the log instead of sending them (`EMAIL_PROVIDER=log`).
 - **Stop:** `Ctrl+C`, or `docker compose down` when started with `-d`.
 - **After `pnpm-lock.yaml` changes** (new dependencies): `docker compose up --build` installs them on start.
   If anything looks stale, `docker compose down -v` removes the volumes and the next start reinstalls.
@@ -82,60 +84,54 @@ The `/lu/` prefix is kept for the URL, but pages declare the ISO code `lb` (`<ht
 UI texts live in `apps/web/messages/*.json`. Add a key to all four files; `pnpm i18n:check` enforces it.
 Page content (texts, services, news…) will come from the CMS per language.
 
-## Content (Sanity CMS)
+## Content (admin at /admin)
 
-BCC's Sanity project: **`8bx4pgzw`**, dataset `production` (public identifiers, not secrets).
-Editors change texts, photos, videos, logos, testimonials, news and contact details; section order,
-layout and styling stay in the code. Every part of a page uses the CMS content once it is complete
-and the built-in content (`apps/web/src/content/fallback`) otherwise, so an empty or half-filled CMS
-never breaks the site, and a CMS outage serves the built-in content.
+The admin is [Payload CMS](https://payloadcms.com) running inside this Next.js app: open
+`https://<site>/admin` and sign in with e-mail and password. Editors change texts, photos, videos,
+logos, testimonials, news and contact details; section order, layout and styling stay in the code.
+Every part of a page uses the admin's content once it is complete and the built-in content
+(`apps/web/src/content/fallback`) otherwise, so a half-filled page never breaks the site.
 
-| In the Studio                               | On the site                                                                 |
-| ------------------------------------------- | --------------------------------------------------------------------------- |
-| Home page, About Us page, Our Services page | the three pages, all four languages side by side                            |
-| Contact page                                | the photo gallery on the contact page (title and photos, drag to reorder)   |
-| Site settings                               | phone, e-mail, address, map link, social links, footer tagline              |
-| Client logo, Space photo, Testimonial       | “They trust us”, “Our spaces”, testimonials                                 |
-| News                                        | /news (one document per language)                                           |
-| Legal page                                  | Privacy Policy and Legal Notice (one per language; must be marked approved) |
+| In the admin                                           | On the site                                                         |
+| ------------------------------------------------------ | ------------------------------------------------------------------- |
+| Pages → Home, About Us, Our Services, Contact          | those pages; the language menu (top right) switches EN/FR/DE/LU     |
+| Pages → Site settings                                  | phone, e-mail, address, map link, social links, footer tagline      |
+| Pages → Legal pages                                    | Privacy Policy and Legal Notice (admins only; approve per language) |
+| Lists → News, Client logos, Space photos, Testimonials | /news, “They trust us”, “Our spaces”, testimonials                  |
+| Lists → Photos & videos                                | every uploaded file (alternative text and focal point)              |
+| Settings → Users                                       | accounts: **Admin** (also users and legal pages) or **Editor**      |
 
-**Open the Studio locally:** `pnpm --filter studio dev` → http://localhost:3333 (log in with the
-Sanity account). **Publish it for staff:** `pnpm --filter studio deploy` → https://bcc-capellen.sanity.studio (live since 1 October 2026).
-Invite editors at sanity.io/manage → Members (role Editor).
-
-**First import of the current content** (once): create a token at sanity.io/manage → API → Tokens
-(permission Editor), then
-
-```sh
-SANITY_API_WRITE_TOKEN=<token> pnpm --filter web seed:cms
-```
-
-It uploads the photos, logos and hero videos and creates the documents that do not exist yet
-(`--replace` overwrites them, `--dry-run` only lists them). Delete the token afterwards.
-
-**Refresh after publishing:** pages re-read the CMS at most every 5 minutes. For an instant refresh,
-add a webhook at sanity.io/manage → API → Webhooks: URL `https://<site>/api/revalidate`, trigger on
-create/update/delete, HTTP header `Authorization: Bearer <SANITY_REVALIDATE_SECRET>`. New News articles
-need a rebuild: point a second webhook (filter `_type == "newsPost"`) at the host's deploy hook.
-
-Hero videos in the repository (`public/media/hero`, ~26 MB) are the fallback; once the CMS holds the
-video they can be removed.
+- **Where the data lives:** one SQLite file (`DATABASE_URL`, default `apps/web/data/payload.db`) and the
+  uploads folder (`PAYLOAD_MEDIA_DIR`, default `apps/web/media`). In Docker both are under `/data`:
+  keep that on a persistent volume and back it up (copy the folder while the site runs or is stopped).
+- **First start:** with an empty database the server creates the first admin from
+  `PAYLOAD_ADMIN_EMAIL` / `PAYLOAD_ADMIN_PASSWORD` and imports the current website texts and photos
+  (`src/payload/seed.ts`). Without those variables in production it logs an error, because the
+  "create first user" page would otherwise be open to anyone. Locally you can create the first account at `/admin`.
+- **Saving:** pages with a Publish button keep drafts and a version history (restore any version).
+  After a save the next page view shows the change; pages also refresh every 5 minutes.
+- **Sign-in protection:** 5 wrong passwords lock an account for 10 minutes; sessions last 8 hours.
+- **Changing the admin's fields** (`src/payload/**`): run
+  `pnpm --filter web payload migrate:create <name>` and commit the new file in `src/migrations`;
+  production applies it on the next start. In development the database follows the code by itself.
+  After adding admin components, `pnpm --filter web payload generate:importmap`.
 
 ## News
 
-News comes only from the CMS (“News” documents, one per language). Nothing is invented: until the
-first article is published, `/news` shows a short “no news yet” message and the menu has no News item;
-it appears by itself once there is an article. A post not yet translated is listed in English, marked
-as such. Articles are pre-rendered: set up a Sanity webhook that calls the host’s deploy hook so a newly
-published article goes online within a minute or two.
+News comes only from the admin (Lists → News; one article holds all four languages). Nothing is
+invented: until the first article is published, `/news` shows a short “no news yet” message and the menu
+has no News item; it appears by itself once there is an article. An article not yet translated is shown
+in English, marked as such. A published article is online at once.
 
-To review the templates before there is real news, run a staging build with `NEWS_FIXTURES=1`: two
+To review the templates before there is real news, run with `NEWS_FIXTURES=1` outside production: two
 example articles appear, each marked “Test data”. This is ignored when `SITE_ENV=production`.
 
 ## Launch gate
 
-`pnpm build` with `SITE_ENV=production` stops unless the Privacy Policy and Legal Notice exist in the
-CMS in all four languages and are marked "Approved by BCC’s legal adviser". Staging builds are not affected.
+With `SITE_ENV=production` the server refuses to start (`src/instrumentation-node.ts`) until the Privacy
+Policy and Legal Notice are entered in the admin in all four languages and each is ticked "Approved by
+BCC’s legal adviser". Enter them while the server runs with `SITE_ENV=staging` (same database), then
+switch to production.
 
 ## Environment variables
 
@@ -149,25 +145,29 @@ See [`.env.example`](.env.example) for the full list with comments. Rules:
 
 ## Deployment
 
-The same code runs on all three targets; security headers come from `next.config.ts` and apply everywhere.
+The built-in admin keeps its database and uploads on the server's disk, so the site runs as one
+long-lived Node server with a persistent folder: the Docker image below (or plain Node). Serverless
+hosts (Vercel, Netlify) have no such disk; they would need PostgreSQL and cloud file storage instead.
+Security headers come from `next.config.ts`.
 
-**Vercel** — import the GitLab repository, set _Root Directory_ to `apps/web`, add the environment variables.
-
-**Netlify** — import the repository; `netlify.toml` sets the base directory and build command. Add the environment variables in Site settings.
-
-**Own Node server / Docker**
+**Docker (Cloud Power)**
 
 ```sh
-docker build -t bcc-web .
-docker run -p 3000:3000 --env-file /secure/path/bcc.env bcc-web
+docker build --build-arg SITE_ENV=production --build-arg SITE_URL=https://www.businesscentercapellen.lu -t bcc-web .
+docker run -d --restart unless-stopped -p 127.0.0.1:3000:3000 \
+  -v bcc-data:/data --env-file /secure/path/bcc.env bcc-web
 ```
+
+`/data` holds `payload.db` and `media/`: back it up. Database changes in `src/migrations` are applied
+automatically on start. Put a TLS-terminating reverse proxy (nginx, Caddy) in front.
 
 Without Docker: `pnpm install && pnpm build`, then run `node apps/web/.next/standalone/apps/web/server.js`
 after copying `apps/web/.next/static` to `apps/web/.next/standalone/apps/web/.next/static` and `apps/web/public`
-to `apps/web/.next/standalone/apps/web/public`. Put a TLS-terminating reverse proxy (nginx, Caddy) in front.
+to `apps/web/.next/standalone/apps/web/public`, with `DATABASE_URL` and `PAYLOAD_MEDIA_DIR` pointing to a
+persistent folder.
 
 **Staging** — set `SITE_ENV=staging` and `SITE_BASIC_AUTH=user:password`: the whole site asks for a login
-and sends `noindex`.
+and sends `noindex`. The admin at `/admin` keeps its own sign-in.
 
 ## CI (GitLab)
 
@@ -182,7 +182,8 @@ All must be done and confirmed by BCC before the production domain points here:
 - [ ] FR / DE / LU translations reviewed (see `translations/review-notes.md`, phase 5)
 - [ ] Real e-mail delivery connected and tested (`EMAIL_PROVIDER`, recipient confirmed)
 - [ ] Contact form tested end to end, including spam protection and rate limits
-- [ ] CMS roles and permissions checked
+- [ ] Admin accounts created (Admin / Editor roles checked); first-start variables removed
+- [ ] Backups of the `/data` volume (database and uploads) scheduled and a restore tested
 - [ ] Responsive check on all device classes, all four languages
 - [ ] Security review and performance checks (Lighthouse) passed
 - [ ] Every language route tested

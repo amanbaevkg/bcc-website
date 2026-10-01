@@ -9,43 +9,42 @@ import {
   localized,
   localizedList,
   richLine,
-  type SanityImage,
-  type SanityLink,
-  type SanityLocalized,
-  type SanityLocalizedBlock,
+  type CmsLink,
+  type CmsLocalized,
+  type CmsMedia,
+  type CmsRichLine,
 } from './map';
-import { sanityFetch } from './sanity';
+import { readGlobal } from './payload';
 
 /*
- * About Us and Our Services from their CMS documents. As on the home page, each part uses the
- * CMS content when it is complete and the built-in content otherwise.
+ * About Us and Our Services from the admin. As on the home page, each part uses the
+ * admin's content when it is complete and the built-in content otherwise.
  */
-const IMG = '{ alt, hotspot, asset->{ url, metadata { dimensions } } }';
 
 type AboutDoc = {
   hero?: {
-    eyebrow?: SanityLocalized;
-    title?: SanityLocalized;
-    titleAccent?: SanityLocalized;
-    body?: SanityLocalized;
-    image?: SanityImage;
+    eyebrow?: CmsLocalized;
+    title?: CmsLocalized;
+    titleAccent?: CmsLocalized;
+    body?: CmsLocalized;
+    image?: CmsMedia;
   };
-  highlights?: SanityLocalized[];
-  location?: SanityLocalized;
-  audience?: SanityLocalized;
-  figures?: { value?: string; label?: SanityLocalized }[];
+  highlights?: { text?: CmsLocalized }[];
+  location?: CmsLocalized;
+  audience?: CmsLocalized;
+  figures?: { value?: string | null; label?: CmsLocalized }[];
   features?: {
-    title?: SanityLocalized;
-    body?: SanityLocalized;
-    note?: SanityLocalized;
-    image?: SanityImage;
-    cta?: SanityLink;
+    title?: CmsLocalized;
+    body?: CmsLocalized;
+    note?: CmsLocalized;
+    image?: CmsMedia;
+    cta?: CmsLink;
   }[];
   visit?: {
-    eyebrow?: SanityLocalized;
-    title?: SanityLocalized;
-    cta?: SanityLink;
-    image?: SanityImage;
+    eyebrow?: CmsLocalized;
+    title?: CmsLocalized;
+    cta?: CmsLink;
+    image?: CmsMedia;
   };
 };
 
@@ -106,31 +105,31 @@ export function mapAbout(doc: AboutDoc | null): AboutPage {
 }
 
 type ServicesDoc = {
-  hero?: { eyebrow?: SanityLocalized; title?: SanityLocalized; body?: SanityLocalized[] };
+  hero?: { eyebrow?: CmsLocalized; title?: CmsLocalized; body?: { text?: CmsLocalized }[] };
   choose?: {
-    title?: SanityLocalized;
+    title?: CmsLocalized;
     coworking?: {
-      title?: SanityLocalized;
-      kicker?: SanityLocalized;
-      body?: SanityLocalizedBlock;
-      packages?: SanityLocalized;
-      highlight?: SanityLocalized;
-      audience?: SanityLocalized;
-      cta?: SanityLink;
-      image?: SanityImage;
+      title?: CmsLocalized;
+      kicker?: CmsLocalized;
+      body?: CmsRichLine;
+      packages?: CmsLocalized;
+      highlight?: CmsLocalized;
+      audience?: CmsLocalized;
+      cta?: CmsLink;
+      image?: CmsMedia;
     };
     privateOffices?: {
-      title?: SanityLocalized;
-      sizes?: number[];
-      sizeNote?: SanityLocalized;
-      image?: SanityImage;
+      title?: CmsLocalized;
+      sizes?: number[] | null;
+      sizeNote?: CmsLocalized;
+      image?: CmsMedia;
     };
   };
   offers?: {
-    title?: SanityLocalized;
-    items?: { icon?: string; title?: SanityLocalized; body?: SanityLocalized }[];
+    title?: CmsLocalized;
+    items?: { icon?: string | null; title?: CmsLocalized; body?: CmsLocalized }[];
   };
-  cta?: { title?: SanityLocalized; link?: SanityLink };
+  cta?: { title?: CmsLocalized; link?: CmsLink };
 };
 
 const icons: ServiceIcon[] = [
@@ -213,35 +212,18 @@ export function mapServices(doc: ServicesDoc | null): ServicesPage {
 
 export async function getAboutPage(): Promise<AboutPage> {
   try {
-    return mapAbout(
-      await sanityFetch<AboutDoc>(`*[_id == "aboutPage"][0]{
-        hero { eyebrow, title, titleAccent, body, image ${IMG} },
-        "highlights": highlights[].text, location, audience, figures,
-        features[] { title, body, note, cta, image ${IMG} },
-        visit { eyebrow, title, cta, image ${IMG} }
-      }`),
-    );
+    return mapAbout(await readGlobal<AboutDoc>('about'));
   } catch (error) {
-    console.error('[cms] about page query failed, using built-in content', error);
+    console.error('[cms] about page query failed, using fallback content', error);
     return aboutFallback;
   }
 }
 
 export async function getServicesPage(): Promise<ServicesPage> {
   try {
-    return mapServices(
-      await sanityFetch<ServicesDoc>(`*[_id == "servicesPage"][0]{
-        hero { eyebrow, title, "body": body[].text },
-        choose {
-          title,
-          coworking { title, kicker, body, packages, highlight, audience, cta, image ${IMG} },
-          privateOffices { title, sizes, sizeNote, image ${IMG} }
-        },
-        offers, cta
-      }`),
-    );
+    return mapServices(await readGlobal<ServicesDoc>('services'));
   } catch (error) {
-    console.error('[cms] services page query failed, using built-in content', error);
+    console.error('[cms] services page query failed, using fallback content', error);
     return servicesFallback;
   }
 }

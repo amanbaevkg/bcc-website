@@ -28,10 +28,13 @@ const schema = z.object({
   UPSTASH_REDIS_REST_URL: z.url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
 
-  // Sanity (phase 2). The read token is only needed for drafts/preview.
-  SANITY_API_READ_TOKEN: z.string().optional(),
-  // Shared secret the Sanity webhook sends so only Sanity can trigger a refresh.
-  SANITY_REVALIDATE_SECRET: z.string().min(24).optional(),
+  // Admin (Payload CMS at /admin). PAYLOAD_SECRET signs sign-in sessions: 32+ random characters.
+  PAYLOAD_SECRET: z.string().min(32).optional(),
+  DATABASE_URL: z.string().optional(),
+  PAYLOAD_MEDIA_DIR: z.string().optional(),
+  // Only read on the very first start, to create the first administrator.
+  PAYLOAD_ADMIN_EMAIL: z.email().optional(),
+  PAYLOAD_ADMIN_PASSWORD: z.string().min(12).optional(),
 });
 
 export type Env = z.infer<typeof schema>;
