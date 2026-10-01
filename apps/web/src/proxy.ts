@@ -1,6 +1,7 @@
 import createMiddleware from 'next-intl/middleware';
 import { NextResponse, type NextRequest } from 'next/server';
 import { routing } from './i18n/routing';
+import { legacyRedirect } from './lib/legacy';
 
 const intl = createMiddleware(routing);
 
@@ -32,6 +33,14 @@ function safeEqual(a: string, b: string): boolean {
 export function proxy(request: NextRequest) {
   const denied = checkBasicAuth(request);
   if (denied) return denied;
+
+  const legacy = legacyRedirect(request.nextUrl.pathname);
+  if (legacy) {
+    const url = request.nextUrl.clone();
+    url.pathname = legacy;
+    url.search = '';
+    return NextResponse.redirect(url, 301);
+  }
 
   const response = intl(request);
   if (process.env.SITE_ENV !== 'production') {
