@@ -1,11 +1,22 @@
+# Kept out of every image (and out of the build context, so builds stay fast).
+# The dev setup mounts the source at run time, so nothing here is hidden from development.
 **/node_modules
 **/.next
-**/.env
-**/.env.*
-!.env.example
+**/.sanity
+**/dist
+**/.turbo
+.pnpm-store
 **/coverage
 **/playwright-report
 **/test-results
+**/*.tsbuildinfo
 .git
+.DS_Store
+
+# Secrets never enter an image; pass them at run time (env_file / --env-file).
+**/.env
+**/.env.*
+!.env.example
+
 *.md
 !apps/web/**/*.md

@@ -24,7 +24,8 @@ docs/               security notes and decisions
 
 ## Requirements
 
-- Node.js 22 (`.nvmrc`), pnpm 10 (`corepack enable`)
+- Node.js 22 (`.nvmrc`), pnpm 10 (`corepack enable`) — or only Docker, see
+  [Local development with Docker](#local-development-with-docker)
 
 ## Local development
 
@@ -34,6 +35,32 @@ pnpm install
 cp .env.example apps/web/.env.local   # then fill in what you need; never commit it
 pnpm dev                              # http://localhost:3000 → redirects to /en
 ```
+
+## Local development with Docker
+
+Needs only [Docker Desktop](https://www.docker.com/products/docker-desktop/) (no Node.js or pnpm on your machine).
+
+```sh
+cp .env.example .env          # optional: settings for local work; .env is never committed
+docker compose up --build     # first start: a few minutes; later starts: seconds
+```
+
+| Address               | What                                                                    |
+| --------------------- | ----------------------------------------------------------------------- |
+| http://localhost:3000 | the website, redirects to `/en` (also `/fr`, `/de`, `/lu`)              |
+| http://localhost:3333 | the admin (Sanity Studio), local copy; sign in with your Sanity account |
+
+- **Hot reload:** the project folder is mounted into the container, so saving a file reloads the page.
+  Dependencies and the Next.js cache live in Docker volumes, separate from anything installed on your machine.
+- **Settings:** everything in `.env` reaches both services (see [Environment variables](#environment-variables)).
+  Without a `.env` the site runs in development mode with the shared Sanity project and the contact form
+  writing messages to the log instead of sending them (`EMAIL_PROVIDER=log`).
+- **Website only:** `docker compose up --build web`.
+- **Stop:** `Ctrl+C`, or `docker compose down` when started with `-d`.
+- **After `pnpm-lock.yaml` changes** (new dependencies): `docker compose up --build` installs them on start.
+  If anything looks stale, `docker compose down -v` removes the volumes and the next start reinstalls.
+- **Production is different:** `docker compose` is for development only. The live server uses the
+  production image (the `Dockerfile`'s last stage), see [Deployment](#deployment).
 
 ## Scripts
 

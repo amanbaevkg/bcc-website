@@ -1,0 +1,59 @@
+# Local development with hot reload:
+#   docker compose up --build        → website http://localhost:3000, admin (Sanity Studio) http://localhost:3333
+#   docker compose up --build web    → website only
+# Settings: copy .env.example to .env (optional). .env is never committed.
+# Development only; the production image is the Dockerfile's last stage (see README → Deployment).
+
+x-dev: &dev
+  build:
+    context: .
+    target: dev
+  image: bcc-web-dev
+  env_file:
+    - path: .env
+      required: false
+  volumes:
+    # Your source code, live: edits on your machine reload the page.
+    - .:/repo
+    # Dependencies and the build cache stay inside Docker (Linux builds, never mixed with your machine's).
+    - node_modules:/repo/node_modules
+    - web_node_modules:/repo/apps/web/node_modules
+    - studio_node_modules:/repo/apps/studio/node_modules
+    - next_cache:/repo/apps/web/.next
+
+services:
+  # Runs once per start: keeps the dependency volumes in step with pnpm-lock.yaml (seconds when unchanged).
+  install:
+    <<: *dev
+    command: pnpm install --frozen-lockfile --config.confirmModulesPurge=false
+
+  web:
+    <<: *dev
+    depends_on:
+      install:
+        condition: service_completed_successfully
+    command: pnpm --filter web exec next dev --hostname 0.0.0.0 --port 3000
+    ports:
+      - '3000:3000'
+    environment:
+      SITE_ENV: ${SITE_ENV:-development}
+      SITE_URL: ${SITE_URL:-http://localhost:3000}
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ${NEXT_PUBLIC_SANITY_PROJECT_ID:-8bx4pgzw}
+      NEXT_PUBLIC_SANITY_DATASET: ${NEXT_PUBLIC_SANITY_DATASET:-production}
+    restart: unless-stopped
+
+  studio:
+    <<: *dev
+    depends_on:
+      install:
+        condition: service_completed_successfully
+    command: pnpm --filter studio exec sanity dev --host 0.0.0.0 --port 3333
+    ports:
+      - '3333:3333'
+    restart: unless-stopped
+
+volumes:
+  node_modules:
+  web_node_modules:
+  studio_node_modules:
+  next_cache:
