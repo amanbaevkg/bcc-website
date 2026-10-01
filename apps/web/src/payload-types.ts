@@ -179,7 +179,7 @@ export interface LegalPage {
 export interface News {
   id: number;
   /**
-   * About 100 characters at most per language.
+   * About 100 characters at most per language. FR, DE, LU: leave empty to show the English text.
    */
   title?: string | null;
   /**
@@ -192,7 +192,7 @@ export interface News {
    */
   cover?: (number | null) | Media;
   /**
-   * About 400 characters at most per language.
+   * About 400 characters at most per language. FR, DE, LU: leave empty to show the English text.
    */
   excerpt?: string | null;
   body: {
@@ -222,7 +222,7 @@ export interface News {
 export interface Media {
   id: number;
   /**
-   * Describe what the photo shows, for screen readers and search engines. Not needed for videos. About 160 characters at most per language.
+   * Describe what the photo shows, for screen readers and search engines. Not needed for videos. About 160 characters at most per language. FR, DE, LU: leave empty to show the English text.
    */
   alt?: string | null;
   updatedAt: string;
@@ -272,7 +272,7 @@ export interface Space {
    */
   image: number | Media;
   /**
-   * About 100 characters at most per language.
+   * About 100 characters at most per language. FR, DE, LU: leave empty to show the English text.
    */
   caption?: string | null;
   category?: ('office' | 'coworking' | 'meeting-room' | 'common-area' | 'reception' | 'parking' | 'other') | null;
@@ -296,7 +296,7 @@ export interface Testimonial {
   quoteLanguage: 'en' | 'fr' | 'de' | 'lu';
   name: string;
   /**
-   * About 60 characters at most per language.
+   * About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
    */
   role?: string | null;
   company: string;
@@ -597,19 +597,19 @@ export interface Home {
   id: number;
   hero: {
     /**
-     * About 60 characters at most per language.
+     * About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     eyebrow?: string | null;
     /**
-     * About 60 characters at most per language.
+     * About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     /**
-     * Must appear at the end of the title, e.g. "Capellen". About 30 characters at most per language.
+     * Must appear at the end of the title, e.g. "Capellen". About 30 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     titleAccent?: string | null;
     /**
-     * About 120 characters at most per language.
+     * About 120 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     subtitle?: string | null;
     /**
@@ -640,7 +640,7 @@ export interface Home {
            */
           code: string;
           /**
-           * About 30 characters at most per language.
+           * About 30 characters at most per language. FR, DE, LU: leave empty to show the English text.
            */
           name?: string | null;
           hasTeamSize?: boolean | null;
@@ -653,7 +653,7 @@ export interface Home {
     teamSizes?: number[] | null;
     cta: {
       /**
-       * About 40 characters at most per language.
+       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       label?: string | null;
       /**
@@ -663,7 +663,7 @@ export interface Home {
     };
     ring: {
       /**
-       * About 40 characters at most per language.
+       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       label?: string | null;
       /**
@@ -674,12 +674,12 @@ export interface Home {
   };
   coworking: {
     /**
-     * About 40 characters at most per language.
+     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     href: string;
     /**
-     * Up to about 400 characters. Use bold for the key phrases.
+     * Up to about 400 characters. Use bold for the key phrases. FR, DE, LU: leave empty to show the English text.
      */
     body?: {
       root: {
@@ -703,12 +703,12 @@ export interface Home {
   };
   privateOffices: {
     /**
-     * About 40 characters at most per language.
+     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     href: string;
     /**
-     * Up to about 400 characters. Use bold for the key phrases.
+     * Up to about 400 characters. Use bold for the key phrases. FR, DE, LU: leave empty to show the English text.
      */
     body?: {
       root: {
@@ -732,7 +732,7 @@ export interface Home {
   };
   servicesLink: {
     /**
-     * About 40 characters at most per language.
+     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     label?: string | null;
     /**
@@ -742,7 +742,7 @@ export interface Home {
   };
   trust?: {
     /**
-     * About 30 characters at most per language.
+     * About 30 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     /**
@@ -752,7 +752,7 @@ export interface Home {
   };
   spaces: {
     /**
-     * About 20 characters at most per language.
+     * About 20 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     /**
@@ -761,7 +761,7 @@ export interface Home {
     items?: (number | Space)[] | null;
     moreLink: {
       /**
-       * About 40 characters at most per language.
+       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       label?: string | null;
       /**
@@ -772,11 +772,11 @@ export interface Home {
   };
   tomorrow?: {
     /**
-     * Two or three short lines, one per row. The last line is set in italic. About 60 characters at most per language.
+     * Two or three short lines, one per row. The last line is set in italic. About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     lines?: string | null;
     /**
-     * About 140 characters at most per language.
+     * About 140 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     card?: string | null;
     /**
@@ -786,12 +786,12 @@ export interface Home {
   };
   findMore: {
     /**
-     * About 60 characters at most per language.
+     * About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     cta: {
       /**
-       * About 40 characters at most per language.
+       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       label?: string | null;
       /**
@@ -802,7 +802,7 @@ export interface Home {
   };
   testimonials?: {
     /**
-     * About 40 characters at most per language.
+     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     /**
@@ -812,12 +812,12 @@ export interface Home {
   };
   final: {
     /**
-     * Two short lines, one per row. The second is set in italic. About 60 characters at most per language.
+     * Two short lines, one per row. The second is set in italic. About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     lines?: string | null;
     cta: {
       /**
-       * About 40 characters at most per language.
+       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       label?: string | null;
       /**
@@ -842,19 +842,19 @@ export interface About {
   id: number;
   hero?: {
     /**
-     * About 30 characters at most per language.
+     * About 30 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     eyebrow?: string | null;
     /**
-     * About 80 characters at most per language.
+     * About 80 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     /**
-     * Must be the last words of the title. About 40 characters at most per language.
+     * Must be the last words of the title. About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     titleAccent?: string | null;
     /**
-     * About 600 characters at most per language.
+     * About 600 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     body?: string | null;
     /**
@@ -868,18 +868,18 @@ export interface About {
   highlights?:
     | {
         /**
-         * About 120 characters at most per language.
+         * About 120 characters at most per language. FR, DE, LU: leave empty to show the English text.
          */
         text?: string | null;
         id?: string | null;
       }[]
     | null;
   /**
-   * About 240 characters at most per language.
+   * About 240 characters at most per language. FR, DE, LU: leave empty to show the English text.
    */
   location?: string | null;
   /**
-   * About 400 characters at most per language.
+   * About 400 characters at most per language. FR, DE, LU: leave empty to show the English text.
    */
   audience?: string | null;
   figures?:
@@ -889,7 +889,7 @@ export interface About {
          */
         value: string;
         /**
-         * About 40 characters at most per language.
+         * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
          */
         label?: string | null;
         id?: string | null;
@@ -898,15 +898,15 @@ export interface About {
   features?:
     | {
         /**
-         * About 40 characters at most per language.
+         * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
          */
         title?: string | null;
         /**
-         * About 500 characters at most per language.
+         * About 500 characters at most per language. FR, DE, LU: leave empty to show the English text.
          */
         body?: string | null;
         /**
-         * About 500 characters at most per language.
+         * About 500 characters at most per language. FR, DE, LU: leave empty to show the English text.
          */
         note?: string | null;
         /**
@@ -918,7 +918,7 @@ export interface About {
          */
         cta?: {
           /**
-           * About 40 characters at most per language.
+           * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
            */
           label?: string | null;
           /**
@@ -931,16 +931,16 @@ export interface About {
     | null;
   visit: {
     /**
-     * About 40 characters at most per language.
+     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     eyebrow?: string | null;
     /**
-     * About 60 characters at most per language.
+     * About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     cta: {
       /**
-       * About 40 characters at most per language.
+       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       label?: string | null;
       /**
@@ -965,17 +965,17 @@ export interface Service {
   id: number;
   hero?: {
     /**
-     * About 30 characters at most per language.
+     * About 30 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     eyebrow?: string | null;
     /**
-     * About 80 characters at most per language.
+     * About 80 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     body?:
       | {
           /**
-           * About 120 characters at most per language.
+           * About 120 characters at most per language. FR, DE, LU: leave empty to show the English text.
            */
           text?: string | null;
           id?: string | null;
@@ -984,18 +984,21 @@ export interface Service {
   };
   choose: {
     /**
-     * About 40 characters at most per language.
+     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     coworking: {
       /**
-       * About 40 characters at most per language.
+       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       title?: string | null;
       /**
-       * About 40 characters at most per language.
+       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       kicker?: string | null;
+      /**
+       * FR, DE, LU: leave empty to show the English text.
+       */
       body?: {
         root: {
           type: string;
@@ -1012,20 +1015,20 @@ export interface Service {
         [k: string]: unknown;
       } | null;
       /**
-       * About 200 characters at most per language.
+       * About 200 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       packages?: string | null;
       /**
-       * About 300 characters at most per language.
+       * About 300 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       highlight?: string | null;
       /**
-       * About 120 characters at most per language.
+       * About 120 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       audience?: string | null;
       cta: {
         /**
-         * About 40 characters at most per language.
+         * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
          */
         label?: string | null;
         /**
@@ -1040,7 +1043,7 @@ export interface Service {
     };
     privateOffices?: {
       /**
-       * About 40 characters at most per language.
+       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       title?: string | null;
       /**
@@ -1048,7 +1051,7 @@ export interface Service {
        */
       sizes?: number[] | null;
       /**
-       * About 40 characters at most per language.
+       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       sizeNote?: string | null;
       /**
@@ -1059,7 +1062,7 @@ export interface Service {
   };
   offers?: {
     /**
-     * About 40 characters at most per language.
+     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     /**
@@ -1079,11 +1082,11 @@ export interface Service {
             | 'handshake'
             | 'more';
           /**
-           * About 50 characters at most per language.
+           * About 50 characters at most per language. FR, DE, LU: leave empty to show the English text.
            */
           title?: string | null;
           /**
-           * About 500 characters at most per language.
+           * About 500 characters at most per language. FR, DE, LU: leave empty to show the English text.
            */
           body?: string | null;
           id?: string | null;
@@ -1092,12 +1095,12 @@ export interface Service {
   };
   cta: {
     /**
-     * About 80 characters at most per language.
+     * About 80 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     link: {
       /**
-       * About 40 characters at most per language.
+       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
        */
       label?: string | null;
       /**
@@ -1121,7 +1124,7 @@ export interface Contact {
    */
   gallery?: {
     /**
-     * About 30 characters at most per language.
+     * About 30 characters at most per language. FR, DE, LU: leave empty to show the English text.
      */
     title?: string | null;
     /**
@@ -1151,7 +1154,7 @@ export interface SiteSetting {
   };
   mapUrl?: string | null;
   /**
-   * About 90 characters at most per language.
+   * About 90 characters at most per language. FR, DE, LU: leave empty to show the English text.
    */
   tagline?: string | null;
   social?:

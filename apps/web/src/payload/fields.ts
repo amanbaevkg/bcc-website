@@ -8,6 +8,9 @@ import { lexicalEditor, BoldFeature, ParagraphFeature } from '@payloadcms/richte
  * each field, not hard limits.
  */
 
+/** Under every per-language field: an empty FR/DE/LU field shows the English text on the site. */
+export const SAME_TEXT_HINT = 'FR, DE, LU: leave empty to show the English text.';
+
 type TextOpts = {
   max?: number;
   required?: boolean;
@@ -18,7 +21,7 @@ type TextOpts = {
 
 export function text(name: string, label: string, opts: TextOpts = {}): Field {
   const { max, required = true, multiline, description } = opts;
-  const hint = [description, max && `About ${max} characters at most per language.`]
+  const hint = [description, max && `About ${max} characters at most per language.`, SAME_TEXT_HINT]
     .filter(Boolean)
     .join(' ');
   return {
@@ -50,7 +53,7 @@ export const boldText = (name: string, label: string, description?: string): Fie
   type: 'richText',
   localized: true,
   editor: lexicalEditor({ features: () => [ParagraphFeature(), BoldFeature()] }),
-  admin: description ? { description } : undefined,
+  admin: { description: [description, SAME_TEXT_HINT].filter(Boolean).join(' ') },
 });
 
 export function image(
