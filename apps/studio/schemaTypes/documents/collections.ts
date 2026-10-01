@@ -50,7 +50,7 @@ export const space = defineType({
       minWidth: 1600,
       description: 'Horizontal or vertical; the gallery crops by its hotspot.',
     }),
-    localized('caption', 'Caption', { max: 60 }),
+    localized('caption', 'Caption', { max: 100 }),
     defineField({
       name: 'category',
       title: 'Category',
@@ -84,7 +84,7 @@ export const testimonial = defineType({
       title: 'Quote',
       type: 'text',
       rows: 5,
-      validation: (r) => r.required().max(500),
+      validation: (r) => r.required().max(700),
     }),
     defineField({
       name: 'quoteLanguage',
@@ -149,7 +149,7 @@ export const newsPost = defineType({
       title: 'Teaser',
       type: 'text',
       rows: 3,
-      validation: (r) => r.required().max(250),
+      validation: (r) => r.required().max(400),
     }),
     defineField({ name: 'body', title: 'Text', type: 'richText', validation: (r) => r.required() }),
     defineField({ name: 'author', title: 'Author', type: 'string' }),

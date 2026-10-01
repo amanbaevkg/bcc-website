@@ -27,7 +27,7 @@ export const aboutPage = defineType({
           required: false,
           description: 'Must be the last words of the title.',
         }),
-        localized('body', 'Text', { max: 300, multiline: true }),
+        localized('body', 'Text', { max: 600, multiline: true }),
         image('image', 'Wide photo', {
           minWidth: 2400,
           minHeight: 1200,
@@ -44,8 +44,8 @@ export const aboutPage = defineType({
       of: [defineArrayMember({ type: 'localizedLine' })],
       validation: (r) => r.max(7),
     }),
-    localized('location', 'Location sentence', { max: 160, group: 'facts' }),
-    localized('audience', 'Who it is for', { max: 200, multiline: true, group: 'facts' }),
+    localized('location', 'Location sentence', { max: 240, group: 'facts' }),
+    localized('audience', 'Who it is for', { max: 400, multiline: true, group: 'facts' }),
     defineField({
       name: 'figures',
       title: 'Figures',
@@ -82,8 +82,8 @@ export const aboutPage = defineType({
           name: 'feature',
           fields: [
             localized('title', 'Title', { max: 40 }),
-            localized('body', 'Text', { max: 240, multiline: true }),
-            localized('note', 'Highlighted note', { max: 300, multiline: true, required: false }),
+            localized('body', 'Text', { max: 500, multiline: true }),
+            localized('note', 'Highlighted note', { max: 500, multiline: true, required: false }),
             image('image', 'Photo', { minWidth: 1200, description: 'Tall or horizontal.' }),
             defineField({ name: 'cta', title: 'Button (optional)', type: 'link' }),
           ],
