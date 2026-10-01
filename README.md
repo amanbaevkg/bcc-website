@@ -73,7 +73,7 @@ never breaks the site, and a CMS outage serves the built-in content.
 | Legal page                                  | Privacy Policy and Legal Notice (one per language; must be marked approved) |
 
 **Open the Studio locally:** `pnpm --filter studio dev` → http://localhost:3333 (log in with the
-Sanity account). **Publish it for staff:** `pnpm --filter studio deploy` → `<name>.sanity.studio`.
+Sanity account). **Publish it for staff:** `pnpm --filter studio deploy` → https://bcc-capellen.sanity.studio (live since 1 October 2026).
 Invite editors at sanity.io/manage → Members (role Editor).
 
 **First import of the current content** (once): create a token at sanity.io/manage → API → Tokens

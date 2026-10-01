@@ -5,4 +5,6 @@ export default defineCliConfig({
     projectId: process.env.SANITY_STUDIO_PROJECT_ID || '8bx4pgzw',
     dataset: process.env.SANITY_STUDIO_DATASET ?? 'production',
   },
+  // `sanity deploy` publishes the Studio here: https://bcc-capellen.sanity.studio
+  studioHost: 'bcc-capellen',
 });
