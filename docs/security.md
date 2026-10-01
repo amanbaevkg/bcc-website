@@ -43,6 +43,10 @@ guide); the cost is dynamic rendering of every page.
   the public pages show); the website reads content on the server through Payload's local API.
 - The first admin comes from `PAYLOAD_ADMIN_EMAIL` / `PAYLOAD_ADMIN_PASSWORD` on the first start, so the
   public "create first user" page never appears on a live server. Remove both variables afterwards.
+- Password reset: a one-hour, single-use link, sent only to the account's own address and built from
+  `SITE_URL` (never from the request's Host header). The answer is the same whether or not the address
+  has an account, and an account gets at most one reset e-mail every 2 minutes. In production the
+  link is never written to the log.
 - `PAYLOAD_SECRET` (32+ random characters) signs sessions; the server does not start without it.
 - No outside service: no Gravatar, no telemetry, GraphQL disabled.
 - Data: `/data/payload.db` and `/data/media` on the server. Back them up; whoever can read the volume can

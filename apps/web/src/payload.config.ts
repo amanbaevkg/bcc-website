@@ -16,6 +16,7 @@ import { Media } from './payload/collections/Media';
 import { News } from './payload/collections/News';
 import { Users } from './payload/collections/Users';
 import { bootstrap } from './payload/bootstrap';
+import { adminEmail } from './payload/email';
 import { migrations } from './migrations';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -54,6 +55,7 @@ export default buildConfig({
   collections: [LegalPages, News, ClientLogos, Spaces, Testimonials, Media, Users],
   globals: [Home, About, Services, Contact, SiteSettings],
   editor: lexicalEditor(),
+  email: adminEmail,
   db: sqliteAdapter({
     client: { url: databaseUrl },
     // The live server applies the schema from src/migrations on start; development syncs it.

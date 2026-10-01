@@ -111,6 +111,11 @@ Every part of a page uses the admin's content once it is complete and the built-
 - **Saving:** pages with a Publish button keep drafts and a version history (restore any version).
   After a save the next page view shows the change; pages also refresh every 5 minutes.
 - **Sign-in protection:** 5 wrong passwords lock an account for 10 minutes; sessions last 8 hours.
+- **Forgot password:** the sign-in page's "Forgot password?" e-mails a reset link valid for one hour
+  (one use, at most one e-mail per account every 2 minutes). It goes out through the contact form's mail
+  setup (`EMAIL_PROVIDER`, `CONTACT_FROM`, `SMTP_*`). With `EMAIL_PROVIDER=log` nothing is sent and,
+  outside production, the link is printed in the server terminal. Admins can also set a new password
+  for anyone under Settings → Users, and unlock a locked account there.
 - **Changing the admin's fields** (`src/payload/**`): run
   `pnpm --filter web payload migrate:create <name>` and commit the new file in `src/migrations`;
   production applies it on the next start. In development the database follows the code by itself.
