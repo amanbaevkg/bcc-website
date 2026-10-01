@@ -14,6 +14,7 @@ import { basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createClient } from '@sanity/client';
 import { aboutFallback } from '../src/content/fallback/about';
+import { contactFallback } from '../src/content/fallback/contact';
 import { homeFallback } from '../src/content/fallback/home';
 import { servicesFallback } from '../src/content/fallback/services';
 import { siteFallback } from '../src/content/site';
@@ -321,6 +322,14 @@ export async function buildDocuments(up: Uploader): Promise<Doc[]> {
       })),
     },
     cta: { title: L(s.cta.title), link: link(s.cta.link) },
+  });
+
+  const gallery = [];
+  for (const photo of contactFallback.gallery.photos) gallery.push(await img(up, photo, true));
+  docs.push({
+    _id: 'contactPage',
+    _type: 'contactPage',
+    gallery: { title: L(contactFallback.gallery.title), photos: gallery },
   });
 
   return docs;

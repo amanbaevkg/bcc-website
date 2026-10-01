@@ -5,6 +5,11 @@
   overflow: hidden;
 }
 
+/* The same gallery further down a page (contact): less room above the title. */
+.spaces.compact {
+  padding-block: 140px 120px;
+}
+
 .head {
   position: relative;
 }

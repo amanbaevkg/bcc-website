@@ -163,3 +163,7 @@ export type NewsSummary = {
 };
 
 export type NewsPost = NewsSummary & { body: RichBlock[]; author?: string };
+
+export type ContactPage = {
+  gallery: { title: Localized; photos: ImageAsset[] };
+};

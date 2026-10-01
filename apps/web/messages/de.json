@@ -109,7 +109,10 @@
     "successBody": "Ihre Nachricht wurde gesendet. Wir melden uns in Kürze bei Ihnen.",
     "sendAnother": "Weitere Nachricht senden",
     "ctaTitle": "Bereit, Ihr Unternehmen auf die nächste Stufe zu bringen?",
-    "ctaBody": "Vereinbaren Sie einen Besichtigungstermin mit unserem Team und lassen Sie uns loslegen!"
+    "ctaBody": "Vereinbaren Sie einen Besichtigungstermin mit unserem Team und lassen Sie uns loslegen!",
+    "galleryLabel": "Fotogalerie",
+    "galleryPrevious": "Vorheriges Foto",
+    "galleryNext": "Nächstes Foto"
   },
   "Services": {
     "sizeCta": "Angebot anfordern",

@@ -35,6 +35,10 @@ export default defineConfig({
               .id('servicesPage')
               .child(S.document().schemaType('servicesPage').documentId('servicesPage')),
             S.listItem()
+              .title('Contact page')
+              .id('contactPage')
+              .child(S.document().schemaType('contactPage').documentId('contactPage')),
+            S.listItem()
               .title('Site settings')
               .id('siteSettings')
               .child(S.document().schemaType('siteSettings').documentId('siteSettings')),

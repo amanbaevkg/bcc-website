@@ -13,12 +13,16 @@ export function SpacesGallery({
   children,
   count,
   extra,
+  labels,
 }: {
   children: ReactNode;
   count: number;
   extra?: ReactNode;
+  /** Screen-reader names; the home page's "spaces" wording by default. */
+  labels?: { region: string; previous: string; next: string };
 }) {
   const t = useTranslations('Home');
+  const l = labels ?? { region: t('galleryLabel'), previous: t('previous'), next: t('next') };
   const ref = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const [bar, setBar] = useState({ left: 0, width: 100 });
@@ -69,7 +73,7 @@ export function SpacesGallery({
             onClick={() => go(-1)}
             disabled={index === 0}
           >
-            <span className="visually-hidden">{t('previous')}</span>
+            <span className="visually-hidden">{l.previous}</span>
             <Icon name="arrowLeft" width={18} height={18} />
           </button>
           <button
@@ -78,7 +82,7 @@ export function SpacesGallery({
             onClick={() => go(1)}
             disabled={index >= count - 1}
           >
-            <span className="visually-hidden">{t('next')}</span>
+            <span className="visually-hidden">{l.next}</span>
             <Icon name="arrow" width={18} height={18} />
           </button>
           {extra}
@@ -89,7 +93,7 @@ export function SpacesGallery({
         className={styles.gallery}
         tabIndex={0}
         role="region"
-        aria-label={t('galleryLabel')}
+        aria-label={l.region}
         onScroll={update}
       >
         {children}

@@ -109,7 +109,10 @@
     "successBody": "Your message has been sent. We will get back to you shortly.",
     "sendAnother": "Send another message",
     "ctaTitle": "Ready to take your business to the next level?",
-    "ctaBody": "Schedule a visit with our team and let’s make things happen!"
+    "ctaBody": "Schedule a visit with our team and let’s make things happen!",
+    "galleryLabel": "Photo gallery",
+    "galleryPrevious": "Previous photo",
+    "galleryNext": "Next photo"
   },
   "Services": {
     "sizeCta": "Get a quote",

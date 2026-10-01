@@ -109,7 +109,10 @@
     "successBody": "Votre message a bien été envoyé. Nous reviendrons vers vous rapidement.",
     "sendAnother": "Envoyer un autre message",
     "ctaTitle": "Prêt à faire passer votre entreprise à la vitesse supérieure ?",
-    "ctaBody": "Planifiez une visite avec notre équipe et passons à l’action !"
+    "ctaBody": "Planifiez une visite avec notre équipe et passons à l’action !",
+    "galleryLabel": "Galerie de photos",
+    "galleryPrevious": "Photo précédente",
+    "galleryNext": "Photo suivante"
   },
   "Services": {
     "sizeCta": "Demander un devis",

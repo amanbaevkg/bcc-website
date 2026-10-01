@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ContactForm } from '@/components/contact/ContactForm';
+import { ContactGallery } from '@/components/contact/ContactGallery';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Photo } from '@/components/ui/Photo';
 import { homeFallback } from '@/content/fallback/home';
+import { getContactPage } from '@/lib/cms/contact';
 import { getSiteInfo } from '@/lib/cms/site';
 import type { Locale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
@@ -29,7 +31,7 @@ export default async function ContactPage({ params }: Props) {
   const locale = raw as Locale;
   const t = await getTranslations('Contact');
   const tf = await getTranslations('Footer');
-  const site = await getSiteInfo();
+  const [site, page] = await Promise.all([getSiteInfo(), getContactPage()]);
 
   const cards = [
     {
@@ -86,6 +88,8 @@ export default async function ContactPage({ params }: Props) {
           </div>
         </div>
       </section>
+
+      <ContactGallery data={page.gallery} locale={locale} />
 
       <section className={styles.cta}>
         <Photo

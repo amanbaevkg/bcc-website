@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { aboutFallback } from '@/content/fallback/about';
+import { contactFallback } from '@/content/fallback/contact';
 import { homeFallback } from '@/content/fallback/home';
 import { servicesFallback } from '@/content/fallback/services';
 import { mapHome } from '@/lib/cms/index';
+import { mapContact } from '@/lib/cms/contact';
 import { mapAbout, mapServices } from '@/lib/cms/pages';
 import { mapSite } from '@/lib/cms/site';
 import { siteFallback } from '@/content/site';
@@ -38,6 +40,7 @@ async function roundTrip() {
     ...aboutFallback.features.map((f) => f.image),
     servicesFallback.choose.coworking.image,
     servicesFallback.choose.privateOffices.image,
+    ...contactFallback.gallery.photos,
   ]);
 
   // Mimics the GROQ projections: follow references, expand assets, flatten line objects.
@@ -90,6 +93,14 @@ describe('CMS import round trip', () => {
     const get = await roundTrip();
     expect(mapAbout(get('aboutPage'))).toEqual(aboutFallback);
     expect(mapServices(get('servicesPage'))).toEqual(servicesFallback);
+  });
+
+  it('the contact gallery comes back unchanged, in order', async () => {
+    const get = await roundTrip();
+    const contact = mapContact(get('contactPage'));
+    // Not the built-in object: the gallery really came through the CMS shape.
+    expect(contact.gallery).not.toBe(contactFallback.gallery);
+    expect(contact).toEqual(contactFallback);
   });
 
   it('site settings come back unchanged', async () => {

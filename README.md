@@ -66,6 +66,7 @@ never breaks the site, and a CMS outage serves the built-in content.
 | In the Studio                               | On the site                                                                 |
 | ------------------------------------------- | --------------------------------------------------------------------------- |
 | Home page, About Us page, Our Services page | the three pages, all four languages side by side                            |
+| Contact page                                | the photo gallery on the contact page (title and photos, drag to reorder)   |
 | Site settings                               | phone, e-mail, address, map link, social links, footer tagline              |
 | Client logo, Space photo, Testimonial       | “They trust us”, “Our spaces”, testimonials                                 |
 | News                                        | /news (one document per language)                                           |
