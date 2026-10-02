@@ -5,3 +5,6 @@ onlyBuiltDependencies:
   - sharp
   - unrs-resolver
   - esbuild
+# Security fixes in dependencies of dependencies (pnpm audit).
+overrides:
+  undici@>=7.0.0 <7.29.1: ^7.29.1
