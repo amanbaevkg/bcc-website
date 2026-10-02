@@ -153,7 +153,7 @@ export const servicesFallback: ServicesPage = {
     },
     items: [
       {
-        icon: 'wifi',
+        icon: '/images/icons/wifi.svg',
         title: {
           en: 'Professional-quality Wi-Fi',
           fr: 'Wi-Fi de qualité professionnelle',
@@ -163,7 +163,7 @@ export const servicesFallback: ServicesPage = {
         body: includedMonthly,
       },
       {
-        icon: 'reception',
+        icon: '/images/icons/reception.svg',
         title: {
           en: 'Reception & Switchboard',
           fr: 'Accueil et standard téléphonique',
@@ -173,7 +173,7 @@ export const servicesFallback: ServicesPage = {
         body: includedMonthly,
       },
       {
-        icon: 'meeting',
+        icon: '/images/icons/meeting.svg',
         title: {
           en: 'Meeting rooms',
           fr: 'Salles de réunion',
@@ -188,7 +188,7 @@ export const servicesFallback: ServicesPage = {
         },
       },
       {
-        icon: 'kitchen',
+        icon: '/images/icons/kitchen.svg',
         title: {
           en: 'Cafeteria & Kitchen',
           fr: 'Cafétéria et cuisine',
@@ -203,7 +203,7 @@ export const servicesFallback: ServicesPage = {
         },
       },
       {
-        icon: 'supplies',
+        icon: '/images/icons/supplies.svg',
         title: {
           en: 'Office supplies',
           fr: 'Fournitures de bureau',
@@ -218,7 +218,7 @@ export const servicesFallback: ServicesPage = {
         },
       },
       {
-        icon: 'parking',
+        icon: '/images/icons/parking.svg',
         title: {
           en: 'Parking spaces',
           fr: 'Places de parking',
@@ -233,7 +233,7 @@ export const servicesFallback: ServicesPage = {
         },
       },
       {
-        icon: 'cloud',
+        icon: '/images/icons/cloud.svg',
         title: {
           en: 'Cloud services',
           fr: 'Services cloud',
@@ -248,7 +248,7 @@ export const servicesFallback: ServicesPage = {
         },
       },
       {
-        icon: 'mail',
+        icon: '/images/icons/mail.svg',
         title: { en: 'Mail room', fr: 'Service courrier', de: 'Postservice', lu: 'Postservice' },
         body: {
           en: 'BCC offers a mail opening, digitisation and emailing service for all your incoming mail. Pricing is based on volume.',
@@ -258,7 +258,7 @@ export const servicesFallback: ServicesPage = {
         },
       },
       {
-        icon: 'handshake',
+        icon: '/images/icons/handshake.svg',
         title: {
           en: 'Accounting, Legal & HR',
           fr: 'Comptabilité, juridique et RH',
@@ -268,7 +268,7 @@ export const servicesFallback: ServicesPage = {
         body: extraCost,
       },
       {
-        icon: 'more',
+        icon: '/images/icons/more.svg',
         title: {
           en: 'Additional services',
           fr: 'Services supplémentaires',

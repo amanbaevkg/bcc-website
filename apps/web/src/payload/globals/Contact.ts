@@ -1,15 +1,16 @@
 import type { GlobalConfig } from 'payload';
 import { signedIn } from '../access';
 import { text } from '../fields';
+import { pagePreview } from '../preview';
 import { refreshAfterChange } from '../revalidate';
 
-/** Contact page. The form and contact details come from the code and Site settings. */
+/** Contact page. The form comes from the code; contact details from "Address, phone & e-mail". */
 export const Contact: GlobalConfig = {
   slug: 'contact',
   label: 'Contact page',
-  admin: { group: 'Pages' },
+  admin: { group: 'Website', preview: pagePreview('/contact') },
   access: { read: signedIn, update: signedIn },
-  versions: { drafts: true, max: 50 },
+  versions: { max: 50 },
   hooks: { afterChange: refreshAfterChange },
   fields: [
     {
@@ -17,7 +18,7 @@ export const Contact: GlobalConfig = {
       label: 'Photo gallery',
       type: 'group',
       admin: {
-        description: 'Shown above the last block of the contact page. Drag photos to reorder.',
+        description: 'Shown at the end of the contact page. Drag photos to change the order.',
       },
       fields: [
         text('title', 'Title', { max: 30 }),
@@ -28,9 +29,10 @@ export const Contact: GlobalConfig = {
           relationTo: 'media',
           hasMany: true,
           maxRows: 40,
+          filterOptions: { mimeType: { contains: 'image' } },
           admin: {
             description:
-              'At least 1600 px wide, JPG or WebP. Set the focal point: the gallery crops photos to different shapes.',
+              'JPG or WebP, 1600 px wide or larger. Click a photo to set its focal point: the gallery crops photos to different shapes.',
           },
         },
       ],

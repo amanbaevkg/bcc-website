@@ -2,28 +2,25 @@ import type { Field, GroupField, UploadField } from 'payload';
 import { lexicalEditor, BoldFeature, ParagraphFeature } from '@payloadcms/richtext-lexical';
 
 /*
- * Field helpers shared by every page and list in the admin. Texts are stored per language
- * (EN/FR/DE/LU, switched with the language menu at the top of the admin); a missing
- * translation shows the English text on the site. Lengths are layout guidance, shown under
- * each field, not hard limits.
+ * Field helpers shared by every page in the admin. Texts are stored per language
+ * (EN/FR/DE/LU, switched with the language menu at the top of the admin); an empty
+ * FR/DE/LU text shows the English one on the site. Lengths are layout guidance, not hard limits.
  */
 
-/** Under every per-language field: an empty FR/DE/LU field shows the English text on the site. */
-export const SAME_TEXT_HINT = 'FR, DE, LU: leave empty to show the English text.';
+/** Help text that also says "leave empty for English" while a non-English language is open. */
+const hint = (text?: string) => ({
+  components: { Description: { path: '@/payload/admin/Hint#Hint', clientProps: { text } } },
+});
 
 type TextOpts = {
   max?: number;
   required?: boolean;
   multiline?: boolean;
   description?: string;
-  label?: string;
 };
 
 export function text(name: string, label: string, opts: TextOpts = {}): Field {
   const { max, required = true, multiline, description } = opts;
-  const hint = [description, max && `About ${max} characters at most per language.`, SAME_TEXT_HINT]
-    .filter(Boolean)
-    .join(' ');
   return {
     name,
     label,
@@ -36,9 +33,9 @@ export function text(name: string, label: string, opts: TextOpts = {}): Field {
             ? true
             : typeof value === 'string' && value.trim()
               ? true
-              : 'English is required.'
+              : 'Please fill this in (English).'
       : undefined,
-    admin: hint ? { description: hint } : undefined,
+    admin: hint([description, max && `Up to about ${max} characters.`].filter(Boolean).join(' ')),
   } as Field;
 }
 
@@ -46,14 +43,14 @@ export function text(name: string, label: string, opts: TextOpts = {}): Field {
 export const lines = (name: string, label: string, description: string): Field =>
   text(name, label, { multiline: true, max: 60, description });
 
-/** A short paragraph with bold runs only (the offer texts). */
+/** A short paragraph where words can be made bold. */
 export const boldText = (name: string, label: string, description?: string): Field => ({
   name,
   label,
   type: 'richText',
   localized: true,
   editor: lexicalEditor({ features: () => [ParagraphFeature(), BoldFeature()] }),
-  admin: { description: [description, SAME_TEXT_HINT].filter(Boolean).join(' ') },
+  admin: hint(description ?? 'Select words and press Ctrl+B (Cmd+B on a Mac) to make them bold.'),
 });
 
 export function image(
@@ -68,46 +65,57 @@ export function image(
     type: 'upload',
     relationTo: 'media',
     required: opts.required ?? false,
+    filterOptions: { mimeType: { contains: 'image' } },
     admin: {
-      description: [
-        opts.description,
-        `${size} or more keeps it sharp on large screens. Set the focal point on the subject.`,
-      ]
-        .filter(Boolean)
-        .join(' '),
+      description: [opts.description, `Best at ${size} or larger.`].filter(Boolean).join(' '),
     },
   };
 }
 
+/** The pages a button can open. */
+export const pages = [
+  { label: 'Contact page', value: '/contact' },
+  { label: 'Contact page, co-working pre-selected', value: '/contact?workspace=coworking' },
+  {
+    label: 'Contact page, private office pre-selected',
+    value: '/contact?workspace=private-office',
+  },
+  { label: 'Our Services page', value: '/services' },
+  { label: 'About Us page', value: '/about' },
+  { label: 'News page', value: '/news' },
+  { label: 'Home page', value: '/' },
+];
+
+export const pageSelect = (name: string, label: string, required = true): Field => ({
+  name,
+  label,
+  type: 'select',
+  required,
+  options: pages,
+  admin: { isClearable: !required },
+});
+
+/** A button: its words, and the page it opens. */
 export const link = (name: string, label: string, optional = false): GroupField => ({
   name,
   label,
   type: 'group',
   admin: optional ? { description: 'Optional: leave both empty for no button.' } : undefined,
   fields: [
-    text('label', 'Label', { max: 40, required: !optional }),
     {
-      name: 'href',
-      label: 'Target',
-      type: 'text',
-      required: !optional,
-      admin: {
-        description:
-          'A page on this site without the language ("/contact", "/services") or a full https:// address.',
-      },
-      validate: (v: unknown) =>
-        (optional && !v) ||
-        (typeof v === 'string' && (/^\/[\w\-/#?=&]*$/.test(v) || /^https:\/\/\S+$/.test(v)))
-          ? true
-          : 'Use a path like /contact or a full https:// address.',
+      type: 'row',
+      fields: [
+        text('label', 'Button text', { max: 40, required: !optional }),
+        pageSelect('href', 'Opens', !optional),
+      ],
     },
   ],
 });
 
-export const order: Field = {
-  name: 'order',
-  label: 'Order',
-  type: 'number',
-  defaultValue: 100,
-  admin: { position: 'sidebar', description: 'Lower numbers come first.' },
-};
+/** List rows are named after one of their fields; long lists start folded. */
+export const rowLabel = (field: string, fallback: string, collapsed = false) => ({
+  initCollapsed: collapsed,
+  components: {
+    RowLabel: { path: '@/payload/admin/RowLabel#RowLabel', clientProps: { field, fallback } },
+  },
+});

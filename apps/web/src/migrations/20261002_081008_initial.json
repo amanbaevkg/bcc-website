@@ -2,747 +2,6 @@
   "version": "6",
   "dialect": "sqlite",
   "tables": {
-    "users_sessions": {
-      "name": "users_sessions",
-      "columns": {
-        "_order": {
-          "name": "_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "_parent_id": {
-          "name": "_parent_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "expires_at": {
-          "name": "expires_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "users_sessions_order_idx": {
-          "name": "users_sessions_order_idx",
-          "columns": ["_order"],
-          "isUnique": false
-        },
-        "users_sessions_parent_id_idx": {
-          "name": "users_sessions_parent_id_idx",
-          "columns": ["_parent_id"],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {
-        "users_sessions_parent_id_fk": {
-          "name": "users_sessions_parent_id_fk",
-          "tableFrom": "users_sessions",
-          "tableTo": "users",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "users": {
-      "name": "users",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "role": {
-          "name": "role",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'editor'"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "reset_password_token": {
-          "name": "reset_password_token",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "reset_password_expiration": {
-          "name": "reset_password_expiration",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "salt": {
-          "name": "salt",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "hash": {
-          "name": "hash",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "reset_password_requested_at": {
-          "name": "reset_password_requested_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "login_attempts": {
-          "name": "login_attempts",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "lock_until": {
-          "name": "lock_until",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "users_updated_at_idx": {
-          "name": "users_updated_at_idx",
-          "columns": ["updated_at"],
-          "isUnique": false
-        },
-        "users_created_at_idx": {
-          "name": "users_created_at_idx",
-          "columns": ["created_at"],
-          "isUnique": false
-        },
-        "users_email_idx": {
-          "name": "users_email_idx",
-          "columns": ["email"],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "media": {
-      "name": "media",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        },
-        "url": {
-          "name": "url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "thumbnail_u_r_l": {
-          "name": "thumbnail_u_r_l",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "filename": {
-          "name": "filename",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "mime_type": {
-          "name": "mime_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "filesize": {
-          "name": "filesize",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "width": {
-          "name": "width",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "height": {
-          "name": "height",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "focal_x": {
-          "name": "focal_x",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "focal_y": {
-          "name": "focal_y",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "media_updated_at_idx": {
-          "name": "media_updated_at_idx",
-          "columns": ["updated_at"],
-          "isUnique": false
-        },
-        "media_created_at_idx": {
-          "name": "media_created_at_idx",
-          "columns": ["created_at"],
-          "isUnique": false
-        },
-        "media_filename_idx": {
-          "name": "media_filename_idx",
-          "columns": ["filename"],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "media_locales": {
-      "name": "media_locales",
-      "columns": {
-        "alt": {
-          "name": "alt",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "_locale": {
-          "name": "_locale",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "_parent_id": {
-          "name": "_parent_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "media_locales_locale_parent_id_unique": {
-          "name": "media_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {
-        "media_locales_parent_id_fk": {
-          "name": "media_locales_parent_id_fk",
-          "tableFrom": "media_locales",
-          "tableTo": "media",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "client_logos": {
-      "name": "client_logos",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "logo_id": {
-          "name": "logo_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "url": {
-          "name": "url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "active": {
-          "name": "active",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": true
-        },
-        "order": {
-          "name": "order",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 100
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        }
-      },
-      "indexes": {
-        "client_logos_logo_idx": {
-          "name": "client_logos_logo_idx",
-          "columns": ["logo_id"],
-          "isUnique": false
-        },
-        "client_logos_updated_at_idx": {
-          "name": "client_logos_updated_at_idx",
-          "columns": ["updated_at"],
-          "isUnique": false
-        },
-        "client_logos_created_at_idx": {
-          "name": "client_logos_created_at_idx",
-          "columns": ["created_at"],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {
-        "client_logos_logo_id_media_id_fk": {
-          "name": "client_logos_logo_id_media_id_fk",
-          "tableFrom": "client_logos",
-          "tableTo": "media",
-          "columnsFrom": ["logo_id"],
-          "columnsTo": ["id"],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "spaces": {
-      "name": "spaces",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "title": {
-          "name": "title",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "image_id": {
-          "name": "image_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "category": {
-          "name": "category",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "order": {
-          "name": "order",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 100
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        }
-      },
-      "indexes": {
-        "spaces_image_idx": {
-          "name": "spaces_image_idx",
-          "columns": ["image_id"],
-          "isUnique": false
-        },
-        "spaces_updated_at_idx": {
-          "name": "spaces_updated_at_idx",
-          "columns": ["updated_at"],
-          "isUnique": false
-        },
-        "spaces_created_at_idx": {
-          "name": "spaces_created_at_idx",
-          "columns": ["created_at"],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {
-        "spaces_image_id_media_id_fk": {
-          "name": "spaces_image_id_media_id_fk",
-          "tableFrom": "spaces",
-          "tableTo": "media",
-          "columnsFrom": ["image_id"],
-          "columnsTo": ["id"],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "spaces_locales": {
-      "name": "spaces_locales",
-      "columns": {
-        "caption": {
-          "name": "caption",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "_locale": {
-          "name": "_locale",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "_parent_id": {
-          "name": "_parent_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "spaces_locales_locale_parent_id_unique": {
-          "name": "spaces_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {
-        "spaces_locales_parent_id_fk": {
-          "name": "spaces_locales_parent_id_fk",
-          "tableFrom": "spaces_locales",
-          "tableTo": "spaces",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "testimonials": {
-      "name": "testimonials",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "quote": {
-          "name": "quote",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "quote_language": {
-          "name": "quote_language",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'en'"
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "company": {
-          "name": "company",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rating": {
-          "name": "rating",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": 5
-        },
-        "consent": {
-          "name": "consent",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "order": {
-          "name": "order",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 100
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        }
-      },
-      "indexes": {
-        "testimonials_updated_at_idx": {
-          "name": "testimonials_updated_at_idx",
-          "columns": ["updated_at"],
-          "isUnique": false
-        },
-        "testimonials_created_at_idx": {
-          "name": "testimonials_created_at_idx",
-          "columns": ["created_at"],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "testimonials_locales": {
-      "name": "testimonials_locales",
-      "columns": {
-        "role": {
-          "name": "role",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "_locale": {
-          "name": "_locale",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "_parent_id": {
-          "name": "_parent_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "testimonials_locales_locale_parent_id_unique": {
-          "name": "testimonials_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {
-        "testimonials_locales_parent_id_fk": {
-          "name": "testimonials_locales_parent_id_fk",
-          "tableFrom": "testimonials_locales",
-          "tableTo": "testimonials",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
     "news": {
       "name": "news",
       "columns": {
@@ -809,27 +68,37 @@
       "indexes": {
         "news_slug_idx": {
           "name": "news_slug_idx",
-          "columns": ["slug"],
+          "columns": [
+            "slug"
+          ],
           "isUnique": true
         },
         "news_cover_idx": {
           "name": "news_cover_idx",
-          "columns": ["cover_id"],
+          "columns": [
+            "cover_id"
+          ],
           "isUnique": false
         },
         "news_updated_at_idx": {
           "name": "news_updated_at_idx",
-          "columns": ["updated_at"],
+          "columns": [
+            "updated_at"
+          ],
           "isUnique": false
         },
         "news_created_at_idx": {
           "name": "news_created_at_idx",
-          "columns": ["created_at"],
+          "columns": [
+            "created_at"
+          ],
           "isUnique": false
         },
         "news__status_idx": {
           "name": "news__status_idx",
-          "columns": ["_status"],
+          "columns": [
+            "_status"
+          ],
           "isUnique": false
         }
       },
@@ -838,8 +107,12 @@
           "name": "news_cover_id_media_id_fk",
           "tableFrom": "news",
           "tableTo": "media",
-          "columnsFrom": ["cover_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "cover_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -897,7 +170,10 @@
       "indexes": {
         "news_locales_locale_parent_id_unique": {
           "name": "news_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -906,8 +182,12 @@
           "name": "news_locales_parent_id_fk",
           "tableFrom": "news_locales",
           "tableTo": "news",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1024,57 +304,79 @@
       "indexes": {
         "_news_v_parent_idx": {
           "name": "_news_v_parent_idx",
-          "columns": ["parent_id"],
+          "columns": [
+            "parent_id"
+          ],
           "isUnique": false
         },
         "_news_v_version_version_slug_idx": {
           "name": "_news_v_version_version_slug_idx",
-          "columns": ["version_slug"],
+          "columns": [
+            "version_slug"
+          ],
           "isUnique": false
         },
         "_news_v_version_version_cover_idx": {
           "name": "_news_v_version_version_cover_idx",
-          "columns": ["version_cover_id"],
+          "columns": [
+            "version_cover_id"
+          ],
           "isUnique": false
         },
         "_news_v_version_version_updated_at_idx": {
           "name": "_news_v_version_version_updated_at_idx",
-          "columns": ["version_updated_at"],
+          "columns": [
+            "version_updated_at"
+          ],
           "isUnique": false
         },
         "_news_v_version_version_created_at_idx": {
           "name": "_news_v_version_version_created_at_idx",
-          "columns": ["version_created_at"],
+          "columns": [
+            "version_created_at"
+          ],
           "isUnique": false
         },
         "_news_v_version_version__status_idx": {
           "name": "_news_v_version_version__status_idx",
-          "columns": ["version__status"],
+          "columns": [
+            "version__status"
+          ],
           "isUnique": false
         },
         "_news_v_created_at_idx": {
           "name": "_news_v_created_at_idx",
-          "columns": ["created_at"],
+          "columns": [
+            "created_at"
+          ],
           "isUnique": false
         },
         "_news_v_updated_at_idx": {
           "name": "_news_v_updated_at_idx",
-          "columns": ["updated_at"],
+          "columns": [
+            "updated_at"
+          ],
           "isUnique": false
         },
         "_news_v_snapshot_idx": {
           "name": "_news_v_snapshot_idx",
-          "columns": ["snapshot"],
+          "columns": [
+            "snapshot"
+          ],
           "isUnique": false
         },
         "_news_v_published_locale_idx": {
           "name": "_news_v_published_locale_idx",
-          "columns": ["published_locale"],
+          "columns": [
+            "published_locale"
+          ],
           "isUnique": false
         },
         "_news_v_latest_idx": {
           "name": "_news_v_latest_idx",
-          "columns": ["latest"],
+          "columns": [
+            "latest"
+          ],
           "isUnique": false
         }
       },
@@ -1083,8 +385,12 @@
           "name": "_news_v_parent_id_news_id_fk",
           "tableFrom": "_news_v",
           "tableTo": "news",
-          "columnsFrom": ["parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1092,8 +398,12 @@
           "name": "_news_v_version_cover_id_media_id_fk",
           "tableFrom": "_news_v",
           "tableTo": "media",
-          "columnsFrom": ["version_cover_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "version_cover_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1151,7 +461,10 @@
       "indexes": {
         "_news_v_locales_locale_parent_id_unique": {
           "name": "_news_v_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -1160,8 +473,12 @@
           "name": "_news_v_locales_parent_id_fk",
           "tableFrom": "_news_v_locales",
           "tableTo": "_news_v",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1207,17 +524,23 @@
       "indexes": {
         "legal_pages_kind_idx": {
           "name": "legal_pages_kind_idx",
-          "columns": ["kind"],
+          "columns": [
+            "kind"
+          ],
           "isUnique": true
         },
         "legal_pages_updated_at_idx": {
           "name": "legal_pages_updated_at_idx",
-          "columns": ["updated_at"],
+          "columns": [
+            "updated_at"
+          ],
           "isUnique": false
         },
         "legal_pages_created_at_idx": {
           "name": "legal_pages_created_at_idx",
-          "columns": ["created_at"],
+          "columns": [
+            "created_at"
+          ],
           "isUnique": false
         }
       },
@@ -1289,7 +612,10 @@
       "indexes": {
         "legal_pages_locales_locale_parent_id_unique": {
           "name": "legal_pages_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -1298,12 +624,396 @@
           "name": "legal_pages_locales_parent_id_fk",
           "tableFrom": "legal_pages_locales",
           "tableTo": "legal_pages",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "media": {
+      "name": "media",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "thumbnail_u_r_l": {
+          "name": "thumbnail_u_r_l",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "filename": {
+          "name": "filename",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "mime_type": {
+          "name": "mime_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "filesize": {
+          "name": "filesize",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "width": {
+          "name": "width",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "height": {
+          "name": "height",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "focal_x": {
+          "name": "focal_x",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "focal_y": {
+          "name": "focal_y",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "media_updated_at_idx": {
+          "name": "media_updated_at_idx",
+          "columns": [
+            "updated_at"
+          ],
+          "isUnique": false
+        },
+        "media_created_at_idx": {
+          "name": "media_created_at_idx",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        },
+        "media_filename_idx": {
+          "name": "media_filename_idx",
+          "columns": [
+            "filename"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "media_locales": {
+      "name": "media_locales",
+      "columns": {
+        "alt": {
+          "name": "alt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "media_locales_locale_parent_id_unique": {
+          "name": "media_locales_locale_parent_id_unique",
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "media_locales_parent_id_fk": {
+          "name": "media_locales_parent_id_fk",
+          "tableFrom": "media_locales",
+          "tableTo": "media",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "users_sessions": {
+      "name": "users_sessions",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "users_sessions_order_idx": {
+          "name": "users_sessions_order_idx",
+          "columns": [
+            "_order"
+          ],
+          "isUnique": false
+        },
+        "users_sessions_parent_id_idx": {
+          "name": "users_sessions_parent_id_idx",
+          "columns": [
+            "_parent_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "users_sessions_parent_id_fk": {
+          "name": "users_sessions_parent_id_fk",
+          "tableFrom": "users_sessions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'editor'"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reset_password_token": {
+          "name": "reset_password_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "reset_password_expiration": {
+          "name": "reset_password_expiration",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "salt": {
+          "name": "salt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "hash": {
+          "name": "hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "reset_password_requested_at": {
+          "name": "reset_password_requested_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "login_attempts": {
+          "name": "login_attempts",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "lock_until": {
+          "name": "lock_until",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "users_updated_at_idx": {
+          "name": "users_updated_at_idx",
+          "columns": [
+            "updated_at"
+          ],
+          "isUnique": false
+        },
+        "users_created_at_idx": {
+          "name": "users_created_at_idx",
+          "columns": [
+            "created_at"
+          ],
+          "isUnique": false
+        },
+        "users_email_idx": {
+          "name": "users_email_idx",
+          "columns": [
+            "email"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -1336,7 +1046,9 @@
       "indexes": {
         "payload_kv_key_idx": {
           "name": "payload_kv_key_idx",
-          "columns": ["key"],
+          "columns": [
+            "key"
+          ],
           "isUnique": true
         }
       },
@@ -1382,17 +1094,23 @@
       "indexes": {
         "payload_locked_documents_global_slug_idx": {
           "name": "payload_locked_documents_global_slug_idx",
-          "columns": ["global_slug"],
+          "columns": [
+            "global_slug"
+          ],
           "isUnique": false
         },
         "payload_locked_documents_updated_at_idx": {
           "name": "payload_locked_documents_updated_at_idx",
-          "columns": ["updated_at"],
+          "columns": [
+            "updated_at"
+          ],
           "isUnique": false
         },
         "payload_locked_documents_created_at_idx": {
           "name": "payload_locked_documents_created_at_idx",
-          "columns": ["created_at"],
+          "columns": [
+            "created_at"
+          ],
           "isUnique": false
         }
       },
@@ -1432,41 +1150,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "users_id": {
-          "name": "users_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "media_id": {
-          "name": "media_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "client_logos_id": {
-          "name": "client_logos_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "spaces_id": {
-          "name": "spaces_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "testimonials_id": {
-          "name": "testimonials_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "news_id": {
           "name": "news_id",
           "type": "integer",
@@ -1480,57 +1163,70 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "media_id": {
+          "name": "media_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "users_id": {
+          "name": "users_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {
         "payload_locked_documents_rels_order_idx": {
           "name": "payload_locked_documents_rels_order_idx",
-          "columns": ["order"],
+          "columns": [
+            "order"
+          ],
           "isUnique": false
         },
         "payload_locked_documents_rels_parent_idx": {
           "name": "payload_locked_documents_rels_parent_idx",
-          "columns": ["parent_id"],
+          "columns": [
+            "parent_id"
+          ],
           "isUnique": false
         },
         "payload_locked_documents_rels_path_idx": {
           "name": "payload_locked_documents_rels_path_idx",
-          "columns": ["path"],
-          "isUnique": false
-        },
-        "payload_locked_documents_rels_users_id_idx": {
-          "name": "payload_locked_documents_rels_users_id_idx",
-          "columns": ["users_id"],
-          "isUnique": false
-        },
-        "payload_locked_documents_rels_media_id_idx": {
-          "name": "payload_locked_documents_rels_media_id_idx",
-          "columns": ["media_id"],
-          "isUnique": false
-        },
-        "payload_locked_documents_rels_client_logos_id_idx": {
-          "name": "payload_locked_documents_rels_client_logos_id_idx",
-          "columns": ["client_logos_id"],
-          "isUnique": false
-        },
-        "payload_locked_documents_rels_spaces_id_idx": {
-          "name": "payload_locked_documents_rels_spaces_id_idx",
-          "columns": ["spaces_id"],
-          "isUnique": false
-        },
-        "payload_locked_documents_rels_testimonials_id_idx": {
-          "name": "payload_locked_documents_rels_testimonials_id_idx",
-          "columns": ["testimonials_id"],
+          "columns": [
+            "path"
+          ],
           "isUnique": false
         },
         "payload_locked_documents_rels_news_id_idx": {
           "name": "payload_locked_documents_rels_news_id_idx",
-          "columns": ["news_id"],
+          "columns": [
+            "news_id"
+          ],
           "isUnique": false
         },
         "payload_locked_documents_rels_legal_pages_id_idx": {
           "name": "payload_locked_documents_rels_legal_pages_id_idx",
-          "columns": ["legal_pages_id"],
+          "columns": [
+            "legal_pages_id"
+          ],
+          "isUnique": false
+        },
+        "payload_locked_documents_rels_media_id_idx": {
+          "name": "payload_locked_documents_rels_media_id_idx",
+          "columns": [
+            "media_id"
+          ],
+          "isUnique": false
+        },
+        "payload_locked_documents_rels_users_id_idx": {
+          "name": "payload_locked_documents_rels_users_id_idx",
+          "columns": [
+            "users_id"
+          ],
           "isUnique": false
         }
       },
@@ -1539,53 +1235,12 @@
           "name": "payload_locked_documents_rels_parent_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "payload_locked_documents",
-          "columnsFrom": ["parent_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "payload_locked_documents_rels_users_fk": {
-          "name": "payload_locked_documents_rels_users_fk",
-          "tableFrom": "payload_locked_documents_rels",
-          "tableTo": "users",
-          "columnsFrom": ["users_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "payload_locked_documents_rels_media_fk": {
-          "name": "payload_locked_documents_rels_media_fk",
-          "tableFrom": "payload_locked_documents_rels",
-          "tableTo": "media",
-          "columnsFrom": ["media_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "payload_locked_documents_rels_client_logos_fk": {
-          "name": "payload_locked_documents_rels_client_logos_fk",
-          "tableFrom": "payload_locked_documents_rels",
-          "tableTo": "client_logos",
-          "columnsFrom": ["client_logos_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "payload_locked_documents_rels_spaces_fk": {
-          "name": "payload_locked_documents_rels_spaces_fk",
-          "tableFrom": "payload_locked_documents_rels",
-          "tableTo": "spaces",
-          "columnsFrom": ["spaces_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "payload_locked_documents_rels_testimonials_fk": {
-          "name": "payload_locked_documents_rels_testimonials_fk",
-          "tableFrom": "payload_locked_documents_rels",
-          "tableTo": "testimonials",
-          "columnsFrom": ["testimonials_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1593,8 +1248,12 @@
           "name": "payload_locked_documents_rels_news_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "news",
-          "columnsFrom": ["news_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "news_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1602,8 +1261,38 @@
           "name": "payload_locked_documents_rels_legal_pages_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "legal_pages",
-          "columnsFrom": ["legal_pages_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "legal_pages_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_media_fk": {
+          "name": "payload_locked_documents_rels_media_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "media",
+          "columnsFrom": [
+            "media_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_users_fk": {
+          "name": "payload_locked_documents_rels_users_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "users",
+          "columnsFrom": [
+            "users_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1656,17 +1345,23 @@
       "indexes": {
         "payload_preferences_key_idx": {
           "name": "payload_preferences_key_idx",
-          "columns": ["key"],
+          "columns": [
+            "key"
+          ],
           "isUnique": false
         },
         "payload_preferences_updated_at_idx": {
           "name": "payload_preferences_updated_at_idx",
-          "columns": ["updated_at"],
+          "columns": [
+            "updated_at"
+          ],
           "isUnique": false
         },
         "payload_preferences_created_at_idx": {
           "name": "payload_preferences_created_at_idx",
-          "columns": ["created_at"],
+          "columns": [
+            "created_at"
+          ],
           "isUnique": false
         }
       },
@@ -1717,22 +1412,30 @@
       "indexes": {
         "payload_preferences_rels_order_idx": {
           "name": "payload_preferences_rels_order_idx",
-          "columns": ["order"],
+          "columns": [
+            "order"
+          ],
           "isUnique": false
         },
         "payload_preferences_rels_parent_idx": {
           "name": "payload_preferences_rels_parent_idx",
-          "columns": ["parent_id"],
+          "columns": [
+            "parent_id"
+          ],
           "isUnique": false
         },
         "payload_preferences_rels_path_idx": {
           "name": "payload_preferences_rels_path_idx",
-          "columns": ["path"],
+          "columns": [
+            "path"
+          ],
           "isUnique": false
         },
         "payload_preferences_rels_users_id_idx": {
           "name": "payload_preferences_rels_users_id_idx",
-          "columns": ["users_id"],
+          "columns": [
+            "users_id"
+          ],
           "isUnique": false
         }
       },
@@ -1741,8 +1444,12 @@
           "name": "payload_preferences_rels_parent_fk",
           "tableFrom": "payload_preferences_rels",
           "tableTo": "payload_preferences",
-          "columnsFrom": ["parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1750,8 +1457,12 @@
           "name": "payload_preferences_rels_users_fk",
           "tableFrom": "payload_preferences_rels",
           "tableTo": "users",
-          "columnsFrom": ["users_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "users_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1804,12 +1515,16 @@
       "indexes": {
         "payload_migrations_updated_at_idx": {
           "name": "payload_migrations_updated_at_idx",
-          "columns": ["updated_at"],
+          "columns": [
+            "updated_at"
+          ],
           "isUnique": false
         },
         "payload_migrations_created_at_idx": {
           "name": "payload_migrations_created_at_idx",
-          "columns": ["created_at"],
+          "columns": [
+            "created_at"
+          ],
           "isUnique": false
         }
       },
@@ -1842,30 +1557,28 @@
           "notNull": true,
           "autoincrement": false
         },
-        "code": {
-          "name": "code",
+        "opens": {
+          "name": "opens",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "has_team_size": {
-          "name": "has_team_size",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'other'"
         }
       },
       "indexes": {
         "home_hero_workspace_types_order_idx": {
           "name": "home_hero_workspace_types_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "home_hero_workspace_types_parent_id_idx": {
           "name": "home_hero_workspace_types_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -1874,8 +1587,12 @@
           "name": "home_hero_workspace_types_parent_id_fk",
           "tableFrom": "home_hero_workspace_types",
           "tableTo": "home",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1919,7 +1636,10 @@
       "indexes": {
         "home_hero_workspace_types_locales_locale_parent_id_unique": {
           "name": "home_hero_workspace_types_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -1928,8 +1648,419 @@
           "name": "home_hero_workspace_types_locales_parent_id_fk",
           "tableFrom": "home_hero_workspace_types_locales",
           "tableTo": "home_hero_workspace_types",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "home_trust_clients": {
+      "name": "home_trust_clients",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "logo_id": {
+          "name": "logo_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "home_trust_clients_order_idx": {
+          "name": "home_trust_clients_order_idx",
+          "columns": [
+            "_order"
+          ],
+          "isUnique": false
+        },
+        "home_trust_clients_parent_id_idx": {
+          "name": "home_trust_clients_parent_id_idx",
+          "columns": [
+            "_parent_id"
+          ],
+          "isUnique": false
+        },
+        "home_trust_clients_logo_idx": {
+          "name": "home_trust_clients_logo_idx",
+          "columns": [
+            "logo_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "home_trust_clients_logo_id_media_id_fk": {
+          "name": "home_trust_clients_logo_id_media_id_fk",
+          "tableFrom": "home_trust_clients",
+          "tableTo": "media",
+          "columnsFrom": [
+            "logo_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "home_trust_clients_parent_id_fk": {
+          "name": "home_trust_clients_parent_id_fk",
+          "tableFrom": "home_trust_clients",
+          "tableTo": "home",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "home_spaces_items": {
+      "name": "home_spaces_items",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "image_id": {
+          "name": "image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "home_spaces_items_order_idx": {
+          "name": "home_spaces_items_order_idx",
+          "columns": [
+            "_order"
+          ],
+          "isUnique": false
+        },
+        "home_spaces_items_parent_id_idx": {
+          "name": "home_spaces_items_parent_id_idx",
+          "columns": [
+            "_parent_id"
+          ],
+          "isUnique": false
+        },
+        "home_spaces_items_image_idx": {
+          "name": "home_spaces_items_image_idx",
+          "columns": [
+            "image_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "home_spaces_items_image_id_media_id_fk": {
+          "name": "home_spaces_items_image_id_media_id_fk",
+          "tableFrom": "home_spaces_items",
+          "tableTo": "media",
+          "columnsFrom": [
+            "image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "home_spaces_items_parent_id_fk": {
+          "name": "home_spaces_items_parent_id_fk",
+          "tableFrom": "home_spaces_items",
+          "tableTo": "home",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "home_spaces_items_locales": {
+      "name": "home_spaces_items_locales",
+      "columns": {
+        "caption": {
+          "name": "caption",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "home_spaces_items_locales_locale_parent_id_unique": {
+          "name": "home_spaces_items_locales_locale_parent_id_unique",
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "home_spaces_items_locales_parent_id_fk": {
+          "name": "home_spaces_items_locales_parent_id_fk",
+          "tableFrom": "home_spaces_items_locales",
+          "tableTo": "home_spaces_items",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "home_testimonials_items": {
+      "name": "home_testimonials_items",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quote": {
+          "name": "quote",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "company": {
+          "name": "company",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rating": {
+          "name": "rating",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'5'"
+        },
+        "quote_language": {
+          "name": "quote_language",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'en'"
+        }
+      },
+      "indexes": {
+        "home_testimonials_items_order_idx": {
+          "name": "home_testimonials_items_order_idx",
+          "columns": [
+            "_order"
+          ],
+          "isUnique": false
+        },
+        "home_testimonials_items_parent_id_idx": {
+          "name": "home_testimonials_items_parent_id_idx",
+          "columns": [
+            "_parent_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "home_testimonials_items_parent_id_fk": {
+          "name": "home_testimonials_items_parent_id_fk",
+          "tableFrom": "home_testimonials_items",
+          "tableTo": "home",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "home_testimonials_items_locales": {
+      "name": "home_testimonials_items_locales",
+      "columns": {
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "home_testimonials_items_locales_locale_parent_id_unique": {
+          "name": "home_testimonials_items_locales_locale_parent_id_unique",
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "home_testimonials_items_locales_parent_id_fk": {
+          "name": "home_testimonials_items_locales_parent_id_fk",
+          "tableFrom": "home_testimonials_items_locales",
+          "tableTo": "home_testimonials_items",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1948,8 +2079,29 @@
           "notNull": true,
           "autoincrement": false
         },
+        "hero_cta_href": {
+          "name": "hero_cta_href",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "hero_ring_href": {
+          "name": "hero_ring_href",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "hero_video_mp4_1080_id": {
           "name": "hero_video_mp4_1080_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "hero_video_poster_id": {
+          "name": "hero_video_poster_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
@@ -1969,55 +2121,25 @@
           "notNull": false,
           "autoincrement": false
         },
-        "hero_video_poster_id": {
-          "name": "hero_video_poster_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "hero_cta_href": {
-          "name": "hero_cta_href",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "hero_ring_href": {
-          "name": "hero_ring_href",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "coworking_href": {
           "name": "coworking_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'/services'"
+          "notNull": true,
+          "autoincrement": false
         },
         "private_offices_href": {
           "name": "private_offices_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'/services'"
+          "notNull": true,
+          "autoincrement": false
         },
         "services_link_href": {
           "name": "services_link_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "spaces_more_link_href": {
-          "name": "spaces_more_link_href",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "tomorrow_image_id": {
@@ -2027,18 +2149,25 @@
           "notNull": false,
           "autoincrement": false
         },
+        "spaces_more_link_href": {
+          "name": "spaces_more_link_href",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "find_more_cta_href": {
           "name": "find_more_cta_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "final_cta_href": {
           "name": "final_cta_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "final_image_id": {
@@ -2047,14 +2176,6 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "_status": {
-          "name": "_status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'draft'"
         },
         "updated_at": {
           "name": "updated_at",
@@ -2074,37 +2195,44 @@
       "indexes": {
         "home_hero_video_hero_video_mp4_1080_idx": {
           "name": "home_hero_video_hero_video_mp4_1080_idx",
-          "columns": ["hero_video_mp4_1080_id"],
-          "isUnique": false
-        },
-        "home_hero_video_hero_video_mp4_720_idx": {
-          "name": "home_hero_video_hero_video_mp4_720_idx",
-          "columns": ["hero_video_mp4_720_id"],
-          "isUnique": false
-        },
-        "home_hero_video_hero_video_mp4_480_idx": {
-          "name": "home_hero_video_hero_video_mp4_480_idx",
-          "columns": ["hero_video_mp4_480_id"],
+          "columns": [
+            "hero_video_mp4_1080_id"
+          ],
           "isUnique": false
         },
         "home_hero_video_hero_video_poster_idx": {
           "name": "home_hero_video_hero_video_poster_idx",
-          "columns": ["hero_video_poster_id"],
+          "columns": [
+            "hero_video_poster_id"
+          ],
+          "isUnique": false
+        },
+        "home_hero_video_hero_video_mp4_720_idx": {
+          "name": "home_hero_video_hero_video_mp4_720_idx",
+          "columns": [
+            "hero_video_mp4_720_id"
+          ],
+          "isUnique": false
+        },
+        "home_hero_video_hero_video_mp4_480_idx": {
+          "name": "home_hero_video_hero_video_mp4_480_idx",
+          "columns": [
+            "hero_video_mp4_480_id"
+          ],
           "isUnique": false
         },
         "home_tomorrow_tomorrow_image_idx": {
           "name": "home_tomorrow_tomorrow_image_idx",
-          "columns": ["tomorrow_image_id"],
+          "columns": [
+            "tomorrow_image_id"
+          ],
           "isUnique": false
         },
         "home_final_final_image_idx": {
           "name": "home_final_final_image_idx",
-          "columns": ["final_image_id"],
-          "isUnique": false
-        },
-        "home__status_idx": {
-          "name": "home__status_idx",
-          "columns": ["_status"],
+          "columns": [
+            "final_image_id"
+          ],
           "isUnique": false
         }
       },
@@ -2113,26 +2241,12 @@
           "name": "home_hero_video_mp4_1080_id_media_id_fk",
           "tableFrom": "home",
           "tableTo": "media",
-          "columnsFrom": ["hero_video_mp4_1080_id"],
-          "columnsTo": ["id"],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "home_hero_video_mp4_720_id_media_id_fk": {
-          "name": "home_hero_video_mp4_720_id_media_id_fk",
-          "tableFrom": "home",
-          "tableTo": "media",
-          "columnsFrom": ["hero_video_mp4_720_id"],
-          "columnsTo": ["id"],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "home_hero_video_mp4_480_id_media_id_fk": {
-          "name": "home_hero_video_mp4_480_id_media_id_fk",
-          "tableFrom": "home",
-          "tableTo": "media",
-          "columnsFrom": ["hero_video_mp4_480_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "hero_video_mp4_1080_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2140,8 +2254,38 @@
           "name": "home_hero_video_poster_id_media_id_fk",
           "tableFrom": "home",
           "tableTo": "media",
-          "columnsFrom": ["hero_video_poster_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "hero_video_poster_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "home_hero_video_mp4_720_id_media_id_fk": {
+          "name": "home_hero_video_mp4_720_id_media_id_fk",
+          "tableFrom": "home",
+          "tableTo": "media",
+          "columnsFrom": [
+            "hero_video_mp4_720_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "home_hero_video_mp4_480_id_media_id_fk": {
+          "name": "home_hero_video_mp4_480_id_media_id_fk",
+          "tableFrom": "home",
+          "tableTo": "media",
+          "columnsFrom": [
+            "hero_video_mp4_480_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2149,8 +2293,12 @@
           "name": "home_tomorrow_image_id_media_id_fk",
           "tableFrom": "home",
           "tableTo": "media",
-          "columnsFrom": ["tomorrow_image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "tomorrow_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2158,8 +2306,12 @@
           "name": "home_final_image_id_media_id_fk",
           "tableFrom": "home",
           "tableTo": "media",
-          "columnsFrom": ["final_image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "final_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -2255,20 +2407,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "spaces_title": {
-          "name": "spaces_title",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "spaces_more_link_label": {
-          "name": "spaces_more_link_label",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "tomorrow_lines": {
           "name": "tomorrow_lines",
           "type": "text",
@@ -2278,6 +2416,20 @@
         },
         "tomorrow_card": {
           "name": "tomorrow_card",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spaces_title": {
+          "name": "spaces_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spaces_more_link_label": {
+          "name": "spaces_more_link_label",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -2343,7 +2495,10 @@
       "indexes": {
         "home_locales_locale_parent_id_unique": {
           "name": "home_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -2352,8 +2507,12 @@
           "name": "home_locales_parent_id_fk",
           "tableFrom": "home_locales",
           "tableTo": "home",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2404,7 +2563,10 @@
       "indexes": {
         "home_numbers_order_parent_idx": {
           "name": "home_numbers_order_parent_idx",
-          "columns": ["order", "parent_id"],
+          "columns": [
+            "order",
+            "parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -2413,8 +2575,12 @@
           "name": "home_numbers_parent_fk",
           "tableFrom": "home_numbers",
           "tableTo": "home",
-          "columnsFrom": ["parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2460,63 +2626,35 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "client_logos_id": {
-          "name": "client_logos_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "spaces_id": {
-          "name": "spaces_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "testimonials_id": {
-          "name": "testimonials_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         }
       },
       "indexes": {
         "home_rels_order_idx": {
           "name": "home_rels_order_idx",
-          "columns": ["order"],
+          "columns": [
+            "order"
+          ],
           "isUnique": false
         },
         "home_rels_parent_idx": {
           "name": "home_rels_parent_idx",
-          "columns": ["parent_id"],
+          "columns": [
+            "parent_id"
+          ],
           "isUnique": false
         },
         "home_rels_path_idx": {
           "name": "home_rels_path_idx",
-          "columns": ["path"],
+          "columns": [
+            "path"
+          ],
           "isUnique": false
         },
         "home_rels_media_id_idx": {
           "name": "home_rels_media_id_idx",
-          "columns": ["media_id"],
-          "isUnique": false
-        },
-        "home_rels_client_logos_id_idx": {
-          "name": "home_rels_client_logos_id_idx",
-          "columns": ["client_logos_id"],
-          "isUnique": false
-        },
-        "home_rels_spaces_id_idx": {
-          "name": "home_rels_spaces_id_idx",
-          "columns": ["spaces_id"],
-          "isUnique": false
-        },
-        "home_rels_testimonials_id_idx": {
-          "name": "home_rels_testimonials_id_idx",
-          "columns": ["testimonials_id"],
+          "columns": [
+            "media_id"
+          ],
           "isUnique": false
         }
       },
@@ -2525,8 +2663,12 @@
           "name": "home_rels_parent_fk",
           "tableFrom": "home_rels",
           "tableTo": "home",
-          "columnsFrom": ["parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2534,35 +2676,12 @@
           "name": "home_rels_media_fk",
           "tableFrom": "home_rels",
           "tableTo": "media",
-          "columnsFrom": ["media_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "home_rels_client_logos_fk": {
-          "name": "home_rels_client_logos_fk",
-          "tableFrom": "home_rels",
-          "tableTo": "client_logos",
-          "columnsFrom": ["client_logos_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "home_rels_spaces_fk": {
-          "name": "home_rels_spaces_fk",
-          "tableFrom": "home_rels",
-          "tableTo": "spaces",
-          "columnsFrom": ["spaces_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "home_rels_testimonials_fk": {
-          "name": "home_rels_testimonials_fk",
-          "tableFrom": "home_rels",
-          "tableTo": "testimonials",
-          "columnsFrom": ["testimonials_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "media_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2595,19 +2714,13 @@
           "notNull": true,
           "autoincrement": false
         },
-        "code": {
-          "name": "code",
+        "opens": {
+          "name": "opens",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "has_team_size": {
-          "name": "has_team_size",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'other'"
         },
         "_uuid": {
           "name": "_uuid",
@@ -2620,12 +2733,16 @@
       "indexes": {
         "_home_v_version_hero_workspace_types_order_idx": {
           "name": "_home_v_version_hero_workspace_types_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "_home_v_version_hero_workspace_types_parent_id_idx": {
           "name": "_home_v_version_hero_workspace_types_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -2634,8 +2751,12 @@
           "name": "_home_v_version_hero_workspace_types_parent_id_fk",
           "tableFrom": "_home_v_version_hero_workspace_types",
           "tableTo": "_home_v",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2679,7 +2800,10 @@
       "indexes": {
         "_home_v_version_hero_workspace_types_locales_locale_parent_i": {
           "name": "_home_v_version_hero_workspace_types_locales_locale_parent_i",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -2688,8 +2812,440 @@
           "name": "_home_v_version_hero_workspace_types_locales_parent_id_fk",
           "tableFrom": "_home_v_version_hero_workspace_types_locales",
           "tableTo": "_home_v_version_hero_workspace_types",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "_home_v_version_trust_clients": {
+      "name": "_home_v_version_trust_clients",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "logo_id": {
+          "name": "logo_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "_uuid": {
+          "name": "_uuid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "_home_v_version_trust_clients_order_idx": {
+          "name": "_home_v_version_trust_clients_order_idx",
+          "columns": [
+            "_order"
+          ],
+          "isUnique": false
+        },
+        "_home_v_version_trust_clients_parent_id_idx": {
+          "name": "_home_v_version_trust_clients_parent_id_idx",
+          "columns": [
+            "_parent_id"
+          ],
+          "isUnique": false
+        },
+        "_home_v_version_trust_clients_logo_idx": {
+          "name": "_home_v_version_trust_clients_logo_idx",
+          "columns": [
+            "logo_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "_home_v_version_trust_clients_logo_id_media_id_fk": {
+          "name": "_home_v_version_trust_clients_logo_id_media_id_fk",
+          "tableFrom": "_home_v_version_trust_clients",
+          "tableTo": "media",
+          "columnsFrom": [
+            "logo_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "_home_v_version_trust_clients_parent_id_fk": {
+          "name": "_home_v_version_trust_clients_parent_id_fk",
+          "tableFrom": "_home_v_version_trust_clients",
+          "tableTo": "_home_v",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "_home_v_version_spaces_items": {
+      "name": "_home_v_version_spaces_items",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "image_id": {
+          "name": "image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_uuid": {
+          "name": "_uuid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "_home_v_version_spaces_items_order_idx": {
+          "name": "_home_v_version_spaces_items_order_idx",
+          "columns": [
+            "_order"
+          ],
+          "isUnique": false
+        },
+        "_home_v_version_spaces_items_parent_id_idx": {
+          "name": "_home_v_version_spaces_items_parent_id_idx",
+          "columns": [
+            "_parent_id"
+          ],
+          "isUnique": false
+        },
+        "_home_v_version_spaces_items_image_idx": {
+          "name": "_home_v_version_spaces_items_image_idx",
+          "columns": [
+            "image_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "_home_v_version_spaces_items_image_id_media_id_fk": {
+          "name": "_home_v_version_spaces_items_image_id_media_id_fk",
+          "tableFrom": "_home_v_version_spaces_items",
+          "tableTo": "media",
+          "columnsFrom": [
+            "image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "_home_v_version_spaces_items_parent_id_fk": {
+          "name": "_home_v_version_spaces_items_parent_id_fk",
+          "tableFrom": "_home_v_version_spaces_items",
+          "tableTo": "_home_v",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "_home_v_version_spaces_items_locales": {
+      "name": "_home_v_version_spaces_items_locales",
+      "columns": {
+        "caption": {
+          "name": "caption",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "_home_v_version_spaces_items_locales_locale_parent_id_unique": {
+          "name": "_home_v_version_spaces_items_locales_locale_parent_id_unique",
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "_home_v_version_spaces_items_locales_parent_id_fk": {
+          "name": "_home_v_version_spaces_items_locales_parent_id_fk",
+          "tableFrom": "_home_v_version_spaces_items_locales",
+          "tableTo": "_home_v_version_spaces_items",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "_home_v_version_testimonials_items": {
+      "name": "_home_v_version_testimonials_items",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quote": {
+          "name": "quote",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "company": {
+          "name": "company",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rating": {
+          "name": "rating",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'5'"
+        },
+        "quote_language": {
+          "name": "quote_language",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'en'"
+        },
+        "_uuid": {
+          "name": "_uuid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "_home_v_version_testimonials_items_order_idx": {
+          "name": "_home_v_version_testimonials_items_order_idx",
+          "columns": [
+            "_order"
+          ],
+          "isUnique": false
+        },
+        "_home_v_version_testimonials_items_parent_id_idx": {
+          "name": "_home_v_version_testimonials_items_parent_id_idx",
+          "columns": [
+            "_parent_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "_home_v_version_testimonials_items_parent_id_fk": {
+          "name": "_home_v_version_testimonials_items_parent_id_fk",
+          "tableFrom": "_home_v_version_testimonials_items",
+          "tableTo": "_home_v",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "_home_v_version_testimonials_items_locales": {
+      "name": "_home_v_version_testimonials_items_locales",
+      "columns": {
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "_home_v_version_testimonials_items_locales_locale_parent_id_": {
+          "name": "_home_v_version_testimonials_items_locales_locale_parent_id_",
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "_home_v_version_testimonials_items_locales_parent_id_fk": {
+          "name": "_home_v_version_testimonials_items_locales_parent_id_fk",
+          "tableFrom": "_home_v_version_testimonials_items_locales",
+          "tableTo": "_home_v_version_testimonials_items",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2708,8 +3264,29 @@
           "notNull": true,
           "autoincrement": false
         },
+        "version_hero_cta_href": {
+          "name": "version_hero_cta_href",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version_hero_ring_href": {
+          "name": "version_hero_ring_href",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "version_hero_video_mp4_1080_id": {
           "name": "version_hero_video_mp4_1080_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_hero_video_poster_id": {
+          "name": "version_hero_video_poster_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
@@ -2729,55 +3306,25 @@
           "notNull": false,
           "autoincrement": false
         },
-        "version_hero_video_poster_id": {
-          "name": "version_hero_video_poster_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "version_hero_cta_href": {
-          "name": "version_hero_cta_href",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "version_hero_ring_href": {
-          "name": "version_hero_ring_href",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "version_coworking_href": {
           "name": "version_coworking_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'/services'"
+          "notNull": true,
+          "autoincrement": false
         },
         "version_private_offices_href": {
           "name": "version_private_offices_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'/services'"
+          "notNull": true,
+          "autoincrement": false
         },
         "version_services_link_href": {
           "name": "version_services_link_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "version_spaces_more_link_href": {
-          "name": "version_spaces_more_link_href",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "version_tomorrow_image_id": {
@@ -2787,18 +3334,25 @@
           "notNull": false,
           "autoincrement": false
         },
+        "version_spaces_more_link_href": {
+          "name": "version_spaces_more_link_href",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "version_find_more_cta_href": {
           "name": "version_find_more_cta_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "version_final_cta_href": {
           "name": "version_final_cta_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "version_final_image_id": {
@@ -2807,14 +3361,6 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "version__status": {
-          "name": "version__status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'draft'"
         },
         "version_updated_at": {
           "name": "version_updated_at",
@@ -2845,88 +3391,63 @@
           "notNull": true,
           "autoincrement": false,
           "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        },
-        "snapshot": {
-          "name": "snapshot",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "published_locale": {
-          "name": "published_locale",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "latest": {
-          "name": "latest",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         }
       },
       "indexes": {
         "_home_v_version_hero_video_version_hero_video_mp4_1080_idx": {
           "name": "_home_v_version_hero_video_version_hero_video_mp4_1080_idx",
-          "columns": ["version_hero_video_mp4_1080_id"],
-          "isUnique": false
-        },
-        "_home_v_version_hero_video_version_hero_video_mp4_720_idx": {
-          "name": "_home_v_version_hero_video_version_hero_video_mp4_720_idx",
-          "columns": ["version_hero_video_mp4_720_id"],
-          "isUnique": false
-        },
-        "_home_v_version_hero_video_version_hero_video_mp4_480_idx": {
-          "name": "_home_v_version_hero_video_version_hero_video_mp4_480_idx",
-          "columns": ["version_hero_video_mp4_480_id"],
+          "columns": [
+            "version_hero_video_mp4_1080_id"
+          ],
           "isUnique": false
         },
         "_home_v_version_hero_video_version_hero_video_poster_idx": {
           "name": "_home_v_version_hero_video_version_hero_video_poster_idx",
-          "columns": ["version_hero_video_poster_id"],
+          "columns": [
+            "version_hero_video_poster_id"
+          ],
+          "isUnique": false
+        },
+        "_home_v_version_hero_video_version_hero_video_mp4_720_idx": {
+          "name": "_home_v_version_hero_video_version_hero_video_mp4_720_idx",
+          "columns": [
+            "version_hero_video_mp4_720_id"
+          ],
+          "isUnique": false
+        },
+        "_home_v_version_hero_video_version_hero_video_mp4_480_idx": {
+          "name": "_home_v_version_hero_video_version_hero_video_mp4_480_idx",
+          "columns": [
+            "version_hero_video_mp4_480_id"
+          ],
           "isUnique": false
         },
         "_home_v_version_tomorrow_version_tomorrow_image_idx": {
           "name": "_home_v_version_tomorrow_version_tomorrow_image_idx",
-          "columns": ["version_tomorrow_image_id"],
+          "columns": [
+            "version_tomorrow_image_id"
+          ],
           "isUnique": false
         },
         "_home_v_version_final_version_final_image_idx": {
           "name": "_home_v_version_final_version_final_image_idx",
-          "columns": ["version_final_image_id"],
-          "isUnique": false
-        },
-        "_home_v_version_version__status_idx": {
-          "name": "_home_v_version_version__status_idx",
-          "columns": ["version__status"],
+          "columns": [
+            "version_final_image_id"
+          ],
           "isUnique": false
         },
         "_home_v_created_at_idx": {
           "name": "_home_v_created_at_idx",
-          "columns": ["created_at"],
+          "columns": [
+            "created_at"
+          ],
           "isUnique": false
         },
         "_home_v_updated_at_idx": {
           "name": "_home_v_updated_at_idx",
-          "columns": ["updated_at"],
-          "isUnique": false
-        },
-        "_home_v_snapshot_idx": {
-          "name": "_home_v_snapshot_idx",
-          "columns": ["snapshot"],
-          "isUnique": false
-        },
-        "_home_v_published_locale_idx": {
-          "name": "_home_v_published_locale_idx",
-          "columns": ["published_locale"],
-          "isUnique": false
-        },
-        "_home_v_latest_idx": {
-          "name": "_home_v_latest_idx",
-          "columns": ["latest"],
+          "columns": [
+            "updated_at"
+          ],
           "isUnique": false
         }
       },
@@ -2935,26 +3456,12 @@
           "name": "_home_v_version_hero_video_mp4_1080_id_media_id_fk",
           "tableFrom": "_home_v",
           "tableTo": "media",
-          "columnsFrom": ["version_hero_video_mp4_1080_id"],
-          "columnsTo": ["id"],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "_home_v_version_hero_video_mp4_720_id_media_id_fk": {
-          "name": "_home_v_version_hero_video_mp4_720_id_media_id_fk",
-          "tableFrom": "_home_v",
-          "tableTo": "media",
-          "columnsFrom": ["version_hero_video_mp4_720_id"],
-          "columnsTo": ["id"],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "_home_v_version_hero_video_mp4_480_id_media_id_fk": {
-          "name": "_home_v_version_hero_video_mp4_480_id_media_id_fk",
-          "tableFrom": "_home_v",
-          "tableTo": "media",
-          "columnsFrom": ["version_hero_video_mp4_480_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "version_hero_video_mp4_1080_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2962,8 +3469,38 @@
           "name": "_home_v_version_hero_video_poster_id_media_id_fk",
           "tableFrom": "_home_v",
           "tableTo": "media",
-          "columnsFrom": ["version_hero_video_poster_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "version_hero_video_poster_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "_home_v_version_hero_video_mp4_720_id_media_id_fk": {
+          "name": "_home_v_version_hero_video_mp4_720_id_media_id_fk",
+          "tableFrom": "_home_v",
+          "tableTo": "media",
+          "columnsFrom": [
+            "version_hero_video_mp4_720_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "_home_v_version_hero_video_mp4_480_id_media_id_fk": {
+          "name": "_home_v_version_hero_video_mp4_480_id_media_id_fk",
+          "tableFrom": "_home_v",
+          "tableTo": "media",
+          "columnsFrom": [
+            "version_hero_video_mp4_480_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2971,8 +3508,12 @@
           "name": "_home_v_version_tomorrow_image_id_media_id_fk",
           "tableFrom": "_home_v",
           "tableTo": "media",
-          "columnsFrom": ["version_tomorrow_image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "version_tomorrow_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2980,8 +3521,12 @@
           "name": "_home_v_version_final_image_id_media_id_fk",
           "tableFrom": "_home_v",
           "tableTo": "media",
-          "columnsFrom": ["version_final_image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "version_final_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -3077,20 +3622,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "version_spaces_title": {
-          "name": "version_spaces_title",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "version_spaces_more_link_label": {
-          "name": "version_spaces_more_link_label",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "version_tomorrow_lines": {
           "name": "version_tomorrow_lines",
           "type": "text",
@@ -3100,6 +3631,20 @@
         },
         "version_tomorrow_card": {
           "name": "version_tomorrow_card",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_spaces_title": {
+          "name": "version_spaces_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_spaces_more_link_label": {
+          "name": "version_spaces_more_link_label",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -3165,7 +3710,10 @@
       "indexes": {
         "_home_v_locales_locale_parent_id_unique": {
           "name": "_home_v_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -3174,8 +3722,12 @@
           "name": "_home_v_locales_parent_id_fk",
           "tableFrom": "_home_v_locales",
           "tableTo": "_home_v",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3226,7 +3778,10 @@
       "indexes": {
         "_home_v_numbers_order_parent_idx": {
           "name": "_home_v_numbers_order_parent_idx",
-          "columns": ["order", "parent_id"],
+          "columns": [
+            "order",
+            "parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -3235,8 +3790,12 @@
           "name": "_home_v_numbers_parent_fk",
           "tableFrom": "_home_v_numbers",
           "tableTo": "_home_v",
-          "columnsFrom": ["parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3282,63 +3841,35 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "client_logos_id": {
-          "name": "client_logos_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "spaces_id": {
-          "name": "spaces_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "testimonials_id": {
-          "name": "testimonials_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         }
       },
       "indexes": {
         "_home_v_rels_order_idx": {
           "name": "_home_v_rels_order_idx",
-          "columns": ["order"],
+          "columns": [
+            "order"
+          ],
           "isUnique": false
         },
         "_home_v_rels_parent_idx": {
           "name": "_home_v_rels_parent_idx",
-          "columns": ["parent_id"],
+          "columns": [
+            "parent_id"
+          ],
           "isUnique": false
         },
         "_home_v_rels_path_idx": {
           "name": "_home_v_rels_path_idx",
-          "columns": ["path"],
+          "columns": [
+            "path"
+          ],
           "isUnique": false
         },
         "_home_v_rels_media_id_idx": {
           "name": "_home_v_rels_media_id_idx",
-          "columns": ["media_id"],
-          "isUnique": false
-        },
-        "_home_v_rels_client_logos_id_idx": {
-          "name": "_home_v_rels_client_logos_id_idx",
-          "columns": ["client_logos_id"],
-          "isUnique": false
-        },
-        "_home_v_rels_spaces_id_idx": {
-          "name": "_home_v_rels_spaces_id_idx",
-          "columns": ["spaces_id"],
-          "isUnique": false
-        },
-        "_home_v_rels_testimonials_id_idx": {
-          "name": "_home_v_rels_testimonials_id_idx",
-          "columns": ["testimonials_id"],
+          "columns": [
+            "media_id"
+          ],
           "isUnique": false
         }
       },
@@ -3347,8 +3878,12 @@
           "name": "_home_v_rels_parent_fk",
           "tableFrom": "_home_v_rels",
           "tableTo": "_home_v",
-          "columnsFrom": ["parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -3356,35 +3891,12 @@
           "name": "_home_v_rels_media_fk",
           "tableFrom": "_home_v_rels",
           "tableTo": "media",
-          "columnsFrom": ["media_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "_home_v_rels_client_logos_fk": {
-          "name": "_home_v_rels_client_logos_fk",
-          "tableFrom": "_home_v_rels",
-          "tableTo": "client_logos",
-          "columnsFrom": ["client_logos_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "_home_v_rels_spaces_fk": {
-          "name": "_home_v_rels_spaces_fk",
-          "tableFrom": "_home_v_rels",
-          "tableTo": "spaces",
-          "columnsFrom": ["spaces_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "_home_v_rels_testimonials_fk": {
-          "name": "_home_v_rels_testimonials_fk",
-          "tableFrom": "_home_v_rels",
-          "tableTo": "testimonials",
-          "columnsFrom": ["testimonials_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "media_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3421,12 +3933,16 @@
       "indexes": {
         "about_highlights_order_idx": {
           "name": "about_highlights_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "about_highlights_parent_id_idx": {
           "name": "about_highlights_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -3435,8 +3951,12 @@
           "name": "about_highlights_parent_id_fk",
           "tableFrom": "about_highlights",
           "tableTo": "about",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3480,7 +4000,10 @@
       "indexes": {
         "about_highlights_locales_locale_parent_id_unique": {
           "name": "about_highlights_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -3489,8 +4012,12 @@
           "name": "about_highlights_locales_parent_id_fk",
           "tableFrom": "about_highlights_locales",
           "tableTo": "about_highlights",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3527,19 +4054,23 @@
           "name": "value",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
       "indexes": {
         "about_figures_order_idx": {
           "name": "about_figures_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "about_figures_parent_id_idx": {
           "name": "about_figures_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -3548,8 +4079,12 @@
           "name": "about_figures_parent_id_fk",
           "tableFrom": "about_figures",
           "tableTo": "about",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3593,7 +4128,10 @@
       "indexes": {
         "about_figures_locales_locale_parent_id_unique": {
           "name": "about_figures_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -3602,8 +4140,12 @@
           "name": "about_figures_locales_parent_id_fk",
           "tableFrom": "about_figures_locales",
           "tableTo": "about_figures",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3654,17 +4196,23 @@
       "indexes": {
         "about_features_order_idx": {
           "name": "about_features_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "about_features_parent_id_idx": {
           "name": "about_features_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
           "isUnique": false
         },
         "about_features_image_idx": {
           "name": "about_features_image_idx",
-          "columns": ["image_id"],
+          "columns": [
+            "image_id"
+          ],
           "isUnique": false
         }
       },
@@ -3673,8 +4221,12 @@
           "name": "about_features_image_id_media_id_fk",
           "tableFrom": "about_features",
           "tableTo": "media",
-          "columnsFrom": ["image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -3682,8 +4234,12 @@
           "name": "about_features_parent_id_fk",
           "tableFrom": "about_features",
           "tableTo": "about",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3748,7 +4304,10 @@
       "indexes": {
         "about_features_locales_locale_parent_id_unique": {
           "name": "about_features_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -3757,8 +4316,12 @@
           "name": "about_features_locales_parent_id_fk",
           "tableFrom": "about_features_locales",
           "tableTo": "about_features",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3788,7 +4351,7 @@
           "name": "visit_cta_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "visit_image_id": {
@@ -3797,14 +4360,6 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "_status": {
-          "name": "_status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'draft'"
         },
         "updated_at": {
           "name": "updated_at",
@@ -3824,17 +4379,16 @@
       "indexes": {
         "about_hero_hero_image_idx": {
           "name": "about_hero_hero_image_idx",
-          "columns": ["hero_image_id"],
+          "columns": [
+            "hero_image_id"
+          ],
           "isUnique": false
         },
         "about_visit_visit_image_idx": {
           "name": "about_visit_visit_image_idx",
-          "columns": ["visit_image_id"],
-          "isUnique": false
-        },
-        "about__status_idx": {
-          "name": "about__status_idx",
-          "columns": ["_status"],
+          "columns": [
+            "visit_image_id"
+          ],
           "isUnique": false
         }
       },
@@ -3843,8 +4397,12 @@
           "name": "about_hero_image_id_media_id_fk",
           "tableFrom": "about",
           "tableTo": "media",
-          "columnsFrom": ["hero_image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "hero_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -3852,8 +4410,12 @@
           "name": "about_visit_image_id_media_id_fk",
           "tableFrom": "about",
           "tableTo": "media",
-          "columnsFrom": ["visit_image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "visit_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -3953,7 +4515,10 @@
       "indexes": {
         "about_locales_locale_parent_id_unique": {
           "name": "about_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -3962,8 +4527,12 @@
           "name": "about_locales_parent_id_fk",
           "tableFrom": "about_locales",
           "tableTo": "about",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4007,12 +4576,16 @@
       "indexes": {
         "_about_v_version_highlights_order_idx": {
           "name": "_about_v_version_highlights_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "_about_v_version_highlights_parent_id_idx": {
           "name": "_about_v_version_highlights_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -4021,8 +4594,12 @@
           "name": "_about_v_version_highlights_parent_id_fk",
           "tableFrom": "_about_v_version_highlights",
           "tableTo": "_about_v",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4066,7 +4643,10 @@
       "indexes": {
         "_about_v_version_highlights_locales_locale_parent_id_unique": {
           "name": "_about_v_version_highlights_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -4075,8 +4655,12 @@
           "name": "_about_v_version_highlights_locales_parent_id_fk",
           "tableFrom": "_about_v_version_highlights_locales",
           "tableTo": "_about_v_version_highlights",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4113,7 +4697,7 @@
           "name": "value",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "_uuid": {
@@ -4127,12 +4711,16 @@
       "indexes": {
         "_about_v_version_figures_order_idx": {
           "name": "_about_v_version_figures_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "_about_v_version_figures_parent_id_idx": {
           "name": "_about_v_version_figures_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -4141,8 +4729,12 @@
           "name": "_about_v_version_figures_parent_id_fk",
           "tableFrom": "_about_v_version_figures",
           "tableTo": "_about_v",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4186,7 +4778,10 @@
       "indexes": {
         "_about_v_version_figures_locales_locale_parent_id_unique": {
           "name": "_about_v_version_figures_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -4195,8 +4790,12 @@
           "name": "_about_v_version_figures_locales_parent_id_fk",
           "tableFrom": "_about_v_version_figures_locales",
           "tableTo": "_about_v_version_figures",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4254,17 +4853,23 @@
       "indexes": {
         "_about_v_version_features_order_idx": {
           "name": "_about_v_version_features_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "_about_v_version_features_parent_id_idx": {
           "name": "_about_v_version_features_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
           "isUnique": false
         },
         "_about_v_version_features_image_idx": {
           "name": "_about_v_version_features_image_idx",
-          "columns": ["image_id"],
+          "columns": [
+            "image_id"
+          ],
           "isUnique": false
         }
       },
@@ -4273,8 +4878,12 @@
           "name": "_about_v_version_features_image_id_media_id_fk",
           "tableFrom": "_about_v_version_features",
           "tableTo": "media",
-          "columnsFrom": ["image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4282,8 +4891,12 @@
           "name": "_about_v_version_features_parent_id_fk",
           "tableFrom": "_about_v_version_features",
           "tableTo": "_about_v",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4348,7 +4961,10 @@
       "indexes": {
         "_about_v_version_features_locales_locale_parent_id_unique": {
           "name": "_about_v_version_features_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -4357,8 +4973,12 @@
           "name": "_about_v_version_features_locales_parent_id_fk",
           "tableFrom": "_about_v_version_features_locales",
           "tableTo": "_about_v_version_features",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4388,7 +5008,7 @@
           "name": "version_visit_cta_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "version_visit_image_id": {
@@ -4397,14 +5017,6 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "version__status": {
-          "name": "version__status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'draft'"
         },
         "version_updated_at": {
           "name": "version_updated_at",
@@ -4435,68 +5047,35 @@
           "notNull": true,
           "autoincrement": false,
           "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        },
-        "snapshot": {
-          "name": "snapshot",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "published_locale": {
-          "name": "published_locale",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "latest": {
-          "name": "latest",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         }
       },
       "indexes": {
         "_about_v_version_hero_version_hero_image_idx": {
           "name": "_about_v_version_hero_version_hero_image_idx",
-          "columns": ["version_hero_image_id"],
+          "columns": [
+            "version_hero_image_id"
+          ],
           "isUnique": false
         },
         "_about_v_version_visit_version_visit_image_idx": {
           "name": "_about_v_version_visit_version_visit_image_idx",
-          "columns": ["version_visit_image_id"],
-          "isUnique": false
-        },
-        "_about_v_version_version__status_idx": {
-          "name": "_about_v_version_version__status_idx",
-          "columns": ["version__status"],
+          "columns": [
+            "version_visit_image_id"
+          ],
           "isUnique": false
         },
         "_about_v_created_at_idx": {
           "name": "_about_v_created_at_idx",
-          "columns": ["created_at"],
+          "columns": [
+            "created_at"
+          ],
           "isUnique": false
         },
         "_about_v_updated_at_idx": {
           "name": "_about_v_updated_at_idx",
-          "columns": ["updated_at"],
-          "isUnique": false
-        },
-        "_about_v_snapshot_idx": {
-          "name": "_about_v_snapshot_idx",
-          "columns": ["snapshot"],
-          "isUnique": false
-        },
-        "_about_v_published_locale_idx": {
-          "name": "_about_v_published_locale_idx",
-          "columns": ["published_locale"],
-          "isUnique": false
-        },
-        "_about_v_latest_idx": {
-          "name": "_about_v_latest_idx",
-          "columns": ["latest"],
+          "columns": [
+            "updated_at"
+          ],
           "isUnique": false
         }
       },
@@ -4505,8 +5084,12 @@
           "name": "_about_v_version_hero_image_id_media_id_fk",
           "tableFrom": "_about_v",
           "tableTo": "media",
-          "columnsFrom": ["version_hero_image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "version_hero_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4514,8 +5097,12 @@
           "name": "_about_v_version_visit_image_id_media_id_fk",
           "tableFrom": "_about_v",
           "tableTo": "media",
-          "columnsFrom": ["version_visit_image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "version_visit_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -4615,7 +5202,10 @@
       "indexes": {
         "_about_v_locales_locale_parent_id_unique": {
           "name": "_about_v_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -4624,8 +5214,12 @@
           "name": "_about_v_locales_parent_id_fk",
           "tableFrom": "_about_v_locales",
           "tableTo": "_about_v",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4662,12 +5256,16 @@
       "indexes": {
         "services_hero_body_order_idx": {
           "name": "services_hero_body_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "services_hero_body_parent_id_idx": {
           "name": "services_hero_body_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -4676,8 +5274,12 @@
           "name": "services_hero_body_parent_id_fk",
           "tableFrom": "services_hero_body",
           "tableTo": "services",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4721,7 +5323,10 @@
       "indexes": {
         "services_hero_body_locales_locale_parent_id_unique": {
           "name": "services_hero_body_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -4730,8 +5335,12 @@
           "name": "services_hero_body_locales_parent_id_fk",
           "tableFrom": "services_hero_body_locales",
           "tableTo": "services_hero_body",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4764,33 +5373,61 @@
           "notNull": true,
           "autoincrement": false
         },
-        "icon": {
-          "name": "icon",
-          "type": "text",
+        "icon_id": {
+          "name": "icon_id",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
       "indexes": {
         "services_offers_items_order_idx": {
           "name": "services_offers_items_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "services_offers_items_parent_id_idx": {
           "name": "services_offers_items_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
+          "isUnique": false
+        },
+        "services_offers_items_icon_idx": {
+          "name": "services_offers_items_icon_idx",
+          "columns": [
+            "icon_id"
+          ],
           "isUnique": false
         }
       },
       "foreignKeys": {
+        "services_offers_items_icon_id_media_id_fk": {
+          "name": "services_offers_items_icon_id_media_id_fk",
+          "tableFrom": "services_offers_items",
+          "tableTo": "media",
+          "columnsFrom": [
+            "icon_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
         "services_offers_items_parent_id_fk": {
           "name": "services_offers_items_parent_id_fk",
           "tableFrom": "services_offers_items",
           "tableTo": "services",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4841,7 +5478,10 @@
       "indexes": {
         "services_offers_items_locales_locale_parent_id_unique": {
           "name": "services_offers_items_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -4850,8 +5490,12 @@
           "name": "services_offers_items_locales_parent_id_fk",
           "tableFrom": "services_offers_items_locales",
           "tableTo": "services_offers_items",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4874,7 +5518,7 @@
           "name": "choose_coworking_cta_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "choose_coworking_image_id": {
@@ -4895,16 +5539,8 @@
           "name": "cta_link_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
-        },
-        "_status": {
-          "name": "_status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'draft'"
         },
         "updated_at": {
           "name": "updated_at",
@@ -4924,17 +5560,16 @@
       "indexes": {
         "services_choose_coworking_choose_coworking_image_idx": {
           "name": "services_choose_coworking_choose_coworking_image_idx",
-          "columns": ["choose_coworking_image_id"],
+          "columns": [
+            "choose_coworking_image_id"
+          ],
           "isUnique": false
         },
         "services_choose_private_offices_choose_private_offices_i_idx": {
           "name": "services_choose_private_offices_choose_private_offices_i_idx",
-          "columns": ["choose_private_offices_image_id"],
-          "isUnique": false
-        },
-        "services__status_idx": {
-          "name": "services__status_idx",
-          "columns": ["_status"],
+          "columns": [
+            "choose_private_offices_image_id"
+          ],
           "isUnique": false
         }
       },
@@ -4943,8 +5578,12 @@
           "name": "services_choose_coworking_image_id_media_id_fk",
           "tableFrom": "services",
           "tableTo": "media",
-          "columnsFrom": ["choose_coworking_image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "choose_coworking_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4952,8 +5591,12 @@
           "name": "services_choose_private_offices_image_id_media_id_fk",
           "tableFrom": "services",
           "tableTo": "media",
-          "columnsFrom": ["choose_private_offices_image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "choose_private_offices_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -5095,7 +5738,10 @@
       "indexes": {
         "services_locales_locale_parent_id_unique": {
           "name": "services_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -5104,8 +5750,12 @@
           "name": "services_locales_parent_id_fk",
           "tableFrom": "services_locales",
           "tableTo": "services",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5156,7 +5806,10 @@
       "indexes": {
         "services_numbers_order_parent_idx": {
           "name": "services_numbers_order_parent_idx",
-          "columns": ["order", "parent_id"],
+          "columns": [
+            "order",
+            "parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -5165,8 +5818,12 @@
           "name": "services_numbers_parent_fk",
           "tableFrom": "services_numbers",
           "tableTo": "services",
-          "columnsFrom": ["parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5210,12 +5867,16 @@
       "indexes": {
         "_services_v_version_hero_body_order_idx": {
           "name": "_services_v_version_hero_body_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "_services_v_version_hero_body_parent_id_idx": {
           "name": "_services_v_version_hero_body_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -5224,8 +5885,12 @@
           "name": "_services_v_version_hero_body_parent_id_fk",
           "tableFrom": "_services_v_version_hero_body",
           "tableTo": "_services_v",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5269,7 +5934,10 @@
       "indexes": {
         "_services_v_version_hero_body_locales_locale_parent_id_uniqu": {
           "name": "_services_v_version_hero_body_locales_locale_parent_id_uniqu",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -5278,8 +5946,12 @@
           "name": "_services_v_version_hero_body_locales_parent_id_fk",
           "tableFrom": "_services_v_version_hero_body_locales",
           "tableTo": "_services_v_version_hero_body",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5312,11 +5984,11 @@
           "notNull": true,
           "autoincrement": false
         },
-        "icon": {
-          "name": "icon",
-          "type": "text",
+        "icon_id": {
+          "name": "icon_id",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "_uuid": {
@@ -5330,22 +6002,50 @@
       "indexes": {
         "_services_v_version_offers_items_order_idx": {
           "name": "_services_v_version_offers_items_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "_services_v_version_offers_items_parent_id_idx": {
           "name": "_services_v_version_offers_items_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
+          "isUnique": false
+        },
+        "_services_v_version_offers_items_icon_idx": {
+          "name": "_services_v_version_offers_items_icon_idx",
+          "columns": [
+            "icon_id"
+          ],
           "isUnique": false
         }
       },
       "foreignKeys": {
+        "_services_v_version_offers_items_icon_id_media_id_fk": {
+          "name": "_services_v_version_offers_items_icon_id_media_id_fk",
+          "tableFrom": "_services_v_version_offers_items",
+          "tableTo": "media",
+          "columnsFrom": [
+            "icon_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
         "_services_v_version_offers_items_parent_id_fk": {
           "name": "_services_v_version_offers_items_parent_id_fk",
           "tableFrom": "_services_v_version_offers_items",
           "tableTo": "_services_v",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5396,7 +6096,10 @@
       "indexes": {
         "_services_v_version_offers_items_locales_locale_parent_id_un": {
           "name": "_services_v_version_offers_items_locales_locale_parent_id_un",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -5405,8 +6108,12 @@
           "name": "_services_v_version_offers_items_locales_parent_id_fk",
           "tableFrom": "_services_v_version_offers_items_locales",
           "tableTo": "_services_v_version_offers_items",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5429,7 +6136,7 @@
           "name": "version_choose_coworking_cta_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "version_choose_coworking_image_id": {
@@ -5450,16 +6157,8 @@
           "name": "version_cta_link_href",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
-        },
-        "version__status": {
-          "name": "version__status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'draft'"
         },
         "version_updated_at": {
           "name": "version_updated_at",
@@ -5490,68 +6189,35 @@
           "notNull": true,
           "autoincrement": false,
           "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        },
-        "snapshot": {
-          "name": "snapshot",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "published_locale": {
-          "name": "published_locale",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "latest": {
-          "name": "latest",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         }
       },
       "indexes": {
         "_services_v_version_choose_coworking_version_choose_cowo_idx": {
           "name": "_services_v_version_choose_coworking_version_choose_cowo_idx",
-          "columns": ["version_choose_coworking_image_id"],
+          "columns": [
+            "version_choose_coworking_image_id"
+          ],
           "isUnique": false
         },
         "_services_v_version_choose_private_offices_version_choos_idx": {
           "name": "_services_v_version_choose_private_offices_version_choos_idx",
-          "columns": ["version_choose_private_offices_image_id"],
-          "isUnique": false
-        },
-        "_services_v_version_version__status_idx": {
-          "name": "_services_v_version_version__status_idx",
-          "columns": ["version__status"],
+          "columns": [
+            "version_choose_private_offices_image_id"
+          ],
           "isUnique": false
         },
         "_services_v_created_at_idx": {
           "name": "_services_v_created_at_idx",
-          "columns": ["created_at"],
+          "columns": [
+            "created_at"
+          ],
           "isUnique": false
         },
         "_services_v_updated_at_idx": {
           "name": "_services_v_updated_at_idx",
-          "columns": ["updated_at"],
-          "isUnique": false
-        },
-        "_services_v_snapshot_idx": {
-          "name": "_services_v_snapshot_idx",
-          "columns": ["snapshot"],
-          "isUnique": false
-        },
-        "_services_v_published_locale_idx": {
-          "name": "_services_v_published_locale_idx",
-          "columns": ["published_locale"],
-          "isUnique": false
-        },
-        "_services_v_latest_idx": {
-          "name": "_services_v_latest_idx",
-          "columns": ["latest"],
+          "columns": [
+            "updated_at"
+          ],
           "isUnique": false
         }
       },
@@ -5560,8 +6226,12 @@
           "name": "_services_v_version_choose_coworking_image_id_media_id_fk",
           "tableFrom": "_services_v",
           "tableTo": "media",
-          "columnsFrom": ["version_choose_coworking_image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "version_choose_coworking_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -5569,8 +6239,12 @@
           "name": "_services_v_version_choose_private_offices_image_id_media_id_fk",
           "tableFrom": "_services_v",
           "tableTo": "media",
-          "columnsFrom": ["version_choose_private_offices_image_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "version_choose_private_offices_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -5712,7 +6386,10 @@
       "indexes": {
         "_services_v_locales_locale_parent_id_unique": {
           "name": "_services_v_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -5721,8 +6398,12 @@
           "name": "_services_v_locales_parent_id_fk",
           "tableFrom": "_services_v_locales",
           "tableTo": "_services_v",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5773,7 +6454,10 @@
       "indexes": {
         "_services_v_numbers_order_parent_idx": {
           "name": "_services_v_numbers_order_parent_idx",
-          "columns": ["order", "parent_id"],
+          "columns": [
+            "order",
+            "parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -5782,8 +6466,12 @@
           "name": "_services_v_numbers_parent_fk",
           "tableFrom": "_services_v_numbers",
           "tableTo": "_services_v",
-          "columnsFrom": ["parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5802,14 +6490,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "_status": {
-          "name": "_status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'draft'"
-        },
         "updated_at": {
           "name": "updated_at",
           "type": "text",
@@ -5825,13 +6505,7 @@
           "autoincrement": false
         }
       },
-      "indexes": {
-        "contact__status_idx": {
-          "name": "contact__status_idx",
-          "columns": ["_status"],
-          "isUnique": false
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -5872,7 +6546,10 @@
       "indexes": {
         "contact_locales_locale_parent_id_unique": {
           "name": "contact_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -5881,8 +6558,12 @@
           "name": "contact_locales_parent_id_fk",
           "tableFrom": "contact_locales",
           "tableTo": "contact",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5933,22 +6614,30 @@
       "indexes": {
         "contact_rels_order_idx": {
           "name": "contact_rels_order_idx",
-          "columns": ["order"],
+          "columns": [
+            "order"
+          ],
           "isUnique": false
         },
         "contact_rels_parent_idx": {
           "name": "contact_rels_parent_idx",
-          "columns": ["parent_id"],
+          "columns": [
+            "parent_id"
+          ],
           "isUnique": false
         },
         "contact_rels_path_idx": {
           "name": "contact_rels_path_idx",
-          "columns": ["path"],
+          "columns": [
+            "path"
+          ],
           "isUnique": false
         },
         "contact_rels_media_id_idx": {
           "name": "contact_rels_media_id_idx",
-          "columns": ["media_id"],
+          "columns": [
+            "media_id"
+          ],
           "isUnique": false
         }
       },
@@ -5957,8 +6646,12 @@
           "name": "contact_rels_parent_fk",
           "tableFrom": "contact_rels",
           "tableTo": "contact",
-          "columnsFrom": ["parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -5966,8 +6659,12 @@
           "name": "contact_rels_media_fk",
           "tableFrom": "contact_rels",
           "tableTo": "media",
-          "columnsFrom": ["media_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "media_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5985,14 +6682,6 @@
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
-        },
-        "version__status": {
-          "name": "version__status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'draft'"
         },
         "version_updated_at": {
           "name": "version_updated_at",
@@ -6023,58 +6712,21 @@
           "notNull": true,
           "autoincrement": false,
           "default": "(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))"
-        },
-        "snapshot": {
-          "name": "snapshot",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "published_locale": {
-          "name": "published_locale",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "latest": {
-          "name": "latest",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         }
       },
       "indexes": {
-        "_contact_v_version_version__status_idx": {
-          "name": "_contact_v_version_version__status_idx",
-          "columns": ["version__status"],
-          "isUnique": false
-        },
         "_contact_v_created_at_idx": {
           "name": "_contact_v_created_at_idx",
-          "columns": ["created_at"],
+          "columns": [
+            "created_at"
+          ],
           "isUnique": false
         },
         "_contact_v_updated_at_idx": {
           "name": "_contact_v_updated_at_idx",
-          "columns": ["updated_at"],
-          "isUnique": false
-        },
-        "_contact_v_snapshot_idx": {
-          "name": "_contact_v_snapshot_idx",
-          "columns": ["snapshot"],
-          "isUnique": false
-        },
-        "_contact_v_published_locale_idx": {
-          "name": "_contact_v_published_locale_idx",
-          "columns": ["published_locale"],
-          "isUnique": false
-        },
-        "_contact_v_latest_idx": {
-          "name": "_contact_v_latest_idx",
-          "columns": ["latest"],
+          "columns": [
+            "updated_at"
+          ],
           "isUnique": false
         }
       },
@@ -6118,7 +6770,10 @@
       "indexes": {
         "_contact_v_locales_locale_parent_id_unique": {
           "name": "_contact_v_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -6127,8 +6782,12 @@
           "name": "_contact_v_locales_parent_id_fk",
           "tableFrom": "_contact_v_locales",
           "tableTo": "_contact_v",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -6179,22 +6838,30 @@
       "indexes": {
         "_contact_v_rels_order_idx": {
           "name": "_contact_v_rels_order_idx",
-          "columns": ["order"],
+          "columns": [
+            "order"
+          ],
           "isUnique": false
         },
         "_contact_v_rels_parent_idx": {
           "name": "_contact_v_rels_parent_idx",
-          "columns": ["parent_id"],
+          "columns": [
+            "parent_id"
+          ],
           "isUnique": false
         },
         "_contact_v_rels_path_idx": {
           "name": "_contact_v_rels_path_idx",
-          "columns": ["path"],
+          "columns": [
+            "path"
+          ],
           "isUnique": false
         },
         "_contact_v_rels_media_id_idx": {
           "name": "_contact_v_rels_media_id_idx",
-          "columns": ["media_id"],
+          "columns": [
+            "media_id"
+          ],
           "isUnique": false
         }
       },
@@ -6203,8 +6870,12 @@
           "name": "_contact_v_rels_parent_fk",
           "tableFrom": "_contact_v_rels",
           "tableTo": "_contact_v",
-          "columnsFrom": ["parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -6212,8 +6883,12 @@
           "name": "_contact_v_rels_media_fk",
           "tableFrom": "_contact_v_rels",
           "tableTo": "media",
-          "columnsFrom": ["media_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "media_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -6264,12 +6939,16 @@
       "indexes": {
         "site_settings_social_order_idx": {
           "name": "site_settings_social_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "site_settings_social_parent_id_idx": {
           "name": "site_settings_social_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -6278,8 +6957,12 @@
           "name": "site_settings_social_parent_id_fk",
           "tableFrom": "site_settings_social",
           "tableTo": "site_settings",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -6396,7 +7079,10 @@
       "indexes": {
         "site_settings_locales_locale_parent_id_unique": {
           "name": "site_settings_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -6405,8 +7091,12 @@
           "name": "site_settings_locales_parent_id_fk",
           "tableFrom": "site_settings_locales",
           "tableTo": "site_settings",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -6464,12 +7154,16 @@
       "indexes": {
         "_site_settings_v_version_social_order_idx": {
           "name": "_site_settings_v_version_social_order_idx",
-          "columns": ["_order"],
+          "columns": [
+            "_order"
+          ],
           "isUnique": false
         },
         "_site_settings_v_version_social_parent_id_idx": {
           "name": "_site_settings_v_version_social_parent_id_idx",
-          "columns": ["_parent_id"],
+          "columns": [
+            "_parent_id"
+          ],
           "isUnique": false
         }
       },
@@ -6478,8 +7172,12 @@
           "name": "_site_settings_v_version_social_parent_id_fk",
           "tableFrom": "_site_settings_v_version_social",
           "tableTo": "_site_settings_v",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -6574,12 +7272,16 @@
       "indexes": {
         "_site_settings_v_created_at_idx": {
           "name": "_site_settings_v_created_at_idx",
-          "columns": ["created_at"],
+          "columns": [
+            "created_at"
+          ],
           "isUnique": false
         },
         "_site_settings_v_updated_at_idx": {
           "name": "_site_settings_v_updated_at_idx",
-          "columns": ["updated_at"],
+          "columns": [
+            "updated_at"
+          ],
           "isUnique": false
         }
       },
@@ -6623,7 +7325,10 @@
       "indexes": {
         "_site_settings_v_locales_locale_parent_id_unique": {
           "name": "_site_settings_v_locales_locale_parent_id_unique",
-          "columns": ["_locale", "_parent_id"],
+          "columns": [
+            "_locale",
+            "_parent_id"
+          ],
           "isUnique": true
         }
       },
@@ -6632,8 +7337,12 @@
           "name": "_site_settings_v_locales_parent_id_fk",
           "tableFrom": "_site_settings_v_locales",
           "tableTo": "_site_settings_v",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -6652,6 +7361,6 @@
   "internal": {
     "indexes": {}
   },
-  "id": "3dcefaf5-d963-46a8-b60f-e38d7f6ee2e2",
+  "id": "c3b0174f-98c0-47ce-92d9-98593dddbfdb",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

@@ -6,10 +6,13 @@ import { refreshAfterChange } from '../revalidate';
 /** Contact details and links shown in the header, footer and contact page. */
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
-  label: 'Site settings',
-  admin: { group: 'Pages' },
+  label: 'Address, phone & e-mail',
+  admin: {
+    group: 'Website',
+    description: 'Shown in the header, the footer and on the contact page.',
+  },
   access: { read: signedIn, update: signedIn },
-  versions: { drafts: false, max: 50 },
+  versions: { max: 50 },
   hooks: { afterChange: refreshAfterChange },
   fields: [
     { name: 'email', label: 'Email', type: 'email', required: true },
@@ -29,9 +32,14 @@ export const SiteSettings: GlobalConfig = {
       label: 'Address',
       type: 'group',
       fields: [
-        { name: 'street', label: 'Street', type: 'text', required: true },
-        { name: 'postalCode', label: 'Postal code', type: 'text', required: true },
-        { name: 'city', label: 'City', type: 'text', required: true },
+        {
+          type: 'row',
+          fields: [
+            { name: 'street', label: 'Street', type: 'text', required: true },
+            { name: 'postalCode', label: 'Postal code', type: 'text', required: true },
+            { name: 'city', label: 'City', type: 'text', required: true },
+          ],
+        },
       ],
     },
     {
@@ -54,7 +62,10 @@ export const SiteSettings: GlobalConfig = {
           label: 'Network',
           type: 'select',
           required: true,
-          options: ['linkedin', 'facebook'],
+          options: [
+            { label: 'LinkedIn', value: 'linkedin' },
+            { label: 'Facebook', value: 'facebook' },
+          ],
         },
         {
           name: 'url',

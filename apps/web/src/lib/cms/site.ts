@@ -4,7 +4,7 @@ import type { Localized } from '@/content/types';
 import { localized, type CmsLocalized } from './map';
 import { readGlobal } from './payload';
 
-/** Contact details and social links; the CMS "Site settings" override the built-in values. */
+/** Contact details and social links; "Address, phone & e-mail" in the admin overrides the built-in values. */
 export type SiteInfo = {
   name: string;
   shortName: string;

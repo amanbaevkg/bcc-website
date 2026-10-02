@@ -1,15 +1,20 @@
 import type { GlobalConfig } from 'payload';
 import { signedIn } from '../access';
-import { image, link, text } from '../fields';
+import { image, link, rowLabel, text } from '../fields';
+import { pagePreview } from '../preview';
 import { refreshAfterChange } from '../revalidate';
 
 /** About Us. Layout is fixed in the code; editors change the words and photos. */
 export const About: GlobalConfig = {
   slug: 'about',
   label: 'About Us page',
-  admin: { group: 'Pages' },
+  admin: {
+    group: 'Website',
+    description: 'One tab per block, from the top of the page to the bottom.',
+    preview: pagePreview('/about'),
+  },
   access: { read: signedIn, update: signedIn },
-  versions: { drafts: true, max: 50 },
+  versions: { max: 50 },
   hooks: { afterChange: refreshAfterChange },
   fields: [
     {
@@ -17,14 +22,14 @@ export const About: GlobalConfig = {
       tabs: [
         {
           name: 'hero',
-          label: 'Intro',
+          label: '1. Top',
           fields: [
             text('eyebrow', 'Small label', { max: 30 }),
             text('title', 'Title', { max: 80 }),
-            text('titleAccent', 'End of the title in italic', {
+            text('titleAccent', 'Last words of the title in italic', {
               max: 40,
               required: false,
-              description: 'Must be the last words of the title.',
+              description: 'Copy them from the end of the title.',
             }),
             text('body', 'Text', { max: 600, multiline: true }),
             image('image', 'Wide photo', {
@@ -35,14 +40,15 @@ export const About: GlobalConfig = {
           ],
         },
         {
-          label: 'Highlights & figures',
+          label: '2. Highlights & figures',
           fields: [
             {
               name: 'highlights',
               label: 'Highlights',
               type: 'array',
               maxRows: 7,
-              admin: { description: 'Three to seven short points.' },
+              labels: { singular: 'Point', plural: 'Points' },
+              admin: { ...rowLabel('text', 'Point'), description: 'Three to seven short points.' },
               fields: [text('text', 'Text', { max: 120 })],
             },
             text('location', 'Location sentence', { max: 240 }),
@@ -52,6 +58,8 @@ export const About: GlobalConfig = {
               label: 'Figures',
               type: 'array',
               maxRows: 3,
+              labels: { singular: 'Figure', plural: 'Figures' },
+              admin: rowLabel('value', 'Figure'),
               fields: [
                 {
                   name: 'value',
@@ -67,13 +75,15 @@ export const About: GlobalConfig = {
           ],
         },
         {
-          label: 'Turnkey & Vision',
+          label: '3. Turnkey & Vision',
           fields: [
             {
               name: 'features',
               label: 'Features',
               type: 'array',
               maxRows: 4,
+              labels: { singular: 'Block', plural: 'Blocks' },
+              admin: rowLabel('title', 'Block'),
               fields: [
                 text('title', 'Title', { max: 40 }),
                 text('body', 'Text', { max: 500, multiline: true }),
@@ -86,7 +96,7 @@ export const About: GlobalConfig = {
         },
         {
           name: 'visit',
-          label: 'Visit',
+          label: '4. Visit us',
           fields: [
             text('eyebrow', 'Small label', { max: 40 }),
             text('title', 'Title', { max: 60 }),

@@ -7,8 +7,12 @@ import { refreshAfterChange } from '../revalidate';
 /** Photos, logos and the hero videos. Files are kept on the server in PAYLOAD_MEDIA_DIR. */
 export const Media: CollectionConfig = {
   slug: 'media',
-  labels: { singular: 'Photo or video', plural: 'Photos & videos' },
-  admin: { group: 'Lists', useAsTitle: 'filename' },
+  labels: { singular: 'File', plural: 'Photo library' },
+  admin: {
+    group: 'Settings',
+    useAsTitle: 'filename',
+    description: 'Photos, logos, icons and videos used on the site.',
+  },
   access: { read: anyone, create: signedIn, update: signedIn, delete: signedIn },
   hooks: { afterChange: refreshAfterChange },
   upload: {

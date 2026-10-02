@@ -1,28 +1,20 @@
 import type { GlobalConfig } from 'payload';
 import { signedIn } from '../access';
-import { boldText, image, link, text } from '../fields';
+import { boldText, image, link, rowLabel, text } from '../fields';
+import { pagePreview } from '../preview';
 import { refreshAfterChange } from '../revalidate';
-
-export const serviceIcons = [
-  'wifi',
-  'reception',
-  'meeting',
-  'kitchen',
-  'supplies',
-  'parking',
-  'cloud',
-  'mail',
-  'handshake',
-  'more',
-] as const;
 
 /** Our Services. Layout is fixed in the code; editors change the words and photos. */
 export const Services: GlobalConfig = {
   slug: 'services',
   label: 'Our Services page',
-  admin: { group: 'Pages' },
+  admin: {
+    group: 'Website',
+    description: 'One tab per block, from the top of the page to the bottom.',
+    preview: pagePreview('/services'),
+  },
   access: { read: signedIn, update: signedIn },
-  versions: { drafts: true, max: 50 },
+  versions: { max: 50 },
   hooks: { afterChange: refreshAfterChange },
   fields: [
     {
@@ -30,7 +22,7 @@ export const Services: GlobalConfig = {
       tabs: [
         {
           name: 'hero',
-          label: 'Intro',
+          label: '1. Top',
           fields: [
             text('eyebrow', 'Small label', { max: 30 }),
             text('title', 'Title', { max: 80 }),
@@ -39,13 +31,15 @@ export const Services: GlobalConfig = {
               label: 'Short sentences',
               type: 'array',
               maxRows: 3,
+              labels: { singular: 'Sentence', plural: 'Sentences' },
+              admin: rowLabel('text', 'Sentence'),
               fields: [text('text', 'Text', { max: 120 })],
             },
           ],
         },
         {
           name: 'choose',
-          label: 'Co-working & offices',
+          label: '2. Co-working & offices',
           fields: [
             text('title', 'Section title', { max: 40 }),
             {
@@ -77,7 +71,8 @@ export const Services: GlobalConfig = {
                   minRows: 1,
                   maxRows: 9,
                   admin: {
-                    description: 'One tile per size; each opens the enquiry form pre-filled.',
+                    description:
+                      'Type a number and press Enter. One tile per size; each opens the contact form pre-filled.',
                   },
                 },
                 text('sizeNote', 'Note on each tile', { max: 40 }),
@@ -88,21 +83,31 @@ export const Services: GlobalConfig = {
         },
         {
           name: 'offers',
-          label: 'What we offer',
+          label: '3. What we offer',
           fields: [
             text('title', 'Title', { max: 40 }),
             {
               name: 'items',
               label: 'Services',
               type: 'array',
-              admin: { description: 'An even number fills the two columns neatly.' },
+              labels: { singular: 'Service', plural: 'Services' },
+              admin: {
+                ...rowLabel('title', 'Service', true),
+                description:
+                  'Drag to change the order. An even number fills the two columns neatly.',
+              },
               fields: [
                 {
                   name: 'icon',
                   label: 'Icon',
-                  type: 'select',
+                  type: 'upload',
+                  relationTo: 'media',
                   required: true,
-                  options: [...serviceIcons],
+                  filterOptions: { mimeType: { in: ['image/svg+xml', 'image/png'] } },
+                  admin: {
+                    description:
+                      'Any icon: SVG, or PNG with a transparent background. It is shown in the site’s colour, so its own colours do not matter. Free icons: lucide.dev, tabler.io/icons.',
+                  },
                 },
                 text('title', 'Title', { max: 50 }),
                 text('body', 'Text', { max: 500, multiline: true }),
@@ -112,7 +117,7 @@ export const Services: GlobalConfig = {
         },
         {
           name: 'cta',
-          label: 'Closing call to action',
+          label: '4. Last block',
           fields: [text('title', 'Title', { max: 80 }), link('link', 'Button')],
         },
       ],

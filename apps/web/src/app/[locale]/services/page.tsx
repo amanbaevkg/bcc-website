@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
+import type { CSSProperties } from 'react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { RichText } from '@/components/home/RichText';
 import { PageHero } from '@/components/page/PageHero';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Photo } from '@/components/ui/Photo';
-import { ServiceIcon } from '@/components/ui/ServiceIcon';
 import { pick } from '@/content/types';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
@@ -108,11 +108,14 @@ export default async function ServicesPage({ params }: Props) {
         <div className={`wrap ${styles.offersGrid}`}>
           <h2 className={`xl ${styles.offersTitle}`}>{pick(s.offers.title, locale)}</h2>
           <ul className={styles.offerGrid}>
-            {s.offers.items.map((o) => (
-              <li key={o.icon} className={styles.offer}>
-                <span className={styles.icon}>
-                  <ServiceIcon name={o.icon} size={36} />
-                </span>
+            {s.offers.items.map((o, i) => (
+              <li key={i} className={styles.offer}>
+                {/* Any uploaded icon, drawn in the site colour through a CSS mask. */}
+                <span
+                  className={styles.icon}
+                  style={{ '--icon': `url(${JSON.stringify(o.icon)})` } as CSSProperties}
+                  aria-hidden="true"
+                />
                 <h3 className={styles.offerName}>{pick(o.title, locale)}</h3>
                 <p>{pick(o.body, locale)}</p>
               </li>

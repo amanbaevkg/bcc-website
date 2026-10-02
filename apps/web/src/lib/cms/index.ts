@@ -15,7 +15,7 @@ import {
   type CmsMedia,
   type CmsRichLine,
 } from './map';
-import { cmsQuery } from './payload';
+import { readGlobal } from './payload';
 
 /**
  * Content access for pages. Everything comes from the admin (/admin, Payload); each section
@@ -39,7 +39,7 @@ type HomeDoc = {
     cta?: CmsLink;
     ring?: CmsLink;
     teamSizes?: number[] | null;
-    workspaceTypes?: { code?: string | null; name?: CmsLocalized; hasTeamSize?: boolean | null }[];
+    workspaceTypes?: { opens?: string | null; name?: CmsLocalized }[];
     video?: { mp4_1080?: CmsMedia; mp4_720?: CmsMedia; mp4_480?: CmsMedia; poster?: CmsMedia };
   };
   coworking?: Offer;
@@ -64,7 +64,7 @@ type HomeDoc = {
       name?: string | null;
       role?: CmsLocalized;
       company?: string | null;
-      rating?: number | null;
+      rating?: number | string | null;
     }[];
   };
   final?: { lines?: CmsLocalized; cta?: CmsLink; image?: CmsMedia };
@@ -100,10 +100,16 @@ export function mapHome(doc: HomeDoc | null): HomePage {
     return poster && sources.length ? { poster, sources } : fb.hero.video;
   })();
 
+  // Each choice needs its own id in the menu; two choices may pre-select the same thing.
+  const used = new Set<string>();
   const workspaceTypes = compact(
-    (h?.workspaceTypes ?? []).map((w) => {
+    (h?.workspaceTypes ?? []).map((w, i) => {
       const name = localized(w.name);
-      return w.code && name ? { id: w.code, name, hasTeamSize: !!w.hasTeamSize } : undefined;
+      if (!name) return undefined;
+      const opens = w.opens || 'other';
+      const id = used.has(opens) ? `${opens}-${i}` : opens;
+      used.add(id);
+      return { id, name, hasTeamSize: opens === 'private-office' };
     }),
   );
 
@@ -133,7 +139,8 @@ export function mapHome(doc: HomeDoc | null): HomePage {
             name: q.name,
             role: localized(q.role) ?? { en: '' },
             company: q.company,
-            rating: Math.min(5, Math.max(1, Math.round(q.rating ?? 5))) as 1 | 2 | 3 | 4 | 5,
+            rating: Math.min(5, Math.max(1, Math.round(Number(q.rating) || 5))) as
+              1 | 2 | 3 | 4 | 5,
           }
         : undefined,
     ),
@@ -191,47 +198,9 @@ export function mapHome(doc: HomeDoc | null): HomePage {
   };
 }
 
-type ListDoc = Record<string, unknown> & { active?: boolean | null };
-
-/** The home page plus the lists it shows (all of them unless the page picks some). */
 export async function getHomePage(): Promise<HomePage> {
   try {
-    const doc = await cmsQuery('home', async (p) => {
-      const home = (await p.findGlobal({
-        slug: 'home',
-        locale: 'all',
-        depth: 2,
-        draft: false,
-      })) as Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
-      const all = async (collection: string) =>
-        (
-          await p.find({
-            collection: collection as never,
-            locale: 'all',
-            depth: 1,
-            limit: 100,
-            sort: 'order',
-            pagination: false,
-          })
-        ).docs as ListDoc[];
-      const picked = (v: unknown) =>
-        Array.isArray(v) && v.length && typeof v[0] === 'object' ? (v as ListDoc[]) : null;
-      return {
-        ...home,
-        trust: {
-          ...home.trust,
-          clients:
-            picked(home.trust?.clients) ??
-            (await all('client-logos')).filter((c) => c.active !== false),
-        },
-        spaces: { ...home.spaces, items: picked(home.spaces?.items) ?? (await all('spaces')) },
-        testimonials: {
-          ...home.testimonials,
-          items: picked(home.testimonials?.items) ?? (await all('testimonials')),
-        },
-      } as HomeDoc;
-    });
-    return mapHome(doc);
+    return mapHome(await readGlobal<HomeDoc>('home'));
   } catch (error) {
     // A database problem must not take the site down: log it and serve the built-in content.
     console.error('[cms] home page query failed, using fallback content', error);

@@ -10,7 +10,7 @@ import { refreshAfterChange } from '../revalidate';
 export const LegalPages: CollectionConfig = {
   slug: 'legal-pages',
   labels: { singular: 'Legal page', plural: 'Legal pages' },
-  admin: { group: 'Pages', useAsTitle: 'kind' },
+  admin: { group: 'Settings', useAsTitle: 'kind' },
   access: { read: signedIn, create: isAdmin, update: isAdmin, delete: isAdmin },
   hooks: { afterChange: refreshAfterChange },
   fields: [

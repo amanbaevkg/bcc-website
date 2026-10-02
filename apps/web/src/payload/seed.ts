@@ -15,7 +15,7 @@ import { paragraphs } from './lexical';
 
 /*
  * First-start content: copies the site's built-in texts (4 languages), photos, logos,
- * testimonials and hero videos into the admin, so editors start from the current website.
+ * icons, testimonials and hero videos into the admin, so editors start from the current website.
  * Runs once, when the Home page is still empty (see bootstrap.ts).
  */
 
@@ -97,12 +97,11 @@ export async function seedContent(payload: Payload) {
   }
   const img = (i: ImageAsset) => upload(i.src, i.alt);
 
-  async function writeGlobal(slug: string, tree: object, drafts = true) {
+  async function writeGlobal(slug: string, tree: object) {
     for (const loc of LOCALES) {
-      const data = forLocale(tree, loc) as Record<string, unknown>;
       await payload.updateGlobal({
         slug: slug as never,
-        data: (drafts ? { ...data, _status: 'published' } : data) as never,
+        data: forLocale(tree, loc) as never,
         locale: loc,
         // Untranslated texts stay empty (they show English on the site) instead of copying it.
         fallbackLocale: false as never,
@@ -110,56 +109,7 @@ export async function seedContent(payload: Payload) {
     }
   }
 
-  async function createDoc(collection: string, tree: object) {
-    const first = forLocale(tree, 'en') as Record<string, unknown>;
-    const doc = (await payload.create({
-      collection: collection as never,
-      data: first as never,
-      locale: 'en',
-    })) as { id: number | string };
-    for (const loc of LOCALES.slice(1)) {
-      await payload.update({
-        collection: collection as never,
-        id: doc.id,
-        data: forLocale(tree, loc) as never,
-        locale: loc,
-        fallbackLocale: false as never,
-      });
-    }
-  }
-
   const h = homeFallback;
-
-  // Lists
-  for (const [i, c] of h.trust.clients.entries()) {
-    await createDoc('client-logos', {
-      name: c.name,
-      logo: await upload(c.logo.src, { en: c.name }),
-      url: c.url,
-      active: true,
-      order: (i + 1) * 10,
-    });
-  }
-  for (const [i, s] of h.spaces.items.entries()) {
-    await createDoc('spaces', {
-      title: s.caption.en,
-      image: await img(s.image),
-      caption: L(s.caption),
-      order: (i + 1) * 10,
-    });
-  }
-  for (const [i, q] of h.testimonials.items.entries()) {
-    await createDoc('testimonials', {
-      quote: q.quote.en,
-      quoteLanguage: q.lang ?? 'en',
-      name: q.name,
-      role: L(q.role),
-      company: q.company,
-      rating: q.rating,
-      consent: true,
-      order: (i + 1) * 10,
-    });
-  }
 
   // Home page
   const video: Record<string, unknown> = { poster: await img(h.hero.video.poster) };
@@ -177,9 +127,7 @@ export async function seedContent(payload: Payload) {
       titleAccent: L(h.hero.titleAccent),
       subtitle: L(h.hero.subtitle),
       video,
-      workspaceTypes: h.hero.workspaceTypes.map((w) =>
-        row({ code: w.id, name: L(w.name), hasTeamSize: w.hasTeamSize }),
-      ),
+      workspaceTypes: h.hero.workspaceTypes.map((w) => row({ opens: w.id, name: L(w.name) })),
       teamSizes: h.hero.teamSizes,
       cta: link(h.hero.cta),
       ring: link(h.hero.ring),
@@ -187,15 +135,40 @@ export async function seedContent(payload: Payload) {
     coworking: await offer(h.coworking),
     privateOffices: await offer(h.privateOffices),
     servicesLink: link(h.servicesLink),
-    trust: { title: L(h.trust.title) },
-    spaces: { title: L(h.spaces.title), moreLink: link(h.spaces.moreLink) },
+    trust: {
+      title: L(h.trust.title),
+      clients: await Promise.all(
+        h.trust.clients.map(async (c) =>
+          row({ logo: await upload(c.logo.src, { en: c.name }), name: c.name, url: c.url }),
+        ),
+      ),
+    },
+    spaces: {
+      title: L(h.spaces.title),
+      items: await Promise.all(
+        h.spaces.items.map(async (x) => row({ image: await img(x.image), caption: L(x.caption) })),
+      ),
+      moreLink: link(h.spaces.moreLink),
+    },
     tomorrow: {
       lines: lines(h.tomorrow.lines),
       card: L(h.tomorrow.card),
       image: await img(h.tomorrow.image),
     },
     findMore: { title: L(h.findMore.title), cta: link(h.findMore.cta) },
-    testimonials: { title: L(h.testimonials.title) },
+    testimonials: {
+      title: L(h.testimonials.title),
+      items: h.testimonials.items.map((q) =>
+        row({
+          quote: q.quote.en,
+          quoteLanguage: q.lang ?? 'en',
+          name: q.name,
+          role: L(q.role),
+          company: q.company,
+          rating: String(q.rating),
+        }),
+      ),
+    },
     final: { lines: lines(h.final.lines), cta: link(h.final.cta), image: await img(h.final.image) },
   });
 
@@ -261,7 +234,11 @@ export async function seedContent(payload: Payload) {
     },
     offers: {
       title: L(s.offers.title),
-      items: s.offers.items.map((o) => row({ icon: o.icon, title: L(o.title), body: L(o.body) })),
+      items: await Promise.all(
+        s.offers.items.map(async (o) =>
+          row({ icon: await upload(o.icon), title: L(o.title), body: L(o.body) }),
+        ),
+      ),
     },
     cta: { title: L(s.cta.title), link: link(s.cta.link) },
   });
@@ -274,22 +251,18 @@ export async function seedContent(payload: Payload) {
     },
   });
 
-  // Site settings
+  // Address, phone & e-mail
   const messages = { en, fr, de, lu };
-  await writeGlobal(
-    'site-settings',
-    {
-      email: siteFallback.email,
-      phone: siteFallback.phone.display,
-      address: {
-        street: siteFallback.address.street,
-        postalCode: siteFallback.address.postalCode,
-        city: siteFallback.address.city,
-      },
-      mapUrl: siteFallback.mapUrl,
-      tagline: new PerLocale(Object.fromEntries(LOCALES.map((l) => [l, messages[l].Meta.tagline]))),
-      social: siteFallback.social.map((x) => row({ network: x.network, url: x.url })),
+  await writeGlobal('site-settings', {
+    email: siteFallback.email,
+    phone: siteFallback.phone.display,
+    address: {
+      street: siteFallback.address.street,
+      postalCode: siteFallback.address.postalCode,
+      city: siteFallback.address.city,
     },
-    false,
-  );
+    mapUrl: siteFallback.mapUrl,
+    tagline: new PerLocale(Object.fromEntries(LOCALES.map((l) => [l, messages[l].Meta.tagline]))),
+    social: siteFallback.social.map((x) => row({ network: x.network, url: x.url })),
+  });
 }

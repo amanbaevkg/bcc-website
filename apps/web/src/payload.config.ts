@@ -10,7 +10,6 @@ import { About } from './payload/globals/About';
 import { Home } from './payload/globals/Home';
 import { Services } from './payload/globals/Services';
 import { SiteSettings } from './payload/globals/SiteSettings';
-import { ClientLogos, Spaces, Testimonials } from './payload/collections/Lists';
 import { LegalPages } from './payload/collections/LegalPages';
 import { Media } from './payload/collections/Media';
 import { News } from './payload/collections/News';
@@ -51,8 +50,8 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  // Order and groups decide the admin's menu: pages first, then lists, then accounts.
-  collections: [LegalPages, News, ClientLogos, Spaces, Testimonials, Media, Users],
+  // Order and groups decide the admin's menu: "Website" (news, then the pages), then "Settings".
+  collections: [News, LegalPages, Media, Users],
   globals: [Home, About, Services, Contact, SiteSettings],
   editor: lexicalEditor(),
   email: adminEmail,

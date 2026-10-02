@@ -92,14 +92,18 @@ logos, testimonials, news and contact details; section order, layout and styling
 Every part of a page uses the admin's content once it is complete and the built-in content
 (`apps/web/src/content/fallback`) otherwise, so a half-filled page never breaks the site.
 
-| In the admin                                           | On the site                                                         |
-| ------------------------------------------------------ | ------------------------------------------------------------------- |
-| Pages → Home, About Us, Our Services, Contact          | those pages; the language menu (top right) switches EN/FR/DE/LU     |
-| Pages → Site settings                                  | phone, e-mail, address, map link, social links, footer tagline      |
-| Pages → Legal pages                                    | Privacy Policy and Legal Notice (admins only; approve per language) |
-| Lists → News, Client logos, Space photos, Testimonials | /news, “They trust us”, “Our spaces”, testimonials                  |
-| Lists → Photos & videos                                | every uploaded file (alternative text and focal point)              |
-| Settings → Users                                       | accounts: **Admin** (also users and legal pages) or **Editor**      |
+| In the admin                                    | On the site                                                                                                                                      |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Website → News                                  | /news (articles have a draft until published; the address fills itself)                                                                          |
+| Website → Home, About Us, Our Services, Contact | those pages, one tab per block in page order; lists (logos, photos, testimonials, services) are edited inside the page and reordered by dragging |
+| Website → Address, phone & e-mail               | header, footer, contact page and social links                                                                                                    |
+| Settings → Legal pages                          | Privacy Policy and Legal Notice (admins only; approve per language)                                                                              |
+| Settings → Photo library                        | every uploaded photo, logo, icon and video                                                                                                       |
+| Settings → Users                                | accounts: **Admin** (also users and legal pages) or **Editor**                                                                                   |
+
+Buttons choose the page they open from a list; the "I'm looking for" menu chooses what it pre-selects
+in the contact form. Service icons are any uploaded SVG/PNG, drawn in the site colour (CSS mask).
+The language menu at the top right switches EN/FR/DE/LU; an empty FR/DE/LU text shows the English one.
 
 - **Where the data lives:** one SQLite file (`DATABASE_URL`, default `apps/web/data/payload.db`) and the
   uploads folder (`PAYLOAD_MEDIA_DIR`, default `apps/web/media`). In Docker both are under `/data`:
@@ -108,8 +112,8 @@ Every part of a page uses the admin's content once it is complete and the built-
   `PAYLOAD_ADMIN_EMAIL` / `PAYLOAD_ADMIN_PASSWORD` and imports the current website texts and photos
   (`src/payload/seed.ts`). Without those variables in production it logs an error, because the
   "create first user" page would otherwise be open to anyone. Locally you can create the first account at `/admin`.
-- **Saving:** pages with a Publish button keep drafts and a version history (restore any version).
-  After a save the next page view shows the change; pages also refresh every 5 minutes.
+- **Saving:** **Save** puts a page live at once; **Versions** keeps the last 50 saves to restore.
+  News articles have drafts and a **Publish** button. The eye/arrow button next to Save opens the page.
 - **Sign-in protection:** 5 wrong passwords lock an account for 10 minutes; sessions last 8 hours.
 - **Forgot password:** the sign-in page's "Forgot password?" e-mails a reset link valid for one hour
   (one use, at most one e-mail per account every 2 minutes). It goes out through the contact form's mail

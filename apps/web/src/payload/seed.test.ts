@@ -46,7 +46,7 @@ function withoutSources(value: unknown): unknown {
   if (value && typeof value === 'object') {
     return Object.fromEntries(
       Object.entries(value)
-        .filter(([k]) => !['src', 'width', 'height', 'hotspot'].includes(k))
+        .filter(([k]) => !['src', 'width', 'height', 'hotspot', 'icon'].includes(k))
         .map(([k, v]) => [k, withoutSources(v)]),
     );
   }
@@ -55,16 +55,6 @@ function withoutSources(value: unknown): unknown {
 
 const read = (slug: string) =>
   payload.findGlobal({ slug: slug as never, locale: 'all', depth: 2, draft: false }) as never;
-const list = async (collection: string) =>
-  (
-    await payload.find({
-      collection: collection as never,
-      locale: 'all',
-      depth: 1,
-      sort: 'order',
-      pagination: false,
-    })
-  ).docs;
 
 describe('admin first-start import', () => {
   it('creates the first administrator from the environment', async () => {
@@ -75,13 +65,7 @@ describe('admin first-start import', () => {
   });
 
   it('home page comes back unchanged', async () => {
-    const home = (await read('home')) as Record<string, Record<string, unknown>>;
-    const mapped = mapHome({
-      ...home,
-      trust: { ...home.trust, clients: await list('client-logos') },
-      spaces: { ...home.spaces, items: await list('spaces') },
-      testimonials: { ...home.testimonials, items: await list('testimonials') },
-    } as never);
+    const mapped = mapHome(await read('home'));
     expect(withoutSources(mapped)).toEqual(withoutSources(homeFallback));
     expect(mapped.hero.video.sources.map((s) => s.height)).toEqual([1080, 720, 480]);
     expect(mapped.hero.video.poster.src).toMatch(/^\/api\/media\/file\//);
@@ -89,9 +73,13 @@ describe('admin first-start import', () => {
 
   it('About Us, Our Services and Contact come back unchanged', async () => {
     expect(withoutSources(mapAbout(await read('about')))).toEqual(withoutSources(aboutFallback));
-    expect(withoutSources(mapServices(await read('services')))).toEqual(
-      withoutSources(servicesFallback),
+    const services = mapServices(await read('services'));
+    expect(withoutSources(services)).toEqual(withoutSources(servicesFallback));
+    const iconName = (src: string) => src.replace(/^.*\//, '').replace(/-\d+(?=\.svg$)/, '');
+    expect(services.offers.items.map((o) => iconName(o.icon))).toEqual(
+      servicesFallback.offers.items.map((o) => iconName(o.icon)),
     );
+    expect(services.offers.items[0]?.icon).toMatch(/^\/api\/media\/file\//);
     const contact = mapContact(await read('contact'));
     expect(contact.gallery).not.toBe(contactFallback.gallery);
     expect(withoutSources(contact)).toEqual(withoutSources(contactFallback));

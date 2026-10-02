@@ -67,11 +67,8 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    'legal-pages': LegalPage;
     news: News;
-    'client-logos': ClientLogo;
-    spaces: Space;
-    testimonials: Testimonial;
+    'legal-pages': LegalPage;
     media: Media;
     users: User;
     'payload-kv': PayloadKv;
@@ -81,11 +78,8 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    'legal-pages': LegalPagesSelect<false> | LegalPagesSelect<true>;
     news: NewsSelect<false> | NewsSelect<true>;
-    'client-logos': ClientLogosSelect<false> | ClientLogosSelect<true>;
-    spaces: SpacesSelect<false> | SpacesSelect<true>;
-    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    'legal-pages': LegalPagesSelect<false> | LegalPagesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -142,6 +136,64 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "news".
+ */
+export interface News {
+  id: number;
+  title?: string | null;
+  /**
+   * Filled in from the English title when you save. Part of the article’s address, so better not changed once published.
+   */
+  slug?: string | null;
+  date: string;
+  /**
+   * Horizontal 16:9. Best at 1600×900 px or larger.
+   */
+  cover?: (number | null) | Media;
+  excerpt?: string | null;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  author?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Photos, logos, icons and videos used on the site.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "legal-pages".
  */
 export interface LegalPage {
@@ -169,146 +221,6 @@ export interface LegalPage {
   lastUpdated?: string | null;
   approved?: boolean | null;
   approvedBy?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "news".
- */
-export interface News {
-  id: number;
-  /**
-   * About 100 characters at most per language. FR, DE, LU: leave empty to show the English text.
-   */
-  title?: string | null;
-  /**
-   * Part of the address, e.g. "new-meeting-room". Lowercase, digits, hyphens.
-   */
-  slug: string;
-  date: string;
-  /**
-   * Horizontal 16:9. 1600×900 px or more keeps it sharp on large screens. Set the focal point on the subject.
-   */
-  cover?: (number | null) | Media;
-  /**
-   * About 400 characters at most per language. FR, DE, LU: leave empty to show the English text.
-   */
-  excerpt?: string | null;
-  body: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  author?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  /**
-   * Describe what the photo shows, for screen readers and search engines. Not needed for videos. About 160 characters at most per language. FR, DE, LU: leave empty to show the English text.
-   */
-  alt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "client-logos".
- */
-export interface ClientLogo {
-  id: number;
-  name: string;
-  /**
-   * SVG, or PNG with a transparent background. Dark logo for a light background. 400 px or more keeps it sharp on large screens. Set the focal point on the subject.
-   */
-  logo: number | Media;
-  url?: string | null;
-  active?: boolean | null;
-  /**
-   * Lower numbers come first.
-   */
-  order?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "spaces".
- */
-export interface Space {
-  id: number;
-  /**
-   * Only shown here in the admin, e.g. "Meeting room".
-   */
-  title: string;
-  /**
-   * Horizontal or vertical; the gallery crops by its focal point. 1600 px or more keeps it sharp on large screens. Set the focal point on the subject.
-   */
-  image: number | Media;
-  /**
-   * About 100 characters at most per language. FR, DE, LU: leave empty to show the English text.
-   */
-  caption?: string | null;
-  category?: ('office' | 'coworking' | 'meeting-room' | 'common-area' | 'reception' | 'parking' | 'other') | null;
-  /**
-   * Lower numbers come first.
-   */
-  order?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "testimonials".
- */
-export interface Testimonial {
-  id: number;
-  /**
-   * Word for word, in the language the client wrote it.
-   */
-  quote: string;
-  quoteLanguage: 'en' | 'fr' | 'de' | 'lu';
-  name: string;
-  /**
-   * About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
-   */
-  role?: string | null;
-  company: string;
-  rating: number;
-  /**
-   * Only publish testimonials the client agreed to.
-   */
-  consent?: boolean | null;
-  /**
-   * Lower numbers come first.
-   */
-  order?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -365,24 +277,12 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'legal-pages';
-        value: number | LegalPage;
-      } | null)
-    | ({
         relationTo: 'news';
         value: number | News;
       } | null)
     | ({
-        relationTo: 'client-logos';
-        value: number | ClientLogo;
-      } | null)
-    | ({
-        relationTo: 'spaces';
-        value: number | Space;
-      } | null)
-    | ({
-        relationTo: 'testimonials';
-        value: number | Testimonial;
+        relationTo: 'legal-pages';
+        value: number | LegalPage;
       } | null)
     | ({
         relationTo: 'media';
@@ -436,20 +336,6 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "legal-pages_select".
- */
-export interface LegalPagesSelect<T extends boolean = true> {
-  kind?: T;
-  title?: T;
-  body?: T;
-  lastUpdated?: T;
-  approved?: T;
-  approvedBy?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "news_select".
  */
 export interface NewsSelect<T extends boolean = true> {
@@ -466,43 +352,15 @@ export interface NewsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "client-logos_select".
+ * via the `definition` "legal-pages_select".
  */
-export interface ClientLogosSelect<T extends boolean = true> {
-  name?: T;
-  logo?: T;
-  url?: T;
-  active?: T;
-  order?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "spaces_select".
- */
-export interface SpacesSelect<T extends boolean = true> {
+export interface LegalPagesSelect<T extends boolean = true> {
+  kind?: T;
   title?: T;
-  image?: T;
-  caption?: T;
-  category?: T;
-  order?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "testimonials_select".
- */
-export interface TestimonialsSelect<T extends boolean = true> {
-  quote?: T;
-  quoteLanguage?: T;
-  name?: T;
-  role?: T;
-  company?: T;
-  rating?: T;
-  consent?: T;
-  order?: T;
+  body?: T;
+  lastUpdated?: T;
+  approved?: T;
+  approvedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -590,97 +448,83 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * One tab per block, from the top of the page to the bottom.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "home".
  */
 export interface Home {
   id: number;
   hero: {
-    /**
-     * About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     eyebrow?: string | null;
-    /**
-     * About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     title?: string | null;
-    /**
-     * Must appear at the end of the title, e.g. "Capellen". About 30 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     titleAccent?: string | null;
-    /**
-     * About 120 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     subtitle?: string | null;
-    /**
-     * Horizontal 16:9, 30–60 s, seamless loop, no sound, H.264 MP4. Keep the centre calm: the title sits there.
-     */
-    video?: {
-      /**
-       * 1920×1080 MP4, under 15 MB.
-       */
-      mp4_1080?: (number | null) | Media;
-      /**
-       * 1280×720 MP4, under 8 MB.
-       */
-      mp4_720?: (number | null) | Media;
-      /**
-       * 854×480 MP4, under 4 MB.
-       */
-      mp4_480?: (number | null) | Media;
-      /**
-       * Shown while the video loads, on slow connections and for visitors who turn off motion. 1920×1080 px or more keeps it sharp on large screens. Set the focal point on the subject.
-       */
-      poster?: (number | null) | Media;
-    };
     workspaceTypes?:
       | {
-          /**
-           * Sent with the enquiry, e.g. "private-office". Do not change once in use.
-           */
-          code: string;
-          /**
-           * About 30 characters at most per language. FR, DE, LU: leave empty to show the English text.
-           */
           name?: string | null;
-          hasTeamSize?: boolean | null;
+          opens: 'private-office' | 'coworking' | 'meeting-room' | 'domiciliation' | 'other';
           id?: string | null;
         }[]
       | null;
     /**
-     * The list scrolls when it is long; up to 12 sizes.
+     * Type a number and press Enter. Up to 12 sizes.
      */
     teamSizes?: number[] | null;
     cta: {
-      /**
-       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
       label?: string | null;
-      /**
-       * A page on this site without the language ("/contact", "/services") or a full https:// address.
-       */
-      href: string;
+      href:
+        | '/contact'
+        | '/contact?workspace=coworking'
+        | '/contact?workspace=private-office'
+        | '/services'
+        | '/about'
+        | '/news'
+        | '/';
     };
     ring: {
-      /**
-       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
       label?: string | null;
+      href:
+        | '/contact'
+        | '/contact?workspace=coworking'
+        | '/contact?workspace=private-office'
+        | '/services'
+        | '/about'
+        | '/news'
+        | '/';
+    };
+    /**
+     * MP4, horizontal 16:9, 30–60 s, no sound. Keep the centre calm: the title sits there.
+     */
+    video?: {
       /**
-       * A page on this site without the language ("/contact", "/services") or a full https:// address.
+       * 1920×1080, under 15 MB.
        */
-      href: string;
+      mp4_1080?: (number | null) | Media;
+      /**
+       * Shown while the video loads. Usually its first frame. Best at 1920×1080 px or larger.
+       */
+      poster?: (number | null) | Media;
+      /**
+       * Under 8 MB.
+       */
+      mp4_720?: (number | null) | Media;
+      /**
+       * Under 4 MB.
+       */
+      mp4_480?: (number | null) | Media;
     };
   };
   coworking: {
-    /**
-     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     title?: string | null;
-    href: string;
-    /**
-     * Up to about 400 characters. Use bold for the key phrases. FR, DE, LU: leave empty to show the English text.
-     */
+    href:
+      | '/contact'
+      | '/contact?workspace=coworking'
+      | '/contact?workspace=private-office'
+      | '/services'
+      | '/about'
+      | '/news'
+      | '/';
     body?: {
       root: {
         type: string;
@@ -697,19 +541,20 @@ export interface Home {
       [k: string]: unknown;
     } | null;
     /**
-     * First photo: large, horizontal ≈ 4:3, min 1840×1440. Second: ≈ square, min 830×840.
+     * First: horizontal ≈ 4:3 (1840×1440 or larger). Second: square (830×830 or larger).
      */
     images?: (number | Media)[] | null;
   };
   privateOffices: {
-    /**
-     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     title?: string | null;
-    href: string;
-    /**
-     * Up to about 400 characters. Use bold for the key phrases. FR, DE, LU: leave empty to show the English text.
-     */
+    href:
+      | '/contact'
+      | '/contact?workspace=coworking'
+      | '/contact?workspace=private-office'
+      | '/services'
+      | '/about'
+      | '/news'
+      | '/';
     body?: {
       root: {
         type: string;
@@ -726,139 +571,143 @@ export interface Home {
       [k: string]: unknown;
     } | null;
     /**
-     * First photo: tall ≈ 2:3, min 1170×1720. Second: square, min 680×680.
+     * First: tall ≈ 2:3 (1170×1720 or larger). Second: square (680×680 or larger).
      */
     images?: (number | Media)[] | null;
   };
   servicesLink: {
-    /**
-     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     label?: string | null;
-    /**
-     * A page on this site without the language ("/contact", "/services") or a full https:// address.
-     */
-    href: string;
+    href:
+      | '/contact'
+      | '/contact?workspace=coworking'
+      | '/contact?workspace=private-office'
+      | '/services'
+      | '/about'
+      | '/news'
+      | '/';
   };
   trust?: {
-    /**
-     * About 30 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     title?: string | null;
     /**
-     * Leave empty to show all active client logos in their set order.
+     * Drag to change the order. Remove a row to hide that logo.
      */
-    clients?: (number | ClientLogo)[] | null;
-  };
-  spaces: {
-    /**
-     * About 20 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
-    title?: string | null;
-    /**
-     * Any number; the layout repeats every six photos. Leave empty to show all spaces.
-     */
-    items?: (number | Space)[] | null;
-    moreLink: {
-      /**
-       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
-      label?: string | null;
-      /**
-       * A page on this site without the language ("/contact", "/services") or a full https:// address.
-       */
-      href: string;
-    };
+    clients?:
+      | {
+          /**
+           * SVG, or PNG with a transparent background. Best at 400 px or larger.
+           */
+          logo: number | Media;
+          name: string;
+          url?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   tomorrow?: {
-    /**
-     * Two or three short lines, one per row. The last line is set in italic. About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     lines?: string | null;
-    /**
-     * About 140 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     card?: string | null;
     /**
-     * Horizontal ≈ 3:2. Keep the top left calm: the headline sits there. 2880×2000 px or more keeps it sharp on large screens. Set the focal point on the subject.
+     * Horizontal ≈ 3:2. Keep the top left calm: the headline sits there. Best at 2880×2000 px or larger.
      */
     image?: (number | null) | Media;
   };
-  findMore: {
+  spaces: {
+    title?: string | null;
     /**
-     * About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
+     * Drag to change the order. The layout repeats every six photos. Click the photo to set its focal point.
      */
+    items?:
+      | {
+          /**
+           * Best at 1600 px or larger.
+           */
+          image: number | Media;
+          caption?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    moreLink: {
+      label?: string | null;
+      href:
+        | '/contact'
+        | '/contact?workspace=coworking'
+        | '/contact?workspace=private-office'
+        | '/services'
+        | '/about'
+        | '/news'
+        | '/';
+    };
+  };
+  findMore: {
     title?: string | null;
     cta: {
-      /**
-       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
       label?: string | null;
-      /**
-       * A page on this site without the language ("/contact", "/services") or a full https:// address.
-       */
-      href: string;
+      href:
+        | '/contact'
+        | '/contact?workspace=coworking'
+        | '/contact?workspace=private-office'
+        | '/services'
+        | '/about'
+        | '/news'
+        | '/';
     };
   };
   testimonials?: {
-    /**
-     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     title?: string | null;
     /**
-     * Leave empty to show all testimonials in their set order.
+     * Only publish quotes the client agreed to. Drag to change the order.
      */
-    items?: (number | Testimonial)[] | null;
+    items?:
+      | {
+          /**
+           * Word for word, in the language the client wrote it.
+           */
+          quote: string;
+          name: string;
+          role?: string | null;
+          company: string;
+          rating: '5' | '4' | '3' | '2' | '1';
+          quoteLanguage: 'en' | 'fr' | 'de' | 'lu';
+          id?: string | null;
+        }[]
+      | null;
   };
   final: {
-    /**
-     * Two short lines, one per row. The second is set in italic. About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     lines?: string | null;
     cta: {
-      /**
-       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
       label?: string | null;
-      /**
-       * A page on this site without the language ("/contact", "/services") or a full https:// address.
-       */
-      href: string;
+      href:
+        | '/contact'
+        | '/contact?workspace=coworking'
+        | '/contact?workspace=private-office'
+        | '/services'
+        | '/about'
+        | '/news'
+        | '/';
     };
     /**
-     * Horizontal ≈ 5:3. Keep the left side calm: the headline sits there. 2880×1720 px or more keeps it sharp on large screens. Set the focal point on the subject.
+     * Horizontal ≈ 5:3. Keep the left side calm: the headline sits there. Best at 2880×1720 px or larger.
      */
     image?: (number | null) | Media;
   };
-  _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
+ * One tab per block, from the top of the page to the bottom.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "about".
  */
 export interface About {
   id: number;
   hero?: {
-    /**
-     * About 30 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     eyebrow?: string | null;
-    /**
-     * About 80 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     title?: string | null;
-    /**
-     * Must be the last words of the title. About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     titleAccent?: string | null;
-    /**
-     * About 600 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     body?: string | null;
     /**
-     * Horizontal, about 2:1. 2400×1200 px or more keeps it sharp on large screens. Set the focal point on the subject.
+     * Horizontal, about 2:1. Best at 2400×1200 px or larger.
      */
     image?: (number | null) | Media;
   };
@@ -867,20 +716,11 @@ export interface About {
    */
   highlights?:
     | {
-        /**
-         * About 120 characters at most per language. FR, DE, LU: leave empty to show the English text.
-         */
         text?: string | null;
         id?: string | null;
       }[]
     | null;
-  /**
-   * About 240 characters at most per language. FR, DE, LU: leave empty to show the English text.
-   */
   location?: string | null;
-  /**
-   * About 400 characters at most per language. FR, DE, LU: leave empty to show the English text.
-   */
   audience?: string | null;
   figures?:
     | {
@@ -888,117 +728,84 @@ export interface About {
          * For example "20+".
          */
         value: string;
-        /**
-         * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-         */
         label?: string | null;
         id?: string | null;
       }[]
     | null;
   features?:
     | {
-        /**
-         * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-         */
         title?: string | null;
-        /**
-         * About 500 characters at most per language. FR, DE, LU: leave empty to show the English text.
-         */
         body?: string | null;
-        /**
-         * About 500 characters at most per language. FR, DE, LU: leave empty to show the English text.
-         */
         note?: string | null;
         /**
-         * Tall or horizontal. 1200 px or more keeps it sharp on large screens. Set the focal point on the subject.
+         * Tall or horizontal. Best at 1200 px or larger.
          */
         image?: (number | null) | Media;
         /**
          * Optional: leave both empty for no button.
          */
         cta?: {
-          /**
-           * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-           */
           label?: string | null;
-          /**
-           * A page on this site without the language ("/contact", "/services") or a full https:// address.
-           */
-          href?: string | null;
+          href?:
+            | (
+                | '/contact'
+                | '/contact?workspace=coworking'
+                | '/contact?workspace=private-office'
+                | '/services'
+                | '/about'
+                | '/news'
+                | '/'
+              )
+            | null;
         };
         id?: string | null;
       }[]
     | null;
   visit: {
-    /**
-     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     eyebrow?: string | null;
-    /**
-     * About 60 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     title?: string | null;
     cta: {
-      /**
-       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
       label?: string | null;
-      /**
-       * A page on this site without the language ("/contact", "/services") or a full https:// address.
-       */
-      href: string;
+      href:
+        | '/contact'
+        | '/contact?workspace=coworking'
+        | '/contact?workspace=private-office'
+        | '/services'
+        | '/about'
+        | '/news'
+        | '/';
     };
     /**
-     * Horizontal. 2400 px or more keeps it sharp on large screens. Set the focal point on the subject.
+     * Horizontal. Best at 2400 px or larger.
      */
     image?: (number | null) | Media;
   };
-  _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
+ * One tab per block, from the top of the page to the bottom.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services".
  */
 export interface Service {
   id: number;
   hero?: {
-    /**
-     * About 30 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     eyebrow?: string | null;
-    /**
-     * About 80 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     title?: string | null;
     body?:
       | {
-          /**
-           * About 120 characters at most per language. FR, DE, LU: leave empty to show the English text.
-           */
           text?: string | null;
           id?: string | null;
         }[]
       | null;
   };
   choose: {
-    /**
-     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     title?: string | null;
     coworking: {
-      /**
-       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
       title?: string | null;
-      /**
-       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
       kicker?: string | null;
-      /**
-       * FR, DE, LU: leave empty to show the English text.
-       */
       body?: {
         root: {
           type: string;
@@ -1014,102 +821,69 @@ export interface Service {
         };
         [k: string]: unknown;
       } | null;
-      /**
-       * About 200 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
       packages?: string | null;
-      /**
-       * About 300 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
       highlight?: string | null;
-      /**
-       * About 120 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
       audience?: string | null;
       cta: {
-        /**
-         * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-         */
         label?: string | null;
-        /**
-         * A page on this site without the language ("/contact", "/services") or a full https:// address.
-         */
-        href: string;
+        href:
+          | '/contact'
+          | '/contact?workspace=coworking'
+          | '/contact?workspace=private-office'
+          | '/services'
+          | '/about'
+          | '/news'
+          | '/';
       };
       /**
-       * Horizontal ≈ 4:3. 1600 px or more keeps it sharp on large screens. Set the focal point on the subject.
+       * Horizontal ≈ 4:3. Best at 1600 px or larger.
        */
       image?: (number | null) | Media;
     };
     privateOffices?: {
-      /**
-       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
       title?: string | null;
       /**
-       * One tile per size; each opens the enquiry form pre-filled.
+       * Type a number and press Enter. One tile per size; each opens the contact form pre-filled.
        */
       sizes?: number[] | null;
-      /**
-       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
       sizeNote?: string | null;
       /**
-       * Horizontal. 600 px or more keeps it sharp on large screens. Set the focal point on the subject.
+       * Horizontal. Best at 600 px or larger.
        */
       image?: (number | null) | Media;
     };
   };
   offers?: {
-    /**
-     * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     title?: string | null;
     /**
-     * An even number fills the two columns neatly.
+     * Drag to change the order. An even number fills the two columns neatly.
      */
     items?:
       | {
-          icon:
-            | 'wifi'
-            | 'reception'
-            | 'meeting'
-            | 'kitchen'
-            | 'supplies'
-            | 'parking'
-            | 'cloud'
-            | 'mail'
-            | 'handshake'
-            | 'more';
           /**
-           * About 50 characters at most per language. FR, DE, LU: leave empty to show the English text.
+           * Any icon: SVG, or PNG with a transparent background. It is shown in the site’s colour, so its own colours do not matter. Free icons: lucide.dev, tabler.io/icons.
            */
+          icon: number | Media;
           title?: string | null;
-          /**
-           * About 500 characters at most per language. FR, DE, LU: leave empty to show the English text.
-           */
           body?: string | null;
           id?: string | null;
         }[]
       | null;
   };
   cta: {
-    /**
-     * About 80 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     title?: string | null;
     link: {
-      /**
-       * About 40 characters at most per language. FR, DE, LU: leave empty to show the English text.
-       */
       label?: string | null;
-      /**
-       * A page on this site without the language ("/contact", "/services") or a full https:// address.
-       */
-      href: string;
+      href:
+        | '/contact'
+        | '/contact?workspace=coworking'
+        | '/contact?workspace=private-office'
+        | '/services'
+        | '/about'
+        | '/news'
+        | '/';
     };
   };
-  _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1120,23 +894,21 @@ export interface Service {
 export interface Contact {
   id: number;
   /**
-   * Shown above the last block of the contact page. Drag photos to reorder.
+   * Shown at the end of the contact page. Drag photos to change the order.
    */
   gallery?: {
-    /**
-     * About 30 characters at most per language. FR, DE, LU: leave empty to show the English text.
-     */
     title?: string | null;
     /**
-     * At least 1600 px wide, JPG or WebP. Set the focal point: the gallery crops photos to different shapes.
+     * JPG or WebP, 1600 px wide or larger. Click a photo to set its focal point: the gallery crops photos to different shapes.
      */
     photos?: (number | Media)[] | null;
   };
-  _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
+ * Shown in the header, the footer and on the contact page.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
@@ -1153,9 +925,6 @@ export interface SiteSetting {
     city: string;
   };
   mapUrl?: string | null;
-  /**
-   * About 90 characters at most per language. FR, DE, LU: leave empty to show the English text.
-   */
   tagline?: string | null;
   social?:
     | {
@@ -1179,20 +948,11 @@ export interface HomeSelect<T extends boolean = true> {
         title?: T;
         titleAccent?: T;
         subtitle?: T;
-        video?:
-          | T
-          | {
-              mp4_1080?: T;
-              mp4_720?: T;
-              mp4_480?: T;
-              poster?: T;
-            };
         workspaceTypes?:
           | T
           | {
-              code?: T;
               name?: T;
-              hasTeamSize?: T;
+              opens?: T;
               id?: T;
             };
         teamSizes?: T;
@@ -1207,6 +967,14 @@ export interface HomeSelect<T extends boolean = true> {
           | {
               label?: T;
               href?: T;
+            };
+        video?:
+          | T
+          | {
+              mp4_1080?: T;
+              poster?: T;
+              mp4_720?: T;
+              mp4_480?: T;
             };
       };
   coworking?:
@@ -1235,18 +1003,13 @@ export interface HomeSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        clients?: T;
-      };
-  spaces?:
-    | T
-    | {
-        title?: T;
-        items?: T;
-        moreLink?:
+        clients?:
           | T
           | {
-              label?: T;
-              href?: T;
+              logo?: T;
+              name?: T;
+              url?: T;
+              id?: T;
             };
       };
   tomorrow?:
@@ -1255,6 +1018,24 @@ export interface HomeSelect<T extends boolean = true> {
         lines?: T;
         card?: T;
         image?: T;
+      };
+  spaces?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              id?: T;
+            };
+        moreLink?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+            };
       };
   findMore?:
     | T
@@ -1271,7 +1052,17 @@ export interface HomeSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        items?: T;
+        items?:
+          | T
+          | {
+              quote?: T;
+              name?: T;
+              role?: T;
+              company?: T;
+              rating?: T;
+              quoteLanguage?: T;
+              id?: T;
+            };
       };
   final?:
     | T
@@ -1285,7 +1076,6 @@ export interface HomeSelect<T extends boolean = true> {
             };
         image?: T;
       };
-  _status?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1347,7 +1137,6 @@ export interface AboutSelect<T extends boolean = true> {
             };
         image?: T;
       };
-  _status?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1423,7 +1212,6 @@ export interface ServicesSelect<T extends boolean = true> {
               href?: T;
             };
       };
-  _status?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1439,7 +1227,6 @@ export interface ContactSelect<T extends boolean = true> {
         title?: T;
         photos?: T;
       };
-  _status?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

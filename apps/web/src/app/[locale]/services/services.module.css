@@ -197,7 +197,12 @@
 }
 
 .icon {
-  color: var(--cyan-deep);
+  display: block;
+  width: 36px;
+  height: 36px;
+  background: var(--cyan-deep);
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
 }
 
 .offerName {

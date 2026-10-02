@@ -1,5 +1,11 @@
 import type { Payload } from 'payload';
+import { refreshSite } from './revalidate';
 import { seedContent } from './seed';
+
+/** Shared through globalThis: the server's start-up code and its pages load separate module copies. */
+export const importing: { active: boolean } = ((
+  globalThis as Record<string, unknown>
+).__bccImport ??= { active: false }) as { active: boolean };
 
 /**
  * Runs when Payload starts.
@@ -34,10 +40,15 @@ export async function bootstrap(payload: Payload) {
   };
   if (home?.hero?.title) return;
   payload.logger.info('[admin] empty content: importing the current website texts and photos…');
+  // While the import runs, pages show the built-in content and cache nothing (lib/cms/payload.ts).
+  importing.active = true;
   try {
     await seedContent(payload);
     payload.logger.info('[admin] content import done');
   } catch (error) {
     payload.logger.error({ err: error }, '[admin] content import failed');
+  } finally {
+    importing.active = false;
+    refreshSite();
   }
 }

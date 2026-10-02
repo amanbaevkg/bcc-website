@@ -1,9 +1,10 @@
 import 'server-only';
 import { aboutFallback } from '@/content/fallback/about';
 import { servicesFallback } from '@/content/fallback/services';
-import type { AboutPage, ServiceIcon, ServicesPage } from '@/content/types';
+import type { AboutPage, ServicesPage } from '@/content/types';
 import {
   compact,
+  fileUrl,
   image,
   link,
   localized,
@@ -127,23 +128,10 @@ type ServicesDoc = {
   };
   offers?: {
     title?: CmsLocalized;
-    items?: { icon?: string | null; title?: CmsLocalized; body?: CmsLocalized }[];
+    items?: { icon?: CmsMedia; title?: CmsLocalized; body?: CmsLocalized }[];
   };
   cta?: { title?: CmsLocalized; link?: CmsLink };
 };
-
-const icons: ServiceIcon[] = [
-  'wifi',
-  'reception',
-  'meeting',
-  'kitchen',
-  'supplies',
-  'parking',
-  'cloud',
-  'mail',
-  'handshake',
-  'more',
-];
 
 export function mapServices(doc: ServicesDoc | null): ServicesPage {
   const fb = servicesFallback;
@@ -162,7 +150,7 @@ export function mapServices(doc: ServicesDoc | null): ServicesPage {
     (doc.offers?.items ?? []).map((o) => {
       const t = localized(o.title);
       const body = localized(o.body);
-      const icon = icons.find((i) => i === o.icon);
+      const icon = fileUrl(o.icon);
       return t && body && icon ? { icon, title: t, body } : undefined;
     }),
   );

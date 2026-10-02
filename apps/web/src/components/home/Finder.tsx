@@ -24,7 +24,8 @@ export function Finder({ hero }: { hero: Hero }) {
   const current = hero.workspaceTypes.find((w) => w.id === type);
   const sized = !!current?.hasTeamSize && hero.teamSizes.length > 0;
 
-  const query: Record<string, string> = { workspace: type };
+  // Ids of repeated choices end in -<row>; the form only needs what to pre-select.
+  const query: Record<string, string> = { workspace: type.replace(/-\d+$/, '') };
   if (sized) query.team = String(team);
 
   return (

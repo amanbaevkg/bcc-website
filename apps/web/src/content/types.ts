@@ -109,18 +109,6 @@ export type AboutPage = {
   visit: { eyebrow: Localized; title: Localized; cta: Link; image: ImageAsset };
 };
 
-export type ServiceIcon =
-  | 'wifi'
-  | 'reception'
-  | 'meeting'
-  | 'kitchen'
-  | 'supplies'
-  | 'parking'
-  | 'cloud'
-  | 'mail'
-  | 'handshake'
-  | 'more';
-
 export type ServicesPage = {
   hero: { eyebrow: Localized; title: Localized; body: Localized[] };
   choose: {
@@ -142,7 +130,15 @@ export type ServicesPage = {
       image: ImageAsset;
     };
   };
-  offers: { title: Localized; items: { icon: ServiceIcon; title: Localized; body: Localized }[] };
+  offers: {
+    title: Localized;
+    items: {
+      /** Address of the icon file; drawn in the site colour. */
+      icon: string;
+      title: Localized;
+      body: Localized;
+    }[];
+  };
   cta: { title: Localized; link: Link };
 };
 

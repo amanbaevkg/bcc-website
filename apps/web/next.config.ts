@@ -65,6 +65,16 @@ const nextConfig: NextConfig = {
     return [
       { source: '/:path*', headers: securityHeaders },
       {
+        // Uploaded files (SVG icons and logos can carry scripts): opened on their own, nothing runs.
+        source: '/api/media/file/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; sandbox",
+          },
+        ],
+      },
+      {
         source: '/fonts/:path*',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },

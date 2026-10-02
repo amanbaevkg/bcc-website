@@ -15,6 +15,8 @@ export async function cmsQuery<T>(
   if (process.env.NEXT_PHASE === 'phase-production-build' || process.env.CMS_DISABLED === '1') {
     return null;
   }
+  // First start: the admin is still importing the site's content; don't cache a half-filled page.
+  if ((globalThis as { __bccImport?: { active: boolean } }).__bccImport?.active) return null;
   return unstable_cache(
     async () => {
       const [{ getPayload }, { default: config }] = await Promise.all([
