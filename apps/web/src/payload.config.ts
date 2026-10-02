@@ -35,7 +35,16 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || '',
   admin: {
     user: Users.slug,
-    meta: { titleSuffix: ' – BCC admin' },
+    meta: {
+      titleSuffix: ' – BCC admin',
+      icons: [{ rel: 'icon', type: 'image/png', url: '/icon.png' }],
+    },
+    components: {
+      graphics: {
+        Icon: '@/payload/admin/Brand#Icon',
+        Logo: '@/payload/admin/Brand#Logo',
+      },
+    },
     // No Gravatar look-ups: the admin contacts no outside service.
     avatar: 'default',
     importMap: { baseDir: dirname },
