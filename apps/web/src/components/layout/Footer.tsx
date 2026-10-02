@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { htmlLang, localeNames, routing } from '@/i18n/routing';
-import { pick } from '@/content/types';
+import { pick, type Localized } from '@/content/types';
 import type { Locale } from '@/i18n/routing';
 import type { SiteInfo } from '@/lib/cms/site';
 import { Icon, SocialIcon } from '@/components/ui/Icon';
@@ -14,17 +14,15 @@ const socialLabels = { linkedin: 'LinkedIn', facebook: 'Facebook' } as const;
 export function Footer({ showNews, site }: { showNews: boolean; site: SiteInfo }) {
   const t = useTranslations('Footer');
   const tn = useTranslations('Nav');
-  const tm = useTranslations('Meta');
   const tc = useTranslations('Common');
   const locale = useLocale();
+  const f = (text: Localized) => pick(text, locale as Locale);
 
   return (
     <footer className={styles.footer}>
       <div className="wrap">
         <div className={styles.top}>
-          <p className={styles.tagline}>
-            {site.tagline ? pick(site.tagline, locale as Locale) : tm('tagline')}
-          </p>
+          <p className={styles.tagline}>{f(site.footer.tagline)}</p>
           <Link href="/" className={styles.logo} aria-label={tc('homeLink')}>
             <Image src="/images/bcc-logo.png" alt="" width={569} height={257} />
           </Link>
@@ -32,7 +30,7 @@ export function Footer({ showNews, site }: { showNews: boolean; site: SiteInfo }
 
         <div className={styles.cols}>
           <div>
-            <h2 className={styles.h}>{t('getInTouch')}</h2>
+            <h2 className={styles.h}>{f(site.footer.getInTouch)}</h2>
             <div className={styles.big}>
               <a href={`mailto:${site.email}`}>{site.email}</a>
               <a href={site.phone.href}>{site.phone.display}</a>
@@ -40,7 +38,7 @@ export function Footer({ showNews, site }: { showNews: boolean; site: SiteInfo }
           </div>
 
           <div>
-            <h2 className={styles.h}>{t('quickLinks')}</h2>
+            <h2 className={styles.h}>{f(site.footer.quickLinks)}</h2>
             <ul className={styles.list}>
               {navItems(showNews).map((item) => (
                 <li key={item.key}>
@@ -51,7 +49,7 @@ export function Footer({ showNews, site }: { showNews: boolean; site: SiteInfo }
           </div>
 
           <div>
-            <h2 className={styles.h}>{t('follow')}</h2>
+            <h2 className={styles.h}>{f(site.footer.follow)}</h2>
             <div className={styles.social}>
               {site.social.map((s) => (
                 <a key={s.network} href={s.url} rel="noopener noreferrer" target="_blank">
@@ -63,7 +61,7 @@ export function Footer({ showNews, site }: { showNews: boolean; site: SiteInfo }
           </div>
 
           <div>
-            <h2 className={styles.h}>{t('address')}</h2>
+            <h2 className={styles.h}>{f(site.footer.address)}</h2>
             <address>
               {site.name}
               <br />
@@ -74,13 +72,13 @@ export function Footer({ showNews, site }: { showNews: boolean; site: SiteInfo }
               {t('country')}
             </address>
             <a className={styles.map} href={site.mapUrl} rel="noopener noreferrer" target="_blank">
-              {t('openMap')}
+              {f(site.footer.openMap)}
               <Icon name="arrow" />
             </a>
           </div>
 
           <div>
-            <h2 className={styles.h}>{t('language')}</h2>
+            <h2 className={styles.h}>{f(site.footer.language)}</h2>
             <ul className={`${styles.list} ${styles.langs}`}>
               {routing.locales.map((l) => (
                 <li key={l}>
@@ -101,7 +99,9 @@ export function Footer({ showNews, site }: { showNews: boolean; site: SiteInfo }
         </div>
 
         <div className={styles.bottom}>
-          <p>{t('rights', { year: new Date().getFullYear() })}</p>
+          <p>
+            ©{new Date().getFullYear()}. {f(site.footer.rights)}
+          </p>
           <ul>
             <li>
               <Link href="/privacy">{t('privacy')}</Link>

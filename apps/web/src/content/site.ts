@@ -1,6 +1,6 @@
 /**
  * Fallback site details, copied from businesscentercapellen.lu.
- * Used until "Address, phone & e-mail" in the admin are filled in; the admin then overrides them.
+ * Used until "Footer & contact details" in the admin are filled in; the admin then overrides them.
  */
 export const siteFallback = {
   name: 'Business Center Capellen',

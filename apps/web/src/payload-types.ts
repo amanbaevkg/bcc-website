@@ -888,7 +888,7 @@ export interface Service {
   createdAt?: string | null;
 }
 /**
- * One tab per block, from the top of the page to the bottom. Phone, address and e-mail: see "Address, phone & e-mail".
+ * One tab per block, from the top of the page to the bottom. Phone, address and e-mail: see "Footer & contact details".
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact".
@@ -929,7 +929,7 @@ export interface Contact {
   createdAt?: string | null;
 }
 /**
- * Shown in the header, the footer and on the contact page.
+ * Phone, e-mail and address appear in the header, the footer and on the contact page.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -947,7 +947,6 @@ export interface SiteSetting {
     city: string;
   };
   mapUrl?: string | null;
-  tagline?: string | null;
   social?:
     | {
         network: 'linkedin' | 'facebook';
@@ -955,6 +954,16 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  footer?: {
+    tagline?: string | null;
+    getInTouch?: string | null;
+    quickLinks?: string | null;
+    follow?: string | null;
+    address?: string | null;
+    language?: string | null;
+    openMap?: string | null;
+    rights?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1294,13 +1303,24 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         city?: T;
       };
   mapUrl?: T;
-  tagline?: T;
   social?:
     | T
     | {
         network?: T;
         url?: T;
         id?: T;
+      };
+  footer?:
+    | T
+    | {
+        tagline?: T;
+        getInTouch?: T;
+        quickLinks?: T;
+        follow?: T;
+        address?: T;
+        language?: T;
+        openMap?: T;
+        rights?: T;
       };
   updatedAt?: T;
   createdAt?: T;

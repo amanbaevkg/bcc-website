@@ -1,10 +1,10 @@
 import 'server-only';
+import { footerFallback, type FooterTexts } from '@/content/fallback/footer';
 import { siteFallback } from '@/content/site';
-import type { Localized } from '@/content/types';
 import { localized, type CmsLocalized } from './map';
 import { readGlobal } from './payload';
 
-/** Contact details and social links; "Address, phone & e-mail" in the admin overrides the built-in values. */
+/** Contact details, social links and footer texts; "Footer & contact details" in the admin override the built-in values. */
 export type SiteInfo = {
   name: string;
   shortName: string;
@@ -13,7 +13,7 @@ export type SiteInfo = {
   address: { street: string; postalCode: string; city: string; countryCode: string };
   mapUrl: string;
   social: { network: 'linkedin' | 'facebook'; url: string }[];
-  tagline?: Localized;
+  footer: FooterTexts;
 };
 
 type SettingsDoc = {
@@ -22,13 +22,17 @@ type SettingsDoc = {
   address?: { street?: string | null; postalCode?: string | null; city?: string | null };
   mapUrl?: string | null;
   social?: { network?: string | null; url?: string | null }[] | null;
-  tagline?: CmsLocalized;
+  footer?: Partial<Record<keyof FooterTexts, CmsLocalized>>;
 };
 
 const known = ['linkedin', 'facebook'] as const;
 
 export function mapSite(doc: SettingsDoc | null): SiteInfo {
-  const fb: SiteInfo = { ...siteFallback, social: [...siteFallback.social] };
+  const fb: SiteInfo = {
+    ...siteFallback,
+    social: [...siteFallback.social],
+    footer: footerFallback,
+  };
   if (!doc) return fb;
   const phone = doc.phone?.trim();
   const social = (doc.social ?? [])
@@ -52,7 +56,12 @@ export function mapSite(doc: SettingsDoc | null): SiteInfo {
         : fb.address,
     mapUrl: doc.mapUrl?.startsWith('https://') ? doc.mapUrl : fb.mapUrl,
     social: social.length ? social : fb.social,
-    tagline: localized(doc.tagline),
+    footer: Object.fromEntries(
+      (Object.keys(footerFallback) as (keyof FooterTexts)[]).map((k) => [
+        k,
+        localized(doc.footer?.[k]) ?? footerFallback[k],
+      ]),
+    ) as FooterTexts,
   };
 }
 

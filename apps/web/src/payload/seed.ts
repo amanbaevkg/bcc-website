@@ -5,12 +5,9 @@ import { aboutFallback } from '@/content/fallback/about';
 import { contactFallback } from '@/content/fallback/contact';
 import { homeFallback } from '@/content/fallback/home';
 import { servicesFallback } from '@/content/fallback/services';
+import { footerFallback } from '@/content/fallback/footer';
 import { siteFallback } from '@/content/site';
 import type { ImageAsset, Link, Localized, RichLine } from '@/content/types';
-import en from '../../messages/en.json';
-import fr from '../../messages/fr.json';
-import de from '../../messages/de.json';
-import lu from '../../messages/lu.json';
 import { paragraphs } from './lexical';
 
 /*
@@ -262,8 +259,7 @@ export async function seedContent(payload: Payload) {
     },
   });
 
-  // Address, phone & e-mail
-  const messages = { en, fr, de, lu };
+  // Footer & contact details
   await writeGlobal('site-settings', {
     email: siteFallback.email,
     phone: siteFallback.phone.display,
@@ -273,7 +269,7 @@ export async function seedContent(payload: Payload) {
       city: siteFallback.address.city,
     },
     mapUrl: siteFallback.mapUrl,
-    tagline: new PerLocale(Object.fromEntries(LOCALES.map((l) => [l, messages[l].Meta.tagline]))),
     social: siteFallback.social.map((x) => row({ network: x.network, url: x.url })),
+    footer: Object.fromEntries(Object.entries(footerFallback).map(([k, v]) => [k, L(v)])),
   });
 }

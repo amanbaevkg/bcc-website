@@ -7,6 +7,7 @@ import { aboutFallback } from '@/content/fallback/about';
 import { contactFallback } from '@/content/fallback/contact';
 import { homeFallback } from '@/content/fallback/home';
 import { servicesFallback } from '@/content/fallback/services';
+import { footerFallback } from '@/content/fallback/footer';
 import { siteFallback } from '@/content/site';
 import { mapContact } from '@/lib/cms/contact';
 import { mapHome } from '@/lib/cms/index';
@@ -87,11 +88,11 @@ describe('admin first-start import', () => {
 
   it('site settings come back unchanged', async () => {
     const site = mapSite(await read('site-settings'));
-    expect({ ...site, tagline: undefined }).toEqual({
+    expect(site).toEqual({
       ...siteFallback,
       social: [...siteFallback.social],
-      tagline: undefined,
+      footer: footerFallback,
     });
-    expect(site.tagline?.lu).toBeTruthy();
+    expect(site.footer.rights.fr).toMatch(/^Tous droits/);
   });
 });

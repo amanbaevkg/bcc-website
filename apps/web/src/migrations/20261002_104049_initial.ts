@@ -1046,7 +1046,14 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   );
   `)
   await db.run(sql`CREATE TABLE \`site_settings_locales\` (
-  	\`tagline\` text,
+  	\`footer_tagline\` text,
+  	\`footer_get_in_touch\` text,
+  	\`footer_quick_links\` text,
+  	\`footer_follow\` text,
+  	\`footer_address\` text,
+  	\`footer_language\` text,
+  	\`footer_open_map\` text,
+  	\`footer_rights\` text,
   	\`id\` integer PRIMARY KEY NOT NULL,
   	\`_locale\` text NOT NULL,
   	\`_parent_id\` integer NOT NULL,
@@ -1083,7 +1090,14 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.run(sql`CREATE INDEX \`_site_settings_v_created_at_idx\` ON \`_site_settings_v\` (\`created_at\`);`)
   await db.run(sql`CREATE INDEX \`_site_settings_v_updated_at_idx\` ON \`_site_settings_v\` (\`updated_at\`);`)
   await db.run(sql`CREATE TABLE \`_site_settings_v_locales\` (
-  	\`version_tagline\` text,
+  	\`version_footer_tagline\` text,
+  	\`version_footer_get_in_touch\` text,
+  	\`version_footer_quick_links\` text,
+  	\`version_footer_follow\` text,
+  	\`version_footer_address\` text,
+  	\`version_footer_language\` text,
+  	\`version_footer_open_map\` text,
+  	\`version_footer_rights\` text,
   	\`id\` integer PRIMARY KEY NOT NULL,
   	\`_locale\` text NOT NULL,
   	\`_parent_id\` integer NOT NULL,

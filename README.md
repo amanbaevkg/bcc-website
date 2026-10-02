@@ -96,7 +96,7 @@ Every part of a page uses the admin's content once it is complete and the built-
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Website → News                                  | /news (articles have a draft until published; the address fills itself)                                                                          |
 | Website → Home, About Us, Our Services, Contact | those pages, one tab per block in page order; lists (logos, photos, testimonials, services) are edited inside the page and reordered by dragging |
-| Website → Address, phone & e-mail               | header, footer, contact page and social links                                                                                                    |
+| Website → Footer & contact details              | phone, e-mail, address, social links; the footer's texts                                                                                         |
 | Settings → Legal pages                          | Privacy Policy and Legal Notice (admins only; approve per language)                                                                              |
 | Settings → Photo library                        | every uploaded photo, logo, icon and video                                                                                                       |
 | Settings → Users                                | accounts: **Admin** (also users and legal pages) or **Editor**                                                                                   |

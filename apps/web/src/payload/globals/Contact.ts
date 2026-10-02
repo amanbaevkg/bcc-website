@@ -6,7 +6,7 @@ import { refreshAfterChange } from '../revalidate';
 
 /**
  * Contact page, tab by tab in page order. The form's questions stay in the code (the server
- * checks the answers); the phone, address and e-mail come from "Address, phone & e-mail".
+ * checks the answers); the phone, address and e-mail come from "Footer & contact details".
  */
 export const Contact: GlobalConfig = {
   slug: 'contact',
@@ -14,7 +14,7 @@ export const Contact: GlobalConfig = {
   admin: {
     group: 'Website',
     description:
-      'One tab per block, from the top of the page to the bottom. Phone, address and e-mail: see "Address, phone & e-mail".',
+      'One tab per block, from the top of the page to the bottom. Phone, address and e-mail: see "Footer & contact details".',
     preview: pagePreview('/contact'),
   },
   access: { read: signedIn, update: signedIn },

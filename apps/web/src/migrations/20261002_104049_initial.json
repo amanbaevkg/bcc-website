@@ -7286,8 +7286,57 @@
     "site_settings_locales": {
       "name": "site_settings_locales",
       "columns": {
-        "tagline": {
-          "name": "tagline",
+        "footer_tagline": {
+          "name": "footer_tagline",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "footer_get_in_touch": {
+          "name": "footer_get_in_touch",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "footer_quick_links": {
+          "name": "footer_quick_links",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "footer_follow": {
+          "name": "footer_follow",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "footer_address": {
+          "name": "footer_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "footer_language": {
+          "name": "footer_language",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "footer_open_map": {
+          "name": "footer_open_map",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "footer_rights": {
+          "name": "footer_rights",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -7532,8 +7581,57 @@
     "_site_settings_v_locales": {
       "name": "_site_settings_v_locales",
       "columns": {
-        "version_tagline": {
-          "name": "version_tagline",
+        "version_footer_tagline": {
+          "name": "version_footer_tagline",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_footer_get_in_touch": {
+          "name": "version_footer_get_in_touch",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_footer_quick_links": {
+          "name": "version_footer_quick_links",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_footer_follow": {
+          "name": "version_footer_follow",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_footer_address": {
+          "name": "version_footer_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_footer_language": {
+          "name": "version_footer_language",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_footer_open_map": {
+          "name": "version_footer_open_map",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_footer_rights": {
+          "name": "version_footer_rights",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -7600,6 +7698,6 @@
   "internal": {
     "indexes": {}
   },
-  "id": "c610a34b-d173-412d-95e6-9d26f0c9194b",
+  "id": "8df591d2-2480-4862-9614-6f5d5be49144",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
