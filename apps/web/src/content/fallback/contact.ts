@@ -1,7 +1,20 @@
+import en from '../../../messages/en.json';
+import fr from '../../../messages/fr.json';
+import de from '../../../messages/de.json';
+import lu from '../../../messages/lu.json';
 import type { ContactPage, Localized } from '../types';
+import { homeFallback } from './home';
+
+/** A text of the site's built-in translations, in all four languages. */
+const msg = (pick: (m: typeof en) => string): Localized => ({
+  en: pick(en),
+  fr: pick(fr as typeof en),
+  de: pick(de as typeof en),
+  lu: pick(lu as typeof en),
+});
 
 /**
- * Contact page photos used until the admin's Contact page is filled in (and imported into it on first start).
+ * Contact page content used until the admin's Contact page is filled in (and imported into it on first start).
  * The 20 photos are the gallery from the contact page of businesscentercapellen.lu,
  * resized to 2000 px; alt texts describe what each photo shows.
  */
@@ -13,6 +26,26 @@ const photo = (n: number, alt: Localized) => ({
 });
 
 export const contactFallback: ContactPage = {
+  top: {
+    eyebrow: msg((m) => m.Contact.eyebrow),
+    title: msg((m) => m.Contact.title),
+    subtitle: msg((m) => m.Contact.subtitle),
+    callUs: msg((m) => m.Contact.callUs),
+    visitUs: msg((m) => m.Contact.visitUs),
+    writeUs: msg((m) => m.Contact.writeUs),
+  },
+  form: {
+    title: msg((m) => m.Contact.introTitle),
+    body: msg((m) => m.Contact.introBody),
+    successTitle: msg((m) => m.Contact.successTitle),
+    successBody: msg((m) => m.Contact.successBody),
+  },
+  cta: {
+    title: msg((m) => m.Contact.ctaTitle),
+    body: msg((m) => m.Contact.ctaBody),
+    mapButton: msg((m) => m.Footer.openMap),
+    image: homeFallback.final.image,
+  },
   gallery: {
     title: {
       en: 'Take a look inside',

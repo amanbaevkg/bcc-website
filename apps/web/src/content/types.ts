@@ -161,5 +161,15 @@ export type NewsSummary = {
 export type NewsPost = NewsSummary & { body: RichDoc; author?: string };
 
 export type ContactPage = {
+  top: {
+    eyebrow: Localized;
+    title: Localized;
+    subtitle: Localized;
+    callUs: Localized;
+    visitUs: Localized;
+    writeUs: Localized;
+  };
+  form: { title: Localized; body: Localized; successTitle: Localized; successBody: Localized };
   gallery: { title: Localized; photos: ImageAsset[] };
+  cta: { title: Localized; body: Localized; mapButton: Localized; image: ImageAsset };
 };

@@ -5,7 +5,7 @@ import { ContactGallery } from '@/components/contact/ContactGallery';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Photo } from '@/components/ui/Photo';
-import { homeFallback } from '@/content/fallback/home';
+import { pick } from '@/content/types';
 import { getContactPage } from '@/lib/cms/contact';
 import { getSiteInfo } from '@/lib/cms/site';
 import type { Locale } from '@/i18n/routing';
@@ -17,11 +17,12 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Contact' });
+  const page = await getContactPage();
   return pageMetadata({
     locale: locale as Locale,
     path: '/contact',
     title: t('metaTitle'),
-    description: t('introBody'),
+    description: pick(page.form.body, locale as Locale),
   });
 }
 
@@ -29,24 +30,23 @@ export default async function ContactPage({ params }: Props) {
   const { locale: raw } = await params;
   setRequestLocale(raw);
   const locale = raw as Locale;
-  const t = await getTranslations('Contact');
   const tf = await getTranslations('Footer');
   const [site, page] = await Promise.all([getSiteInfo(), getContactPage()]);
 
   const cards = [
     {
-      label: t('callUs'),
+      label: pick(page.top.callUs, locale),
       value: site.phone.display,
       href: site.phone.href,
     },
     {
-      label: t('visitUs'),
+      label: pick(page.top.visitUs, locale),
       value: `${site.address.street}\n${site.address.postalCode} ${site.address.city}\n${tf('country')}`,
       href: site.mapUrl,
       external: true,
     },
     {
-      label: t('writeUs'),
+      label: pick(page.top.writeUs, locale),
       value: site.email,
       href: `mailto:${site.email}`,
     },
@@ -56,9 +56,9 @@ export default async function ContactPage({ params }: Props) {
     <>
       <section className={styles.top} data-header-overlay>
         <div className="wrap">
-          <span className={`label ${styles.eyebrow}`}>{t('eyebrow')}</span>
-          <h1 className={`xl ${styles.title}`}>{t('title')}</h1>
-          <p className={`serif-accent ${styles.subtitle}`}>{t('subtitle')}</p>
+          <span className={`label ${styles.eyebrow}`}>{pick(page.top.eyebrow, locale)}</span>
+          <h1 className={`xl ${styles.title}`}>{pick(page.top.title, locale)}</h1>
+          <p className={`serif-accent ${styles.subtitle}`}>{pick(page.top.subtitle, locale)}</p>
           <ul className={styles.cards}>
             {cards.map((c) => (
               <li key={c.label}>
@@ -80,11 +80,17 @@ export default async function ContactPage({ params }: Props) {
       <section className={styles.formSection} id="form">
         <div className={`wrap ${styles.formGrid}`}>
           <div className={styles.intro}>
-            <h2 className={`xl ${styles.introTitle}`}>{t('introTitle')}</h2>
-            <p className={styles.introBody}>{t('introBody')}</p>
+            <h2 className={`xl ${styles.introTitle}`}>{pick(page.form.title, locale)}</h2>
+            <p className={styles.introBody}>{pick(page.form.body, locale)}</p>
           </div>
           <div className={styles.formCard}>
-            <ContactForm fallbackEmail={site.email} />
+            <ContactForm
+              fallbackEmail={site.email}
+              success={{
+                title: pick(page.form.successTitle, locale),
+                body: pick(page.form.successBody, locale),
+              }}
+            />
           </div>
         </div>
       </section>
@@ -93,7 +99,7 @@ export default async function ContactPage({ params }: Props) {
 
       <section className={styles.cta}>
         <Photo
-          image={homeFallback.final.image}
+          image={page.cta.image}
           locale={locale}
           className={styles.ctaBg}
           sizes="100vw"
@@ -101,14 +107,14 @@ export default async function ContactPage({ params }: Props) {
         />
         <div className={styles.ctaShade} aria-hidden="true" />
         <div className={`wrap ${styles.ctaInner}`}>
-          <h2 className={`xl ${styles.ctaTitle}`}>{t('ctaTitle')}</h2>
-          <p className={styles.ctaBody}>{t('ctaBody')}</p>
+          <h2 className={`xl ${styles.ctaTitle}`}>{pick(page.cta.title, locale)}</h2>
+          <p className={styles.ctaBody}>{pick(page.cta.body, locale)}</p>
           <div className={styles.ctaActions}>
             <Button href={site.phone.href} variant="light">
               {site.phone.display}
             </Button>
             <Button href={site.mapUrl} variant="outline-light">
-              {tf('openMap')}
+              {pick(page.cta.mapButton, locale)}
             </Button>
           </div>
         </div>

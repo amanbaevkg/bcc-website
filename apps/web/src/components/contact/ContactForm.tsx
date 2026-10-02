@@ -56,7 +56,14 @@ const emptyForm: ContactInput = {
   message: '',
 };
 
-export function ContactForm({ fallbackEmail }: { fallbackEmail: string }) {
+export function ContactForm({
+  fallbackEmail,
+  success,
+}: {
+  fallbackEmail: string;
+  /** Message after sending, from the admin; the built-in text otherwise. */
+  success?: { title: string; body: string };
+}) {
   const t = useTranslations('Contact');
   const locale = useLocale();
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
@@ -160,9 +167,9 @@ export function ContactForm({ fallbackEmail }: { fallbackEmail: string }) {
           </svg>
         </span>
         <h2 ref={successRef} tabIndex={-1} className={`xl ${styles.successTitle}`}>
-          {t('successTitle')}
+          {success?.title || t('successTitle')}
         </h2>
-        <p>{t('successBody')}</p>
+        <p>{success?.body || t('successBody')}</p>
         <button
           type="button"
           className={styles.linkBtn}

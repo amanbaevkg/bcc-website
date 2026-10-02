@@ -930,12 +930,28 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.run(sql`CREATE INDEX \`_services_v_numbers_order_parent_idx\` ON \`_services_v_numbers\` (\`order\`,\`parent_id\`);`)
   await db.run(sql`CREATE TABLE \`contact\` (
   	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`cta_image_id\` integer,
   	\`updated_at\` text,
-  	\`created_at\` text
+  	\`created_at\` text,
+  	FOREIGN KEY (\`cta_image_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE set null
   );
   `)
+  await db.run(sql`CREATE INDEX \`contact_cta_cta_image_idx\` ON \`contact\` (\`cta_image_id\`);`)
   await db.run(sql`CREATE TABLE \`contact_locales\` (
+  	\`top_eyebrow\` text,
+  	\`top_title\` text,
+  	\`top_subtitle\` text,
+  	\`top_call_us\` text,
+  	\`top_visit_us\` text,
+  	\`top_write_us\` text,
+  	\`form_title\` text,
+  	\`form_body\` text,
+  	\`form_success_title\` text,
+  	\`form_success_body\` text,
   	\`gallery_title\` text,
+  	\`cta_title\` text,
+  	\`cta_body\` text,
+  	\`cta_map_button\` text,
   	\`id\` integer PRIMARY KEY NOT NULL,
   	\`_locale\` text NOT NULL,
   	\`_parent_id\` integer NOT NULL,
@@ -959,16 +975,32 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.run(sql`CREATE INDEX \`contact_rels_media_id_idx\` ON \`contact_rels\` (\`media_id\`);`)
   await db.run(sql`CREATE TABLE \`_contact_v\` (
   	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`version_cta_image_id\` integer,
   	\`version_updated_at\` text,
   	\`version_created_at\` text,
   	\`created_at\` text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
-  	\`updated_at\` text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL
+  	\`updated_at\` text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL,
+  	FOREIGN KEY (\`version_cta_image_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE set null
   );
   `)
+  await db.run(sql`CREATE INDEX \`_contact_v_version_cta_version_cta_image_idx\` ON \`_contact_v\` (\`version_cta_image_id\`);`)
   await db.run(sql`CREATE INDEX \`_contact_v_created_at_idx\` ON \`_contact_v\` (\`created_at\`);`)
   await db.run(sql`CREATE INDEX \`_contact_v_updated_at_idx\` ON \`_contact_v\` (\`updated_at\`);`)
   await db.run(sql`CREATE TABLE \`_contact_v_locales\` (
+  	\`version_top_eyebrow\` text,
+  	\`version_top_title\` text,
+  	\`version_top_subtitle\` text,
+  	\`version_top_call_us\` text,
+  	\`version_top_visit_us\` text,
+  	\`version_top_write_us\` text,
+  	\`version_form_title\` text,
+  	\`version_form_body\` text,
+  	\`version_form_success_title\` text,
+  	\`version_form_success_body\` text,
   	\`version_gallery_title\` text,
+  	\`version_cta_title\` text,
+  	\`version_cta_body\` text,
+  	\`version_cta_map_button\` text,
   	\`id\` integer PRIMARY KEY NOT NULL,
   	\`_locale\` text NOT NULL,
   	\`_parent_id\` integer NOT NULL,

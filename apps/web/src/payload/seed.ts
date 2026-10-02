@@ -243,11 +243,22 @@ export async function seedContent(payload: Payload) {
     cta: { title: L(s.cta.title), link: link(s.cta.link) },
   });
 
-  // Contact page gallery
+  // Contact page
+  const c = contactFallback;
+  const texts = (o: Record<string, Localized>) =>
+    Object.fromEntries(Object.entries(o).map(([k, v]) => [k, L(v)]));
   await writeGlobal('contact', {
+    top: texts(c.top),
+    form: texts(c.form),
     gallery: {
-      title: L(contactFallback.gallery.title),
-      photos: await Promise.all(contactFallback.gallery.photos.map(img)),
+      title: L(c.gallery.title),
+      photos: await Promise.all(c.gallery.photos.map(img)),
+    },
+    cta: {
+      title: L(c.cta.title),
+      body: L(c.cta.body),
+      mapButton: L(c.cta.mapButton),
+      image: await img(c.cta.image),
     },
   });
 

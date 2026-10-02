@@ -888,20 +888,42 @@ export interface Service {
   createdAt?: string | null;
 }
 /**
+ * One tab per block, from the top of the page to the bottom. Phone, address and e-mail: see "Address, phone & e-mail".
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact".
  */
 export interface Contact {
   id: number;
-  /**
-   * Shown at the end of the contact page. Drag photos to change the order.
-   */
+  top?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    subtitle?: string | null;
+    callUs?: string | null;
+    visitUs?: string | null;
+    writeUs?: string | null;
+  };
+  form?: {
+    title?: string | null;
+    body?: string | null;
+    successTitle?: string | null;
+    successBody?: string | null;
+  };
   gallery?: {
     title?: string | null;
     /**
-     * JPG or WebP, 1600 px wide or larger. Click a photo to set its focal point: the gallery crops photos to different shapes.
+     * Drag to change the order. JPG or WebP, 1600 px wide or larger. Click a photo to set its focal point: the gallery crops photos to different shapes.
      */
     photos?: (number | Media)[] | null;
+  };
+  cta?: {
+    title?: string | null;
+    body?: string | null;
+    mapButton?: string | null;
+    /**
+     * Horizontal ≈ 5:3. Keep the left side calm: the title sits there. Best at 2880×1720 px or larger.
+     */
+    image?: (number | null) | Media;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1221,11 +1243,37 @@ export interface ServicesSelect<T extends boolean = true> {
  * via the `definition` "contact_select".
  */
 export interface ContactSelect<T extends boolean = true> {
+  top?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        subtitle?: T;
+        callUs?: T;
+        visitUs?: T;
+        writeUs?: T;
+      };
+  form?:
+    | T
+    | {
+        title?: T;
+        body?: T;
+        successTitle?: T;
+        successBody?: T;
+      };
   gallery?:
     | T
     | {
         title?: T;
         photos?: T;
+      };
+  cta?:
+    | T
+    | {
+        title?: T;
+        body?: T;
+        mapButton?: T;
+        image?: T;
       };
   updatedAt?: T;
   createdAt?: T;

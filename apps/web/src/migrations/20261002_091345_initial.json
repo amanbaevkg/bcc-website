@@ -6490,6 +6490,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "cta_image_id": {
+          "name": "cta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "updated_at": {
           "name": "updated_at",
           "type": "text",
@@ -6505,8 +6512,30 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
+      "indexes": {
+        "contact_cta_cta_image_idx": {
+          "name": "contact_cta_cta_image_idx",
+          "columns": [
+            "cta_image_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "contact_cta_image_id_media_id_fk": {
+          "name": "contact_cta_image_id_media_id_fk",
+          "tableFrom": "contact",
+          "tableTo": "media",
+          "columnsFrom": [
+            "cta_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -6514,8 +6543,99 @@
     "contact_locales": {
       "name": "contact_locales",
       "columns": {
+        "top_eyebrow": {
+          "name": "top_eyebrow",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "top_title": {
+          "name": "top_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "top_subtitle": {
+          "name": "top_subtitle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "top_call_us": {
+          "name": "top_call_us",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "top_visit_us": {
+          "name": "top_visit_us",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "top_write_us": {
+          "name": "top_write_us",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "form_title": {
+          "name": "form_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "form_body": {
+          "name": "form_body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "form_success_title": {
+          "name": "form_success_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "form_success_body": {
+          "name": "form_success_body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "gallery_title": {
           "name": "gallery_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cta_title": {
+          "name": "cta_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cta_body": {
+          "name": "cta_body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cta_map_button": {
+          "name": "cta_map_button",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -6683,6 +6803,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "version_cta_image_id": {
+          "name": "version_cta_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "version_updated_at": {
           "name": "version_updated_at",
           "type": "text",
@@ -6715,6 +6842,13 @@
         }
       },
       "indexes": {
+        "_contact_v_version_cta_version_cta_image_idx": {
+          "name": "_contact_v_version_cta_version_cta_image_idx",
+          "columns": [
+            "version_cta_image_id"
+          ],
+          "isUnique": false
+        },
         "_contact_v_created_at_idx": {
           "name": "_contact_v_created_at_idx",
           "columns": [
@@ -6730,7 +6864,21 @@
           "isUnique": false
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "_contact_v_version_cta_image_id_media_id_fk": {
+          "name": "_contact_v_version_cta_image_id_media_id_fk",
+          "tableFrom": "_contact_v",
+          "tableTo": "media",
+          "columnsFrom": [
+            "version_cta_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -6738,8 +6886,99 @@
     "_contact_v_locales": {
       "name": "_contact_v_locales",
       "columns": {
+        "version_top_eyebrow": {
+          "name": "version_top_eyebrow",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_top_title": {
+          "name": "version_top_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_top_subtitle": {
+          "name": "version_top_subtitle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_top_call_us": {
+          "name": "version_top_call_us",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_top_visit_us": {
+          "name": "version_top_visit_us",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_top_write_us": {
+          "name": "version_top_write_us",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_form_title": {
+          "name": "version_form_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_form_body": {
+          "name": "version_form_body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_form_success_title": {
+          "name": "version_form_success_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_form_success_body": {
+          "name": "version_form_success_body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "version_gallery_title": {
           "name": "version_gallery_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_cta_title": {
+          "name": "version_cta_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_cta_body": {
+          "name": "version_cta_body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "version_cta_map_button": {
+          "name": "version_cta_map_button",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -7361,6 +7600,6 @@
   "internal": {
     "indexes": {}
   },
-  "id": "c3b0174f-98c0-47ce-92d9-98593dddbfdb",
+  "id": "c610a34b-d173-412d-95e6-9d26f0c9194b",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
