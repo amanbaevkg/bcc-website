@@ -64,6 +64,13 @@ docker compose up --build     # first start: a few minutes; later starts: second
 - **Production is different:** `docker compose` is for development only. The live server uses the
   production image (the `Dockerfile`'s last stage), see [Deployment](#deployment).
 
+### Open it on a phone (same Wi-Fi)
+
+`localhost` on a phone means the phone itself. Use the computer's address instead: on a Mac,
+`ipconfig getifaddr en0` prints it (e.g. `192.168.1.23`), then open `http://192.168.1.23:3000`.
+To sign in to the admin from the phone too, set `SITE_URL=http://192.168.1.23:3000` in `.env` and
+restart (the admin only accepts sign-ins from `SITE_URL`).
+
 ## Scripts
 
 | Command                                              | What it does                                                       |

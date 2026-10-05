@@ -33,7 +33,8 @@ const csp = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
-  'upgrade-insecure-requests',
+  // Not in development: it would break the site opened from a phone at http://<computer's IP>:3000.
+  ...(isDev ? [] : ['upgrade-insecure-requests']),
 ].join('; ');
 
 const securityHeaders = [
@@ -55,6 +56,8 @@ const nextConfig: NextConfig = {
   // Trace files from the monorepo root so workspace packages are included.
   outputFileTracingRoot: path.join(path.dirname(fileURLToPath(import.meta.url)), '../..'),
   poweredByHeader: false,
+  // Development only: open the dev server from a phone or tablet on the same Wi-Fi.
+  allowedDevOrigins: ['192.168.*.*', '10.*.*.*', '172.*.*.*', '*.local'],
   reactStrictMode: true,
   experimental: {
     sri: { algorithm: 'sha256' },
