@@ -22,6 +22,10 @@ default:
 variables:
   NEXT_TELEMETRY_DISABLED: '1'
   SITE_ENV: staging
+  # The runner allows about 2 GB per job: build with webpack, one worker, a capped heap and no
+  # second type check ("quality" runs tsc). See next.config.ts.
+  BUILD_LOW_MEMORY: '1'
+  NODE_OPTIONS: --max-old-space-size=1280
 
 quality:
   stage: test

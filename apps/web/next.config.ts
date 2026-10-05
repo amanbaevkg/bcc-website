@@ -50,6 +50,11 @@ const securityHeaders = [
   { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
 ];
 
+// Builds on machines with about 2 GB of memory (GitLab's runner OOM-killed the default build,
+// which peaks near 3 GB): with webpack (package.json) and NODE_OPTIONS=--max-old-space-size=1280,
+// one build worker and no second type check (the "quality" job and `pnpm typecheck` run tsc).
+const lowMemory = process.env.BUILD_LOW_MEMORY === '1';
+
 const nextConfig: NextConfig = {
   // Self-contained server for Docker / plain Node hosting. Vercel and Netlify ignore it.
   output: 'standalone',
@@ -59,7 +64,9 @@ const nextConfig: NextConfig = {
   // Development only: open the dev server from a phone or tablet on the same Wi-Fi.
   allowedDevOrigins: ['192.168.*.*', '10.*.*.*', '172.*.*.*', '*.local'],
   reactStrictMode: true,
+  typescript: { ignoreBuildErrors: lowMemory },
   experimental: {
+    ...(lowMemory ? { cpus: 1, memoryBasedWorkersCount: true } : {}),
     sri: { algorithm: 'sha256' },
     // [locale]/layout.tsx is the root layout, so URLs outside a language get this page.
     globalNotFound: true,
