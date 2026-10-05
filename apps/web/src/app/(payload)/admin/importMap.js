@@ -25,6 +25,7 @@ import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0
 import { RowLabel as RowLabel_c2c1df2c22e4e8e488a9cd717ab3d896 } from '@/payload/admin/RowLabel'
 import { Icon as Icon_b9e9b447baa5fc5b01f1bf12b506faed } from '@/payload/admin/Brand'
 import { Logo as Logo_b9e9b447baa5fc5b01f1bf12b506faed } from '@/payload/admin/Brand'
+import { PasswordEye as PasswordEye_5393ac19757e79c11c2c5f26942596c9 } from '@/payload/admin/PasswordEye'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -56,5 +57,6 @@ export const importMap = {
   "@/payload/admin/RowLabel#RowLabel": RowLabel_c2c1df2c22e4e8e488a9cd717ab3d896,
   "@/payload/admin/Brand#Icon": Icon_b9e9b447baa5fc5b01f1bf12b506faed,
   "@/payload/admin/Brand#Logo": Logo_b9e9b447baa5fc5b01f1bf12b506faed,
+  "@/payload/admin/PasswordEye#PasswordEye": PasswordEye_5393ac19757e79c11c2c5f26942596c9,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

@@ -40,6 +40,8 @@ export default buildConfig({
       icons: [{ rel: 'icon', type: 'image/png', url: '/icon.png' }],
     },
     components: {
+      // An eye button in every password field to show what was typed.
+      providers: ['@/payload/admin/PasswordEye#PasswordEye'],
       graphics: {
         Icon: '@/payload/admin/Brand#Icon',
         Logo: '@/payload/admin/Brand#Logo',

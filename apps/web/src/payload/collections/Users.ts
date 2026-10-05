@@ -26,6 +26,20 @@ export const Users: CollectionConfig = {
       generateEmailHTML: resetPasswordEmail,
     },
   },
+  hooks: {
+    // The very first account is always an admin, whatever the form said: otherwise nobody
+    // could add users or approve the legal pages.
+    beforeChange: [
+      async ({ data, operation, req }) => {
+        if (operation !== 'create') return data;
+        const { totalDocs } = await req.payload.count({
+          collection: 'users',
+          overrideAccess: true,
+        });
+        return totalDocs === 0 ? { ...data, role: 'admin' } : data;
+      },
+    ],
+  },
   access: {
     create: isAdmin,
     read: adminOrSelf,
