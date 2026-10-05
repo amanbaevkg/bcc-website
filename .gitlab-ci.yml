@@ -25,7 +25,7 @@ variables:
   # The runner allows about 2 GB per job: build with webpack, one worker, a capped heap and no
   # second type check ("quality" runs tsc). See next.config.ts.
   BUILD_LOW_MEMORY: '1'
-  NODE_OPTIONS: --max-old-space-size=1280
+  NODE_OPTIONS: --max-old-space-size=1024
 
 quality:
   stage: test
@@ -45,19 +45,21 @@ audit:
     - pnpm audit --prod --audit-level high
   allow_failure: true
 
-# The built site is larger than GitLab's artifact limit (100 MB), so it is not passed between
-# jobs: "build" checks that the site builds, and "e2e" builds it again before testing it.
 build:
   stage: build
   script:
     - pnpm build
+  # The tests below reuse this build (about 5 MB zipped) instead of building again.
+  artifacts:
+    paths: [apps/web/.next]
+    exclude: [apps/web/.next/cache/**/*, apps/web/.next/standalone/**/*]
+    expire_in: 1 day
 
 e2e:
   stage: e2e
   image: mcr.microsoft.com/playwright:v1.63.0-noble
   needs: [build]
   script:
-    - pnpm build
     - pnpm --filter web exec playwright test
   artifacts:
     when: on_failure

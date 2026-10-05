@@ -37,7 +37,7 @@ ARG SITE_ENV=staging
 ARG SITE_URL=http://localhost:3000
 ENV SITE_ENV=$SITE_ENV SITE_URL=$SITE_URL
 # Fits in 2 GB of memory (see BUILD_LOW_MEMORY in next.config.ts).
-ENV BUILD_LOW_MEMORY=1 NODE_OPTIONS=--max-old-space-size=1280
+ENV BUILD_LOW_MEMORY=1 NODE_OPTIONS=--max-old-space-size=1024
 RUN pnpm --filter web build
 
 FROM node:22-alpine AS run
