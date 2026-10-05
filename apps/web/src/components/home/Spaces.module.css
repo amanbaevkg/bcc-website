@@ -120,46 +120,12 @@
   width: 100%;
 }
 
-/* A six-step rhythm of widths, heights and offsets that repeats for any number of photos. */
-.item:nth-child(6n + 1) {
-  width: 780px;
+/* Every photo the same size, in one straight row; each is cropped around its focal point. */
+.item {
+  width: 560px;
 }
-.item:nth-child(6n + 1) .frame {
-  height: 540px;
-}
-.item:nth-child(6n + 2) {
-  width: 420px;
-  margin-top: 96px;
-}
-.item:nth-child(6n + 2) .frame {
-  height: 540px;
-}
-.item:nth-child(6n + 3) {
-  width: 460px;
-}
-.item:nth-child(6n + 3) .frame {
-  height: 620px;
-}
-.item:nth-child(6n + 4) {
-  width: 720px;
-  margin-top: 130px;
-}
-.item:nth-child(6n + 4) .frame {
-  height: 480px;
-}
-.item:nth-child(6n + 5) {
-  width: 620px;
-  margin-top: 40px;
-}
-.item:nth-child(6n + 5) .frame {
-  height: 420px;
-}
-.item:nth-child(6n) {
-  width: 440px;
-  margin-top: 150px;
-}
-.item:nth-child(6n) .frame {
-  height: 560px;
+.item .frame {
+  aspect-ratio: 4 / 3;
 }
 
 .progress {
@@ -199,17 +165,7 @@
   }
 
   .item {
-    width: 78vw !important;
-    margin-top: 0 !important;
-  }
-
-  .item .frame {
-    height: auto !important;
-    aspect-ratio: 4 / 3;
-  }
-
-  .item:nth-child(even) .frame {
-    aspect-ratio: 4 / 5;
+    width: 78vw;
   }
 
   .navBtn {

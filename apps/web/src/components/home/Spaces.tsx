@@ -28,7 +28,7 @@ export function Spaces({ data, locale }: { data: HomePage['spaces']; locale: Loc
               image={s.image}
               locale={locale}
               className={styles.frame}
-              sizes="(width < 900px) 80vw, 780px"
+              sizes="(width < 900px) 80vw, 560px"
             />
             <figcaption>{pick(s.caption, locale)}</figcaption>
           </figure>

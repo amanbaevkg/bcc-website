@@ -34,7 +34,7 @@ export async function ContactGallery({
               image={photo}
               locale={locale}
               className={styles.frame}
-              sizes="(width < 900px) 80vw, 780px"
+              sizes="(width < 900px) 80vw, 560px"
             />
           </figure>
         ))}

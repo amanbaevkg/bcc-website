@@ -621,7 +621,7 @@ export interface Home {
   spaces: {
     title?: string | null;
     /**
-     * Drag to change the order. The layout repeats every six photos. Click the photo to set its focal point.
+     * Drag to change the order. Every photo is shown at the same size (4:3): click the photo to set its focal point.
      */
     items?:
       | {
