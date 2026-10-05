@@ -1,14 +1,23 @@
 # GitLab CI for bcc-web.
-# Secrets are GitLab CI/CD variables (masked + protected), never files in the repo.
+# Secrets belong in GitLab CI/CD variables, never in the repository.
 
 include:
   - template: Jobs/SAST.gitlab-ci.yml
   - template: Jobs/Dependency-Scanning.gitlab-ci.yml
   - template: Jobs/Secret-Detection.gitlab-ci.yml
 
-stages: [test, build, e2e]
+stages:
+  - test
+  - build
+  - e2e
+  - publish
 
-default:
+variables:
+  NEXT_TELEMETRY_DISABLED: '1'
+  SITE_ENV: staging
+
+# Only application jobs inherit the Node/pnpm setup.
+.node-job:
   image: node:22-alpine
   before_script:
     - corepack enable
@@ -16,18 +25,15 @@ default:
     - pnpm install --frozen-lockfile
   cache:
     key:
-      files: [pnpm-lock.yaml]
-    paths: [.pnpm-store]
-
-variables:
-  NEXT_TELEMETRY_DISABLED: '1'
-  SITE_ENV: staging
-  # The runner allows about 2 GB per job: build with webpack, one worker, a capped heap and no
-  # second type check ("quality" runs tsc). See next.config.ts.
-  BUILD_LOW_MEMORY: '1'
-  NODE_OPTIONS: --max-old-space-size=1024
+      files:
+        - pnpm-lock.yaml
+    paths:
+      - .pnpm-store/
+  variables:
+    NODE_OPTIONS: '--max-old-space-size=1024'
 
 quality:
+  extends: .node-job
   stage: test
   script:
     - pnpm format:check
@@ -36,32 +42,74 @@ quality:
     - pnpm i18n:check
     - pnpm test
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
 
 audit:
+  extends: .node-job
   stage: test
   script:
     - pnpm audit --prod --audit-level high
+  # Keep findings visible without blocking the pipeline.
   allow_failure: true
 
 build:
+  extends: .node-job
   stage: build
+  variables:
+    BUILD_LOW_MEMORY: '1'
+    NODE_OPTIONS: '--max-old-space-size=2048'
+    KUBERNETES_MEMORY_REQUEST: '2Gi'
+    KUBERNETES_MEMORY_LIMIT: '4Gi'
   script:
     - pnpm build
-  # The tests below reuse this build (about 5 MB zipped) instead of building again.
   artifacts:
-    paths: [apps/web/.next]
-    exclude: [apps/web/.next/cache/**/*, apps/web/.next/standalone/**/*]
+    paths:
+      - apps/web/.next/
+    exclude:
+      - 'apps/web/.next/cache/**/*'
+      - 'apps/web/.next/standalone/**/*'
     expire_in: 1 day
 
 e2e:
+  extends: .node-job
   stage: e2e
   image: mcr.microsoft.com/playwright:v1.63.0-noble
-  needs: [build]
+  needs:
+    - job: build
+      artifacts: true
   script:
     - pnpm --filter web exec playwright test
   artifacts:
     when: on_failure
-    paths: [apps/web/playwright-report, apps/web/test-results]
+    paths:
+      - apps/web/playwright-report/
+      - apps/web/test-results/
     expire_in: 7 days
+
+publish-image:
+  stage: publish
+  image:
+    name: moby/buildkit:rootless
+    entrypoint: ['']
+  variables:
+    BUILDKITD_FLAGS: '--oci-worker-no-process-sandbox'
+    KUBERNETES_MEMORY_REQUEST: '2Gi'
+    KUBERNETES_MEMORY_LIMIT: '4Gi'
+  dependencies: []
+  before_script:
+    - mkdir -p ~/.docker
+    - |
+      printf '{"auths":{"%s":{"username":"%s","password":"%s"}}}\n' \
+        "$CI_REGISTRY" "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD" \
+        > ~/.docker/config.json
+  script:
+    - |
+      buildctl-daemonless.sh build \
+        --frontend dockerfile.v0 \
+        --local context=. \
+        --local dockerfile=. \
+        --output "type=image,name=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA,push=true"
+    - echo "Published image $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
