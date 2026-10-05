@@ -10,6 +10,7 @@ stages:
   - test
   - build
   - e2e
+  - publish
 
 variables:
   NEXT_TELEMETRY_DISABLED: '1'
@@ -85,3 +86,30 @@ e2e:
       - apps/web/playwright-report/
       - apps/web/test-results/
     expire_in: 7 days
+
+publish-image:
+  stage: publish
+  image:
+    name: moby/buildkit:rootless
+    entrypoint: ['']
+  variables:
+    BUILDKITD_FLAGS: '--oci-worker-no-process-sandbox'
+    KUBERNETES_MEMORY_REQUEST: '2Gi'
+    KUBERNETES_MEMORY_LIMIT: '4Gi'
+  dependencies: []
+  before_script:
+    - mkdir -p ~/.docker
+    - |
+      printf '{"auths":{"%s":{"username":"%s","password":"%s"}}}\n' \
+        "$CI_REGISTRY" "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD" \
+        > ~/.docker/config.json
+  script:
+    - |
+      buildctl-daemonless.sh build \
+        --frontend dockerfile.v0 \
+        --local context=. \
+        --local dockerfile=. \
+        --output "type=image,name=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA,push=true"
+    - echo "Published image $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
