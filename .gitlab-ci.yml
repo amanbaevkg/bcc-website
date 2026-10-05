@@ -12,7 +12,7 @@ stages:
   - e2e
 
 variables:
-  NEXT_TELEMETRY_DISABLED: "1"
+  NEXT_TELEMETRY_DISABLED: '1'
   SITE_ENV: staging
 
 # Only application jobs inherit the Node/pnpm setup.
@@ -29,7 +29,7 @@ variables:
     paths:
       - .pnpm-store/
   variables:
-    NODE_OPTIONS: "--max-old-space-size=1024"
+    NODE_OPTIONS: '--max-old-space-size=1024'
 
 quality:
   extends: .node-job
@@ -56,18 +56,18 @@ build:
   extends: .node-job
   stage: build
   variables:
-    BUILD_LOW_MEMORY: "1"
-    NODE_OPTIONS: "--max-old-space-size=2048"
-    KUBERNETES_MEMORY_REQUEST: "2Gi"
-    KUBERNETES_MEMORY_LIMIT: "4Gi"
+    BUILD_LOW_MEMORY: '1'
+    NODE_OPTIONS: '--max-old-space-size=2048'
+    KUBERNETES_MEMORY_REQUEST: '2Gi'
+    KUBERNETES_MEMORY_LIMIT: '4Gi'
   script:
     - pnpm build
   artifacts:
     paths:
       - apps/web/.next/
     exclude:
-      - "apps/web/.next/cache/**/*"
-      - "apps/web/.next/standalone/**/*"
+      - 'apps/web/.next/cache/**/*'
+      - 'apps/web/.next/standalone/**/*'
     expire_in: 1 day
 
 e2e:
