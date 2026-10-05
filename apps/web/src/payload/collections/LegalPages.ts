@@ -7,23 +7,41 @@ import { refreshAfterChange } from '../revalidate';
  * The live site refuses to start until both are approved in all four languages
  * (src/instrumentation.ts).
  */
+const kinds = [
+  { label: 'Privacy Policy', value: 'privacy' },
+  { label: 'Legal Notice', value: 'legal-notice' },
+];
+
 export const LegalPages: CollectionConfig = {
   slug: 'legal-pages',
   labels: { singular: 'Legal page', plural: 'Legal pages' },
-  admin: { group: 'Settings', useAsTitle: 'kind' },
+  admin: {
+    group: 'Settings',
+    useAsTitle: 'name',
+    defaultColumns: ['name', 'updatedAt'],
+    description: 'Privacy Policy and Legal Notice, linked at the bottom of every page.',
+  },
   access: { read: signedIn, create: isAdmin, update: isAdmin, delete: isAdmin },
   hooks: { afterChange: refreshAfterChange },
   fields: [
+    {
+      // Readable name in the admin ("Privacy Policy"), filled in from the page choice.
+      name: 'name',
+      type: 'text',
+      admin: { hidden: true },
+      hooks: {
+        beforeChange: [
+          ({ siblingData }) => kinds.find((k) => k.value === siblingData?.kind)?.label,
+        ],
+      },
+    },
     {
       name: 'kind',
       label: 'Page',
       type: 'select',
       required: true,
       unique: true,
-      options: [
-        { label: 'Privacy Policy', value: 'privacy' },
-        { label: 'Legal Notice', value: 'legal-notice' },
-      ],
+      options: kinds,
     },
     { name: 'title', label: 'Title', type: 'text', localized: true, maxLength: 80 },
     {

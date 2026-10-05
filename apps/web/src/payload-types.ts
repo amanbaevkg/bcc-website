@@ -193,11 +193,14 @@ export interface Media {
   focalY?: number | null;
 }
 /**
+ * Privacy Policy and Legal Notice, linked at the bottom of every page.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "legal-pages".
  */
 export interface LegalPage {
   id: number;
+  name?: string | null;
   kind: 'privacy' | 'legal-notice';
   title?: string | null;
   /**
@@ -355,6 +358,7 @@ export interface NewsSelect<T extends boolean = true> {
  * via the `definition` "legal-pages_select".
  */
 export interface LegalPagesSelect<T extends boolean = true> {
+  name?: T;
   kind?: T;
   title?: T;
   body?: T;
