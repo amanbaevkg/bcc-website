@@ -44,6 +44,12 @@ export function inLocale(d: StoredPost, locale: Locale): NewsPost | undefined {
   };
 }
 
+function endOfToday() {
+  const d = new Date();
+  d.setUTCHours(23, 59, 59, 999);
+  return d.toISOString();
+}
+
 const readPosts = () =>
   cmsQuery(
     'news',
@@ -57,7 +63,9 @@ const readPosts = () =>
           where: {
             and: [
               { _status: { equals: 'published' } },
-              { date: { less_than_equal: new Date().toISOString() } },
+              // Dated today or earlier: the date picker stores a day as its midday, so compare
+              // with the end of today, not with this very moment.
+              { date: { less_than_equal: endOfToday() } },
             ],
           },
           sort: '-date',

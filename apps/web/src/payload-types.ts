@@ -145,6 +145,9 @@ export interface News {
    * Filled in from the English title when you save. Part of the article’s address, so better not changed once published.
    */
   slug?: string | null;
+  /**
+   * A future date keeps the article hidden until that day.
+   */
   date: string;
   /**
    * Horizontal 16:9. Best at 1600×900 px or larger.

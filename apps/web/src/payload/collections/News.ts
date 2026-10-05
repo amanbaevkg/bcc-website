@@ -56,7 +56,12 @@ export const News: CollectionConfig = {
       label: 'Date',
       type: 'date',
       required: true,
-      admin: { position: 'sidebar', date: { pickerAppearance: 'dayOnly' } },
+      defaultValue: () => new Date().toISOString(),
+      admin: {
+        position: 'sidebar',
+        date: { pickerAppearance: 'dayOnly' },
+        description: 'A future date keeps the article hidden until that day.',
+      },
     },
     image('cover', 'Cover', { minWidth: 1600, minHeight: 900, description: 'Horizontal 16:9.' }),
     text('excerpt', 'Teaser', { max: 400, multiline: true }),
