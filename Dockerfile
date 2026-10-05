@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 # Two uses, one file:
 #   Local development (hot reload): docker compose up --build   → target "dev", see docker-compose.yml
 #   Production server:              docker build -t bcc-web .   → the last stage, "run"
@@ -40,15 +41,60 @@ ENV SITE_ENV=$SITE_ENV SITE_URL=$SITE_URL
 ENV BUILD_LOW_MEMORY=1 NODE_OPTIONS=--max-old-space-size=1024
 RUN pnpm --filter web build
 
+# ---- Complete production dependencies, including Payload's native SQLite driver ----
+# Standalone tracing can omit dependencies loaded by the instrumentation hook.
+FROM base AS runtime-deps
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY apps/web/package.json apps/web/
+RUN pnpm install --frozen-lockfile --prod --filter web...
+# The compiled instrumentation hook requires libsql from the application directory.
+# Resolve the version already locked through Payload's SQLite adapter; do not install latest.
+RUN node <<'NODE'
+const fs = require('node:fs');
+const path = require('node:path');
+const { createRequire } = require('node:module');
+const appRequire = createRequire('/repo/apps/web/package.json');
+const sqliteRequire = createRequire(appRequire.resolve('@payloadcms/db-sqlite'));
+const clientRequire = createRequire(sqliteRequire.resolve('@libsql/client'));
+let packageDir = path.dirname(clientRequire.resolve('libsql'));
+while (true) {
+  const manifest = path.join(packageDir, 'package.json');
+  if (fs.existsSync(manifest) && JSON.parse(fs.readFileSync(manifest, 'utf8')).name === 'libsql') break;
+  const parent = path.dirname(packageDir);
+  if (parent === packageDir) throw new Error('Cannot locate the locked libsql package');
+  packageDir = parent;
+}
+const link = '/repo/apps/web/node_modules/libsql';
+if (!fs.existsSync(link)) {
+  fs.symlinkSync(path.relative(path.dirname(link), packageDir), link, 'dir');
+}
+NODE
+
 FROM node:22-alpine AS run
 WORKDIR /app
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0 \
     DATABASE_URL=file:/data/payload.db PAYLOAD_MEDIA_DIR=/data/media
 RUN addgroup -S app && adduser -S app -G app && mkdir -p /data/media && chown -R app:app /data
 COPY --from=build --chown=app:app /repo/apps/web/.next/standalone ./
+# Replace the traced dependency subset with the complete production installation.
+RUN rm -rf /app/node_modules /app/apps/web/node_modules
+# Preserve pnpm's store and workspace symlinks in the final image.
+COPY --from=runtime-deps --chown=app:app /repo/node_modules ./node_modules
+COPY --from=runtime-deps --chown=app:app /repo/apps/web/node_modules ./apps/web/node_modules
 COPY --from=build --chown=app:app /repo/apps/web/.next/static ./apps/web/.next/static
 COPY --from=build --chown=app:app /repo/apps/web/public ./apps/web/public
 USER app
+# Fail the image build if the module or Alpine native binding is unavailable.
+RUN node <<'NODE'
+const { createRequire } = require('node:module');
+const appRequire = createRequire('/app/apps/web/.next/server/instrumentation.js');
+const loaded = appRequire('libsql');
+const Database = loaded.default || loaded;
+const db = new Database(':memory:');
+db.prepare('SELECT 1').get();
+db.close();
+console.log('libsql runtime check passed');
+NODE
 VOLUME /data
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s CMD wget -qO- http://127.0.0.1:3000/en >/dev/null || exit 1
