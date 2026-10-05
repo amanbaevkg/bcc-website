@@ -41,20 +41,19 @@ audit:
     - pnpm audit --prod --audit-level high
   allow_failure: true
 
+# The built site is larger than GitLab's artifact limit (100 MB), so it is not passed between
+# jobs: "build" checks that the site builds, and "e2e" builds it again before testing it.
 build:
   stage: build
   script:
     - pnpm build
-  artifacts:
-    paths: [apps/web/.next]
-    exclude: [apps/web/.next/cache/**/*]
-    expire_in: 1 day
 
 e2e:
   stage: e2e
   image: mcr.microsoft.com/playwright:v1.63.0-noble
   needs: [build]
   script:
+    - pnpm build
     - pnpm --filter web exec playwright test
   artifacts:
     when: on_failure

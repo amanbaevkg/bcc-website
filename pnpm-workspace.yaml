@@ -8,3 +8,9 @@ onlyBuiltDependencies:
 # Security fixes in dependencies of dependencies (pnpm audit).
 overrides:
   undici@>=7.0.0 <7.29.1: ^7.29.1
+# Advisories without a fix that do not apply here (pnpm audit).
+auditConfig:
+  ignoreGhsas:
+    # braces (via sass → chokidar, used by the admin's build tooling to watch files): the
+    # patterns come from the code, never from visitors. No fixed version exists yet.
+    - GHSA-vfj7-8cjw-p6xm
