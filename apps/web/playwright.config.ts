@@ -7,6 +7,8 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
+  // CI runners allow about 2 GB per job: one browser at a time next to the site's server.
+  workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI
     ? [['list'], ['junit', { outputFile: 'test-results/junit.xml' }]]
     : 'list',
