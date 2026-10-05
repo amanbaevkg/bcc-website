@@ -109,7 +109,7 @@ publish-image:
         --frontend dockerfile.v0 \
         --local context=. \
         --local dockerfile=. \
-        --output "type=image,name=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA,push=true"
-    - echo "Published image $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+        --output "type=image,name=$CI_REGISTRY_IMAGE:latest,push=true"
+    - echo "Published image $CI_REGISTRY_IMAGE:latest"
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
