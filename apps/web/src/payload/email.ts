@@ -69,3 +69,23 @@ export function resetPasswordEmail({ token }: { token?: string } = {}) {
     '<p>Business Center Capellen</p>',
   ].join('\n');
 }
+
+/** Sent when an admin adds someone: a link to choose their own password (valid three days). */
+export function welcomeEmail({ token, role, by }: { token: string; role: string; by?: string }) {
+  const site = (process.env.SITE_URL || 'http://localhost:3000').replace(/\/$/, '');
+  const link = escape(`${site}/admin/reset/${encodeURIComponent(token)}`);
+  const admin = escape(`${site}/admin`);
+  const what =
+    role === 'admin'
+      ? 'As an administrator you can change the website’s texts and photos, publish news and manage the admin’s users.'
+      : 'As an editor you can change the website’s texts and photos and publish news.';
+  return [
+    '<p>Hello,</p>',
+    `<p>${by ? `${escape(by)} has given you` : 'You have been given'} access to the admin of the Business Center Capellen website.</p>`,
+    `<p>${what}</p>`,
+    `<p>To choose your password, open this link within three days:<br><a href="${link}">${link}</a></p>`,
+    `<p>Afterwards you sign in at <a href="${admin}">${admin}</a> with this e-mail address and your password. If the link has expired, use “Forgot password?” on that page.</p>`,
+    '<p>If you did not expect this e-mail, you can ignore it.</p>',
+    '<p>Business Center Capellen</p>',
+  ].join('\n');
+}

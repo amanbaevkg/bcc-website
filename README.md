@@ -127,6 +127,8 @@ The language menu at the top right switches EN/FR/DE/LU; an empty FR/DE/LU text 
   setup (`EMAIL_PROVIDER`, `CONTACT_FROM`, `SMTP_*`). With `EMAIL_PROVIDER=log` nothing is sent and,
   outside production, the link is printed in the server terminal. Admins can also set a new password
   for anyone under Settings → Users, and unlock a locked account there.
+- **New users:** an admin adds someone under Settings → Users (e-mail, any password, role). They get
+  a welcome e-mail with a link (valid three days) to choose their own password; the typed one stops working.
 - **Changing the admin's fields** (`src/payload/**`): run
   `pnpm --filter web payload migrate:create <name>` and commit the new file in `src/migrations`;
   production applies it on the next start. In development the database follows the code by itself.
