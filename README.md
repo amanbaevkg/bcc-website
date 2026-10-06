@@ -158,8 +158,11 @@ See [`.env.example`](.env.example) for the full list with comments. Rules:
 - Secrets (SMTP password, API keys, tokens) exist **only** as environment variables in the host
   (Vercel / Netlify settings, GitLab CI/CD variables, or the server's env file). Never in Git, never in
   frontend code. Only variables starting with `NEXT_PUBLIC_` reach the browser, and those must never be secret.
-- `SITE_ENV` and `SITE_URL` must be set **at build time** as well as at run time: pages are pre-rendered,
-  so `noindex` and canonical URLs are fixed during the build.
+- `SITE_URL` and `SITE_ENV` are read when the server runs: pass them to the container (`--env-file`
+  or `-e`), e.g. `SITE_URL=https://bcc-dev.squared.cloud-power.eu` on staging. With the default
+  (`http://localhost:3000`) the admin rejects every save ("You are not allowed to perform this action")
+  and canonical links point to localhost; the server logs `[config] SITE_URL …` at start, and
+  production refuses to start.
 
 ## Deployment
 
