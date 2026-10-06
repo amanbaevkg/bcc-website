@@ -27,7 +27,10 @@ export const Users: CollectionConfig = {
     maxLoginAttempts: 5,
     lockTime: 10 * 60 * 1000,
     tokenExpiration: 8 * 60 * 60,
-    cookies: { secure: process.env.NODE_ENV === 'production', sameSite: 'Lax' },
+    // Secure cookies only reach the server over https; on a plain-http test address (Docker on
+    // a laptop, a server's IP) the browser would drop them and every admin request would be
+    // "not logged in". So follow the site's own address.
+    cookies: { secure: (process.env.SITE_URL ?? '').startsWith('https://'), sameSite: 'Lax' },
     forgotPassword: {
       expiration: 60 * 60 * 1000,
       // At most one reset e-mail per account every 2 minutes.
