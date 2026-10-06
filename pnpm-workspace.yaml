@@ -8,6 +8,7 @@ onlyBuiltDependencies:
 # Security fixes in dependencies of dependencies (pnpm audit).
 overrides:
   undici@>=7.0.0 <7.29.1: ^7.29.1
+  source-map-js@<1.2.2: ^1.2.2
 # Advisories without a fix that do not apply here (pnpm audit).
 auditConfig:
   ignoreGhsas:
