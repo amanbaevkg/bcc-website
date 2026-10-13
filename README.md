@@ -186,7 +186,7 @@ visitor's address at the end of `X-Forwarded-For` (Caddy does by default; nginx:
 that last entry.
 
 Without Docker: `pnpm install && pnpm build`, then run `node apps/web/.next/standalone/apps/web/server.js`
-after copying `apps/web/.next/static` to `apps/web/.next/standalone/apps/web/.next/static` and `apps/web/public`
+after copying (keeping links: `cp -RP`, since macOS `cp -r` breaks the copy) `apps/web/.next/static` to `apps/web/.next/standalone/apps/web/.next/static` and `apps/web/public`
 to `apps/web/.next/standalone/apps/web/public`, with `DATABASE_URL` and `PAYLOAD_MEDIA_DIR` pointing to a
 persistent folder.
 
