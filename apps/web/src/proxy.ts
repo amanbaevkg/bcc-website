@@ -15,12 +15,21 @@ function checkBasicAuth(request: NextRequest): NextResponse | null {
 
   const header = request.headers.get('authorization') ?? '';
   const [scheme, encoded] = header.split(' ');
-  if (scheme === 'Basic' && encoded && safeEqual(atob(encoded), expected)) return null;
+  if (scheme === 'Basic' && encoded && safeEqual(decodeBase64(encoded), expected)) return null;
 
   return new NextResponse('Authentication required', {
     status: 401,
     headers: { 'WWW-Authenticate': 'Basic realm="BCC staging", charset="UTF-8"' },
   });
+}
+
+/** Malformed input gives "" (a refused login) instead of an error page. */
+function decodeBase64(value: string): string {
+  try {
+    return atob(value);
+  } catch {
+    return '';
+  }
 }
 
 function safeEqual(a: string, b: string): boolean {

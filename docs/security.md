@@ -42,7 +42,8 @@ guide); the cost is dynamic rendering of every page.
   own account. The REST API under `/api/*` answers only signed-in users (except uploaded files, which
   the public pages show); the website reads content on the server through Payload's local API.
 - The first admin comes from `PAYLOAD_ADMIN_EMAIL` / `PAYLOAD_ADMIN_PASSWORD` on the first start, so the
-  public "create first user" page never appears on a live server. Remove both variables afterwards.
+  public "create first user" page never appears on a live server. With no account and neither variable
+  set, a production server refuses to start. Remove both variables once the account exists.
 - Password reset: a one-hour, single-use link, sent only to the account's own address and built from
   `SITE_URL` (never from the request's Host header). The answer is the same whether or not the address
   has an account, and an account gets at most one reset e-mail every 2 minutes. In production the
@@ -54,5 +55,6 @@ guide); the cost is dynamic rendering of every page.
 
 ## Staging
 
-`SITE_BASIC_AUTH` protects the whole site with a login (constant-time comparison); any `SITE_ENV` other
+`SITE_BASIC_AUTH` protects the website pages with a login (constant-time comparison); `/api` and `/admin`
+are not covered (the admin has its own sign-in). Any `SITE_ENV` other
 than `production` adds `X-Robots-Tag: noindex, nofollow` and a `noindex` meta tag.

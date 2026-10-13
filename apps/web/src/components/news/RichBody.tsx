@@ -4,6 +4,7 @@ import type { Locale } from '@/i18n/routing';
 import { image, type CmsMedia } from '@/lib/cms/map';
 import { Photo } from '@/components/ui/Photo';
 import styles from './RichBody.module.css';
+import { safeHref } from './safeHref';
 
 /**
  * Article text from the admin's rich-text editor, rendered as React elements (never raw HTML).
@@ -24,10 +25,6 @@ type Node = {
 const BOLD = 1;
 const ITALIC = 2;
 const UNDERLINE = 8;
-
-function safeHref(url: string | undefined) {
-  return url && /^(https?:|mailto:|tel:|\/)/.test(url) ? url : undefined;
-}
 
 function renderNodes(nodes: Node[] | undefined, locale: Locale): React.ReactNode[] {
   return (nodes ?? []).map((n, i) => renderNode(n, i, locale));
