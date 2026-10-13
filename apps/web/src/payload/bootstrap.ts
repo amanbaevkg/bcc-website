@@ -31,6 +31,8 @@ export async function bootstrap(payload: Payload) {
         '[admin] No user exists and PAYLOAD_ADMIN_EMAIL / PAYLOAD_ADMIN_PASSWORD are not set: ' +
           'set them and restart, otherwise anyone could create the first account at /admin.',
       );
+      // The running server refuses to start; `next build` (pages read content) only warns.
+      if (process.env.NEXT_PHASE !== 'phase-production-build') process.exit(1);
     }
   }
 

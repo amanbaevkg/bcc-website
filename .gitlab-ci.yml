@@ -63,6 +63,8 @@ build:
     KUBERNETES_MEMORY_LIMIT: '4Gi'
   script:
     - pnpm build
+    # The Docker image runs .next/standalone: it must start (catches modules missing from it).
+    - cd apps/web && sh scripts/standalone-smoke.sh
   artifacts:
     paths:
       - apps/web/.next/

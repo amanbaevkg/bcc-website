@@ -180,7 +180,10 @@ docker run -d --restart unless-stopped -p 127.0.0.1:3000:3000 \
 ```
 
 `/data` holds `payload.db` and `media/`: back it up. Database changes in `src/migrations` are applied
-automatically on start. Put a TLS-terminating reverse proxy (nginx, Caddy) in front.
+automatically on start. Put a TLS-terminating reverse proxy (nginx, Caddy) in front. It must add the
+visitor's address at the end of `X-Forwarded-For` (Caddy does by default; nginx:
+`proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;`): the contact form's rate limit uses
+that last entry.
 
 Without Docker: `pnpm install && pnpm build`, then run `node apps/web/.next/standalone/apps/web/server.js`
 after copying `apps/web/.next/static` to `apps/web/.next/standalone/apps/web/.next/static` and `apps/web/public`

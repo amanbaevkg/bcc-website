@@ -24,12 +24,22 @@ const MAX_BYTES = 16 * 1024;
 /** Faster than this and it was not a person typing. */
 const MIN_ELAPSED_MS = 3_000;
 
+/**
+ * The visitor's address as seen by our reverse proxy. The proxy appends it to the end of
+ * X-Forwarded-For; earlier entries come from the visitor and can be anything, so only the
+ * last one is used (otherwise a changing fake entry would get around the rate limit).
+ */
 export function clientIp(headers: Headers): string {
   return (
-    headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    headers.get('x-forwarded-for')?.split(',').pop()?.trim() ||
     headers.get('x-real-ip')?.trim() ||
     'unknown'
   );
+}
+
+/** Escapes a display name for a quoted e-mail header, so a " in the name cannot add addresses. */
+function quoted(name: string): string {
+  return name.replace(/[\\"]/g, '\\$&');
 }
 
 /** The browser must be on our own site: blocks other sites posting to the API. */
@@ -120,7 +130,7 @@ export async function handleContact(req: Request, deps: Deps): Promise<ContactRe
     await provider.send({
       to: to ?? 'not-configured@example.invalid',
       from: from ?? 'not-configured@example.invalid',
-      replyTo: `"${form.firstName} ${form.lastName}" <${form.email}>`,
+      replyTo: `"${quoted(`${form.firstName} ${form.lastName}`)}" <${form.email}>`,
       ...message,
     });
   } catch (error) {

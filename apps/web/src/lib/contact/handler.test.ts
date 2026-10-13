@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Env } from '@/lib/env';
 import type { EmailProvider, OutgoingEmail } from './email';
-import { handleContact } from './handler';
+import { clientIp, handleContact } from './handler';
 import { memoryLimiter } from './rateLimit';
 import { prefillFromQuery } from './schema';
 
@@ -135,5 +135,20 @@ describe('prefill from the hero finder', () => {
       services: ['meeting-rooms'],
     });
     expect(prefillFromQuery({ workspace: 'unknown', team: '4' })).toEqual({});
+  });
+});
+
+describe('contact API: header safety', () => {
+  it('keeps a quote in the name inside the reply-to display name', async () => {
+    const { sent, deps } = setup();
+    const name = { firstName: 'Eve" <evil@example.com>,', lastName: '"x' };
+    await handleContact(request({ form: { ...form, ...name }, meta }), deps);
+    expect(sent[0].replyTo).toBe('"Eve\\" <evil@example.com>, \\"x" <anna@example.com>');
+  });
+
+  it('uses the address added by the proxy, not one sent by the visitor', () => {
+    const h = new Headers({ 'x-forwarded-for': '1.2.3.4, 203.0.113.9' });
+    expect(clientIp(h)).toBe('203.0.113.9');
+    expect(clientIp(new Headers({ 'x-forwarded-for': '203.0.113.9' }))).toBe('203.0.113.9');
   });
 });
