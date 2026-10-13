@@ -49,6 +49,8 @@ build:
   stage: build
   script:
     - pnpm build
+    # The Docker image runs .next/standalone: it must start (catches modules missing from it).
+    - cd apps/web && sh scripts/standalone-smoke.sh
   # The tests below reuse this build (about 5 MB zipped) instead of building again.
   artifacts:
     paths: [apps/web/.next]

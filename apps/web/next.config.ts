@@ -60,6 +60,14 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   // Trace files from the monorepo root so workspace packages are included.
   outputFileTracingRoot: path.join(path.dirname(fileURLToPath(import.meta.url)), '../..'),
+  // The admin's SQLite driver: Payload keeps `libsql` out of the bundle, so it is a direct dependency
+  // (same version as @libsql/client uses) for tracing to find it. Its native part is loaded by
+  // platform name (@libsql/linux-x64-musl, …), which tracing cannot follow. Without both, the
+  // standalone server (Docker image) stops with "Cannot find module"; CI checks it starts.
+  outputFileTracingIncludes: {
+    // Through libsql's own links, so that each platform's package is found next to it.
+    '/**': ['../../node_modules/.pnpm/libsql@*/node_modules/@libsql/*/**'],
+  },
   poweredByHeader: false,
   // Development only: open the dev server from a phone or tablet on the same Wi-Fi.
   allowedDevOrigins: ['192.168.*.*', '10.*.*.*', '172.*.*.*', '*.local'],
