@@ -6,8 +6,6 @@
 .title {
   margin-top: 16px;
   font-size: clamp(30px, 5vw, 64px);
-  overflow-wrap: break-word;
-  hyphens: auto;
   font-stretch: 112%;
   letter-spacing: -0.03em;
   line-height: 1;
