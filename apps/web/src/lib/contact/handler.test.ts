@@ -3,7 +3,11 @@ import type { Env } from '@/lib/env';
 import type { EmailProvider, OutgoingEmail } from './email';
 import { clientIp, handleContact } from './handler';
 import { memoryLimiter } from './rateLimit';
+import { contactFallback } from '@/content/fallback/contact';
+import type { ContactChoices } from './message';
 import { prefillFromQuery } from './schema';
+
+const choices: ContactChoices = contactFallback.form;
 
 const form = {
   firstName: 'Anna',
@@ -44,6 +48,7 @@ function setup(envOverrides: Partial<Env> = {}) {
     email: () => provider,
     limiter: memoryLimiter(3, 600),
     verifyTurnstile: vi.fn(async () => true),
+    choices: async () => choices,
   };
   return { sent, deps };
 }
@@ -77,6 +82,35 @@ describe('contact API', () => {
       error: 'validation',
       fields: { email: 'email', services: 'services', firstName: 'invalid' },
     });
+  });
+
+  it('accepts only the answers the admin lists, and ships their English labels', async () => {
+    const { sent, deps } = setup();
+    const unknown = await handleContact(
+      request({
+        form: { ...form, officeType: 'castle', services: ['meeting-rooms', 'yacht'] },
+        meta,
+      }),
+      deps,
+    );
+    expect(unknown).toMatchObject({
+      status: 400,
+      body: { fields: { officeType: 'required', services: 'services' } },
+    });
+
+    // An answer added in the admin, on an office type that does not ask for the team size.
+    deps.choices = async () => ({
+      officeTypes: [{ id: 'row-1', label: { en: 'Virtual Office', fr: 'Bureau virtuel' } }],
+      services: [{ id: 'row-2', label: { en: 'Printing' } }],
+    });
+    const added = await handleContact(
+      request({ form: { ...form, officeType: 'row-1', services: ['row-2'] }, meta }),
+      deps,
+    );
+    expect(added.status).toBe(200);
+    expect(sent[0].subject).toContain('Virtual Office');
+    expect(sent[0].text).toContain('Services: Printing');
+    expect(sent[0].text).toContain('People: —');
   });
 
   it('silently drops honeypot and too-fast submissions', async () => {
@@ -127,14 +161,27 @@ describe('contact API', () => {
 
 describe('prefill from the hero finder', () => {
   it('maps workspace and team size', () => {
-    expect(prefillFromQuery({ workspace: 'private-office', team: '6' })).toEqual({
+    expect(prefillFromQuery({ workspace: 'private-office', team: '6' }, choices)).toEqual({
       officeType: 'private-office',
       teamSize: '4-6',
     });
-    expect(prefillFromQuery({ workspace: 'meeting-room' })).toEqual({
+    expect(prefillFromQuery({ workspace: 'meeting-room' }, choices)).toEqual({
       services: ['meeting-rooms'],
     });
-    expect(prefillFromQuery({ workspace: 'unknown', team: '4' })).toEqual({});
+    expect(prefillFromQuery({ workspace: 'coworking', team: '6' }, choices)).toEqual({
+      officeType: 'coworking',
+    });
+    expect(prefillFromQuery({ workspace: 'unknown', team: '4' }, choices)).toEqual({});
+  });
+
+  it('follows the admin: the answer marked for a search choice is pre-selected', () => {
+    const edited = {
+      officeTypes: [{ id: 'abc', finder: 'coworking' as const }],
+      services: [{ id: 'x1' }, { id: 'x2', finder: 'meeting-room' as const }],
+    };
+    expect(prefillFromQuery({ workspace: 'coworking' }, edited)).toEqual({ officeType: 'abc' });
+    expect(prefillFromQuery({ workspace: 'meeting-room' }, edited)).toEqual({ services: ['x2'] });
+    expect(prefillFromQuery({ workspace: 'private-office', team: '3' }, edited)).toEqual({});
   });
 });
 

@@ -37,8 +37,51 @@ export const contactFallback: ContactPage = {
   form: {
     title: msg((m) => m.Contact.introTitle),
     body: msg((m) => m.Contact.introBody),
+    formTitle: msg((m) => m.Contact.formTitle),
+    firstName: msg((m) => m.Contact.firstName),
+    lastName: msg((m) => m.Contact.lastName),
+    company: msg((m) => m.Contact.company),
+    email: msg((m) => m.Contact.email),
+    phone: msg((m) => m.Contact.phone),
+    officeQuestion: msg((m) => m.Contact.officeType),
+    teamSizeQuestion: msg((m) => m.Contact.teamSize),
+    servicesQuestion: msg((m) => m.Contact.services),
+    servicesHint: msg((m) => m.Contact.servicesHint),
+    messageLabel: msg((m) => m.Contact.message),
+    submit: msg((m) => m.Contact.submit),
     successTitle: msg((m) => m.Contact.successTitle),
     successBody: msg((m) => m.Contact.successBody),
+    // The answers of the form on businesscentercapellen.lu.
+    officeTypes: [
+      {
+        id: 'coworking',
+        label: msg((m) => m.Contact.officeCoworking),
+        finder: 'coworking',
+      },
+      {
+        id: 'private-office',
+        label: msg((m) => m.Contact.officePrivate),
+        finder: 'private-office',
+        askTeamSize: true,
+      },
+    ],
+    services: [
+      {
+        id: 'domiciliation',
+        label: msg((m) => m.Contact.serviceDomiciliation),
+        finder: 'domiciliation',
+      },
+      { id: 'accounting', label: msg((m) => m.Contact.serviceAccounting) },
+      { id: 'parking', label: msg((m) => m.Contact.serviceParking) },
+      { id: 'mail', label: msg((m) => m.Contact.serviceMail) },
+      {
+        id: 'meeting-rooms',
+        label: msg((m) => m.Contact.serviceMeetingRooms),
+        finder: 'meeting-room',
+      },
+      { id: 'private-cloud', label: msg((m) => m.Contact.servicePrivateCloud) },
+      { id: 'other', label: msg((m) => m.Contact.serviceOther) },
+    ],
   },
   cta: {
     title: msg((m) => m.Contact.ctaTitle),

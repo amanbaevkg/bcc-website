@@ -1,20 +1,21 @@
 import { z } from 'zod';
+import type { ContactChoice } from '@/content/types';
 
 /**
  * The contact form's fields, shared by the browser (instant feedback) and the API
- * (the only check that counts). Options follow the current form on businesscentercapellen.lu.
+ * (the only check that counts). The answers to the office and service questions are edited in
+ * the admin (Contact page → 2. Form): the form sends their ids, the API checks them against
+ * the admin's lists (handler.ts).
  */
-export const officeTypes = ['coworking', 'private-office'] as const;
 export const teamSizes = ['1-2', '3-4', '4-6', '6-8', '8+'] as const;
-export const services = [
-  'domiciliation',
-  'accounting',
-  'parking',
-  'mail',
-  'meeting-rooms',
-  'private-cloud',
-  'other',
-] as const;
+
+/** An answer's id: a short name for the built-in ones, a generated one for answers added later. */
+const choiceId = (error: string) =>
+  z
+    .string({ error })
+    .min(1, { error })
+    .max(64, { error: 'invalid' })
+    .regex(/^[\w-]+$/, { error: 'invalid' });
 
 // No line breaks in single-line fields: they end up in e-mail headers (subject, reply-to name).
 const line = (max: number) =>
@@ -37,9 +38,12 @@ export const contactSchema = z.object({
     .refine((v) => v === '' || /^[+()\d\s./-]{6,40}$/.test(v), { error: 'phone' })
     .optional()
     .default(''),
-  officeType: z.enum(officeTypes, { error: 'required' }),
+  officeType: choiceId('required'),
   teamSize: z.enum(teamSizes).optional(),
-  services: z.array(z.enum(services)).min(1, { error: 'services' }).max(services.length),
+  services: z
+    .array(choiceId('services'), { error: 'services' })
+    .min(1, { error: 'services' })
+    .max(20, { error: 'services' }),
   message: z.string().trim().max(2000, { error: 'tooLong' }).optional().default(''),
 });
 
@@ -58,28 +62,21 @@ export const envelopeSchema = z.object({
 
 export const requestSchema = z.object({ form: contactSchema, meta: envelopeSchema });
 
-/** Maps the hero finder's choice (?workspace=…&team=…) onto the form. */
-export function prefillFromQuery(params: {
-  workspace?: string;
-  team?: string;
-}): Partial<ContactInput> {
+type Answer = Pick<ContactChoice, 'id' | 'finder' | 'askTeamSize'>;
+
+/** Maps the home page search's choice (?workspace=…&team=…) onto the form's answers. */
+export function prefillFromQuery(
+  params: { workspace?: string; team?: string },
+  choices: { officeTypes: Answer[]; services: Answer[] },
+): Partial<ContactInput> {
   const out: Partial<ContactInput> = {};
-  switch (params.workspace) {
-    case 'private-office':
-      out.officeType = 'private-office';
-      break;
-    case 'coworking':
-      out.officeType = 'coworking';
-      break;
-    case 'meeting-room':
-      out.services = ['meeting-rooms'];
-      break;
-    case 'domiciliation':
-      out.services = ['domiciliation'];
-      break;
-  }
+  if (!params.workspace) return out;
+  const office = choices.officeTypes.find((c) => c.finder === params.workspace);
+  if (office) out.officeType = office.id;
+  const services = choices.services.filter((c) => c.finder === params.workspace).map((c) => c.id);
+  if (services.length) out.services = services;
   const n = Number(params.team);
-  if (out.officeType === 'private-office' && Number.isFinite(n) && n > 0) {
+  if (office?.askTeamSize && Number.isFinite(n) && n > 0) {
     out.teamSize = n <= 2 ? '1-2' : n <= 4 ? '3-4' : n <= 6 ? '4-6' : n <= 8 ? '6-8' : '8+';
   }
   return out;

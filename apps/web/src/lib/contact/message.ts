@@ -1,19 +1,12 @@
+import type { ContactChoice } from '@/content/types';
 import type { ContactData } from './schema';
 
-/** Plain labels for the e-mail BCC receives (in English, the team's working language). */
-const officeLabels: Record<ContactData['officeType'], string> = {
-  coworking: 'Co-Working Space',
-  'private-office': 'Private Office',
-};
-const serviceLabels: Record<ContactData['services'][number], string> = {
-  domiciliation: 'Company Creation/Domiciliation',
-  accounting: 'Accounting Assistance',
-  parking: 'Private Parking Space',
-  mail: 'Mail Transfer Service',
-  'meeting-rooms': 'Meeting Rooms',
-  'private-cloud': 'Private Cloud',
-  other: 'Other',
-};
+/** The form's answers as the admin lists them (Contact page → 2. Form). */
+export type ContactChoices = { officeTypes: ContactChoice[]; services: ContactChoice[] };
+
+/** Plain label for the e-mail BCC receives (in English, the team's working language). */
+const labelOf = (list: ContactChoice[], id: string) =>
+  list.find((c) => c.id === id)?.label.en ?? id;
 
 const escape = (s: string) =>
   s.replace(
@@ -21,16 +14,17 @@ const escape = (s: string) =>
     (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!,
   );
 
-export function buildMessage(d: ContactData, locale: string) {
+export function buildMessage(d: ContactData, locale: string, choices: ContactChoices) {
+  const office = labelOf(choices.officeTypes, d.officeType);
   const name = `${d.firstName} ${d.lastName}`.trim();
   const rows: [string, string][] = [
     ['Name', name],
     ['Company', d.company || '—'],
     ['Email', d.email],
     ['Phone', d.phone || '—'],
-    ['Office type', officeLabels[d.officeType]],
+    ['Office type', office],
     ['People', d.teamSize ?? '—'],
-    ['Services', d.services.map((s) => serviceLabels[s]).join(', ')],
+    ['Services', d.services.map((s) => labelOf(choices.services, s)).join(', ')],
     ['Site language', locale.toUpperCase()],
   ];
   const text =
@@ -47,7 +41,7 @@ export function buildMessage(d: ContactData, locale: string) {
       ? `<p style="font:14px/1.5 Arial,sans-serif;white-space:pre-wrap">${escape(d.message)}</p>`
       : '');
   return {
-    subject: `Website enquiry: ${officeLabels[d.officeType]} — ${name}${d.company ? `, ${d.company}` : ''}`,
+    subject: `Website enquiry: ${office} — ${name}${d.company ? `, ${d.company}` : ''}`,
     text,
     html,
   };

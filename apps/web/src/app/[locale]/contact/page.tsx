@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ContactForm } from '@/components/contact/ContactForm';
+import { ContactForm, type FormTexts } from '@/components/contact/ContactForm';
 import { ContactGallery } from '@/components/contact/ContactGallery';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Photo } from '@/components/ui/Photo';
-import { pick } from '@/content/types';
+import { pick, type ContactPage as ContactContent } from '@/content/types';
 import { getContactPage } from '@/lib/cms/contact';
 import { getSiteInfo } from '@/lib/cms/site';
 import type { Locale } from '@/i18n/routing';
@@ -13,6 +13,17 @@ import { pageMetadata } from '@/lib/seo';
 import styles from './contact.module.css';
 
 type Props = { params: Promise<{ locale: string }> };
+
+/** The form's words and answers in the page's language. */
+function formTexts(form: ContactContent['form'], locale: Locale): FormTexts {
+  const { officeTypes, services, ...words } = form;
+  const out = Object.fromEntries(
+    Object.entries(words).map(([k, v]) => [k, pick(v, locale)]),
+  ) as Omit<FormTexts, 'officeTypes' | 'services'>;
+  const answers = (list: typeof officeTypes) =>
+    list.map((c) => ({ ...c, label: pick(c.label, locale) }));
+  return { ...out, officeTypes: answers(officeTypes), services: answers(services) };
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -84,13 +95,7 @@ export default async function ContactPage({ params }: Props) {
             <p className={styles.introBody}>{pick(page.form.body, locale)}</p>
           </div>
           <div className={styles.formCard}>
-            <ContactForm
-              fallbackEmail={site.email}
-              success={{
-                title: pick(page.form.successTitle, locale),
-                body: pick(page.form.successBody, locale),
-              }}
-            />
+            <ContactForm fallbackEmail={site.email} texts={formTexts(page.form, locale)} />
           </div>
         </div>
       </section>

@@ -2,7 +2,7 @@ import 'server-only';
 import { createHash } from 'node:crypto';
 import type { Env } from '@/lib/env';
 import type { EmailProvider } from './email';
-import { buildMessage } from './message';
+import { buildMessage, type ContactChoices } from './message';
 import type { RateLimiter } from './rateLimit';
 import { requestSchema } from './schema';
 
@@ -18,6 +18,8 @@ type Deps = {
   email: () => EmailProvider;
   limiter: RateLimiter;
   verifyTurnstile: (token: string | undefined, ip?: string) => Promise<boolean>;
+  /** The answers the form currently offers (the admin's lists). */
+  choices: () => Promise<ContactChoices>;
 };
 
 const MAX_BYTES = 16 * 1024;
@@ -98,6 +100,18 @@ export async function handleContact(req: Request, deps: Deps): Promise<ContactRe
   }
   const { form, meta } = parsed.data;
 
+  // Only answers the form offers: the lists come from the admin and can change.
+  const choices = await deps.choices();
+  const office = choices.officeTypes.find((c) => c.id === form.officeType);
+  const unknownService = form.services.some((s) => !choices.services.some((c) => c.id === s));
+  if (!office || unknownService) {
+    const fields: Record<string, string> = {};
+    if (!office) fields.officeType = 'required';
+    if (unknownService) fields.services = 'services';
+    return { status: 400, body: { ok: false, error: 'validation', fields } };
+  }
+  if (!office.askTeamSize) form.teamSize = undefined;
+
   // Bots get the same "thank you" as people, so they learn nothing; nothing is sent.
   if (meta.website || meta.elapsedMs < MIN_ELAPSED_MS) {
     console.info('[contact] dropped as spam', {
@@ -125,7 +139,7 @@ export async function handleContact(req: Request, deps: Deps): Promise<ContactRe
     return { status: 500, body: { ok: false, error: 'server' } };
   }
 
-  const message = buildMessage(form, meta.locale);
+  const message = buildMessage(form, meta.locale, choices);
   try {
     await provider.send({
       to: to ?? 'not-configured@example.invalid',

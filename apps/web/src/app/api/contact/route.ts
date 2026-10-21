@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { getContactPage } from '@/lib/cms/contact';
 import { getEmailProvider } from '@/lib/contact/email';
 import { handleContact } from '@/lib/contact/handler';
 import { memoryLimiter, upstashLimiter, type RateLimiter } from '@/lib/contact/rateLimit';
@@ -31,6 +32,7 @@ export async function POST(req: Request) {
     email: () => getEmailProvider(e),
     limiter: getLimiter(),
     verifyTurnstile: (token, ip) => verifyTurnstile(e.TURNSTILE_SECRET_KEY ?? '', token, ip),
+    choices: async () => (await getContactPage()).form,
   });
   const headers: Record<string, string> = { 'Cache-Control': 'no-store' };
   if (result.status === 429) headers['Retry-After'] = String(result.body.retryAfterSec);

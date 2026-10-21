@@ -1,13 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import type { Payload } from 'payload';
+import type { Payload, PayloadRequest } from 'payload';
 import { aboutFallback } from '@/content/fallback/about';
 import { contactFallback } from '@/content/fallback/contact';
 import { homeFallback } from '@/content/fallback/home';
 import { servicesFallback } from '@/content/fallback/services';
 import { footerFallback } from '@/content/fallback/footer';
 import { siteFallback } from '@/content/site';
-import type { ImageAsset, Link, Localized, RichLine } from '@/content/types';
+import type { ContactChoice, ImageAsset, Link, Localized, RichLine } from '@/content/types';
 import { paragraphs } from './lexical';
 
 /*
@@ -60,6 +60,56 @@ function publicDir() {
   const found = candidates.find((d) => fs.existsSync(path.join(d, 'images')));
   if (!found) throw new Error('seed: public/ folder not found');
   return found;
+}
+
+const texts = (o: Record<string, Localized>) =>
+  Object.fromEntries(Object.entries(o).map(([k, v]) => [k, L(v)]));
+
+/** The contact form's words and answers (rows keep the built-in ids, which the form sends). */
+function contactForm() {
+  const { officeTypes, services, ...words } = contactFallback.form;
+  const answer = (a: ContactChoice) => ({
+    id: a.id,
+    label: L(a.label),
+    finder: a.finder ?? 'none',
+  });
+  return {
+    ...texts(words),
+    officeTypes: officeTypes.map((a) => ({ ...answer(a), askTeamSize: !!a.askTeamSize })),
+    services: services.map(answer),
+  };
+}
+
+/**
+ * Fills the contact form's words and answers into an admin that was set up before they became
+ * editable (migration 20261021): every language, without touching the page's other texts.
+ */
+export async function fillContactForm(payload: Payload, req?: Partial<PayloadRequest>) {
+  const tree = contactForm();
+  for (const loc of LOCALES) {
+    const current = (await payload.findGlobal({
+      slug: 'contact',
+      locale: loc,
+      fallbackLocale: false as never,
+      depth: 0,
+      req,
+    })) as { form?: Record<string, unknown> };
+    if (loc === 'en' && (current.form?.officeTypes as unknown[] | undefined)?.length) return;
+    const add = forLocale(tree, loc) as Record<string, unknown>;
+    // Texts already written in the admin stay as they are; the answer lists are new.
+    const kept = Object.entries(current.form ?? {}).filter(
+      ([, v]) => typeof v === 'string' && v !== '',
+    );
+    const form = { ...add, ...Object.fromEntries(kept) };
+    await payload.updateGlobal({
+      slug: 'contact',
+      data: { form } as never,
+      locale: loc,
+      fallbackLocale: false as never,
+      depth: 0,
+      req,
+    });
+  }
 }
 
 export async function seedContent(payload: Payload) {
@@ -242,11 +292,9 @@ export async function seedContent(payload: Payload) {
 
   // Contact page
   const c = contactFallback;
-  const texts = (o: Record<string, Localized>) =>
-    Object.fromEntries(Object.entries(o).map(([k, v]) => [k, L(v)]));
   await writeGlobal('contact', {
     top: texts(c.top),
-    form: texts(c.form),
+    form: contactForm(),
     gallery: {
       title: L(c.gallery.title),
       photos: await Promise.all(c.gallery.photos.map(img)),
