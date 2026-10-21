@@ -95,6 +95,12 @@
   scrollbar-width: none;
 }
 
+/* While the photos glide by on their own: no snapping to a photo, no smoothing of each step. */
+.gallery.gliding {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
 .gallery::-webkit-scrollbar {
   display: none;
 }

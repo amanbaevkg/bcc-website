@@ -51,7 +51,7 @@ export const contactFallback: ContactPage = {
     submit: msg((m) => m.Contact.submit),
     successTitle: msg((m) => m.Contact.successTitle),
     successBody: msg((m) => m.Contact.successBody),
-    // The answers of the form on businesscentercapellen.lu.
+    // The answers of the form on businesscentercapellen.lu; the first service renamed by BCC.
     officeTypes: [
       {
         id: 'coworking',
@@ -66,11 +66,7 @@ export const contactFallback: ContactPage = {
       },
     ],
     services: [
-      {
-        id: 'domiciliation',
-        label: msg((m) => m.Contact.serviceDomiciliation),
-        finder: 'domiciliation',
-      },
+      { id: 'office-rental', label: msg((m) => m.Contact.serviceOfficeRental) },
       { id: 'accounting', label: msg((m) => m.Contact.serviceAccounting) },
       { id: 'parking', label: msg((m) => m.Contact.serviceParking) },
       { id: 'mail', label: msg((m) => m.Contact.serviceMail) },
