@@ -8,8 +8,6 @@
 
 .title {
   font-size: clamp(44px, 6vw, 88px);
-  overflow-wrap: break-word;
-  hyphens: auto;
 }
 
 .title a {

@@ -102,11 +102,22 @@ address {
   }
 }
 
+/*
+ * A word is never split across two lines, in any language: no hyphenation, no break inside a word.
+ * A heading whose longest word is wider than its column is made smaller instead (FitHeadings).
+ */
+h1,
+h2,
+h3,
+.xl {
+  min-width: 0;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: manual;
+}
+
 /* Display type: wide Archivo, light weight, tight tracking. Sizes are set per section. */
 .xl {
-  /* Long words (German, Luxembourgish) break by the page language's rules instead of overflowing. */
-  overflow-wrap: break-word;
-  hyphens: auto;
   font-family: var(--display);
   font-stretch: 125%;
   font-weight: 300;

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { FitHeadings } from '@/components/layout/FitHeadings';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { SkipLink } from '@/components/layout/SkipLink';
@@ -70,6 +71,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             {children}
           </main>
           <Footer showNews={showNews} site={site} />
+          <FitHeadings />
         </NextIntlClientProvider>
       </body>
     </html>
