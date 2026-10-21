@@ -52,7 +52,7 @@ const row = <T extends object>(data: T) => ({
   ...data,
 });
 
-function publicDir() {
+export function publicDir() {
   const candidates = [
     path.resolve(process.cwd(), 'public'),
     path.resolve(process.cwd(), 'apps/web/public'),
