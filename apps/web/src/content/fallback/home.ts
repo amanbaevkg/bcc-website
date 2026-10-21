@@ -74,9 +74,9 @@ export const homeFallback: HomePage = {
     },
     video: {
       sources: [
-        { src: '/media/hero/hero-1080.mp4', height: 1080, type: 'video/mp4' },
-        { src: '/media/hero/hero-720.mp4', height: 720, type: 'video/mp4' },
-        { src: '/media/hero/hero-480.mp4', height: 480, type: 'video/mp4' },
+        { src: '/media/hero/hero-v2-1080.mp4', height: 1080, type: 'video/mp4' },
+        { src: '/media/hero/hero-v2-720.mp4', height: 720, type: 'video/mp4' },
+        { src: '/media/hero/hero-v2-480.mp4', height: 480, type: 'video/mp4' },
       ],
       poster: { src: '/media/hero/hero-poster.jpg', width: 1920, height: 1080, alt: { en: '' } },
     },
