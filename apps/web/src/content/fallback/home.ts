@@ -265,11 +265,11 @@ export const homeFallback: HomePage = {
       de: 'Unternehmensgründung in Capellen (Luxemburg): rechtliche Konformität und flexible Arbeitsplätze vereint',
       lu: 'Är Firma zu Capellen (Lëtzebuerg) grënnen: juristesch Konformitéit a flexibel Aarbechtsplazen',
     },
-    image: img('building.jpg', 1800, 1268, {
-      en: 'Business Center Capellen building with the Bloc C sign',
-      fr: 'Bâtiment du Business Center Capellen avec l’enseigne Bloc C',
-      de: 'Gebäude des Business Center Capellen mit dem Schild Bloc C',
-      lu: 'Gebai vum Business Center Capellen mam Schëld Bloc C',
+    image: img('building-v2.jpg', 1448, 1086, {
+      en: 'Ground floor of the Business Center Capellen with its forecourt',
+      fr: 'Rez-de-chaussée du Business Center Capellen et son parvis',
+      de: 'Erdgeschoss des Business Center Capellen mit Vorplatz',
+      lu: 'Rez-de-chaussée vum Business Center Capellen mat sengem Virplaz',
     }),
   },
 
