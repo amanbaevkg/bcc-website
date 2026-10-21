@@ -83,7 +83,7 @@
     "teamSize": "How many people will work in this office?",
     "services": "Which services are you interested in?",
     "servicesHint": "You can select several options.",
-    "serviceDomiciliation": "Company Creation/Domiciliation",
+    "serviceOfficeRental": "Open Space / Private Office",
     "serviceAccounting": "Accounting Assistance",
     "serviceParking": "Private Parking Space",
     "serviceMail": "Mail Transfer Service",

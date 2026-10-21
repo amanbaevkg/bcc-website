@@ -915,6 +915,39 @@ export interface Contact {
   form?: {
     title?: string | null;
     body?: string | null;
+    formTitle?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    company?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    messageLabel?: string | null;
+    submit?: string | null;
+    officeQuestion?: string | null;
+    /**
+     * Drag to change the order. The e-mail you receive shows the English answer.
+     */
+    officeTypes?:
+      | {
+          label?: string | null;
+          finder?: ('none' | 'private-office' | 'coworking') | null;
+          askTeamSize?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    teamSizeQuestion?: string | null;
+    servicesQuestion?: string | null;
+    servicesHint?: string | null;
+    /**
+     * Drag to change the order. The e-mail you receive shows the English answers.
+     */
+    services?:
+      | {
+          label?: string | null;
+          finder?: ('none' | 'meeting-room' | 'domiciliation') | null;
+          id?: string | null;
+        }[]
+      | null;
     successTitle?: string | null;
     successBody?: string | null;
   };
@@ -1276,6 +1309,33 @@ export interface ContactSelect<T extends boolean = true> {
     | {
         title?: T;
         body?: T;
+        formTitle?: T;
+        firstName?: T;
+        lastName?: T;
+        company?: T;
+        email?: T;
+        phone?: T;
+        messageLabel?: T;
+        submit?: T;
+        officeQuestion?: T;
+        officeTypes?:
+          | T
+          | {
+              label?: T;
+              finder?: T;
+              askTeamSize?: T;
+              id?: T;
+            };
+        teamSizeQuestion?: T;
+        servicesQuestion?: T;
+        servicesHint?: T;
+        services?:
+          | T
+          | {
+              label?: T;
+              finder?: T;
+              id?: T;
+            };
         successTitle?: T;
         successBody?: T;
       };

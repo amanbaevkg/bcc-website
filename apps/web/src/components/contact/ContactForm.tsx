@@ -7,13 +7,12 @@ import { useForm, useWatch } from 'react-hook-form';
 import { Link } from '@/i18n/navigation';
 import {
   contactSchema,
-  officeTypes,
   prefillFromQuery,
-  services,
   teamSizes,
   type ContactData,
   type ContactInput,
 } from '@/lib/contact/schema';
+import type { ContactChoice } from '@/content/types';
 import { Icon } from '@/components/ui/Icon';
 import { Turnstile } from './Turnstile';
 import styles from './ContactForm.module.css';
@@ -33,16 +32,28 @@ const errorKey: Record<string, string> = {
   invalid: 'errInvalid',
 };
 
-const officeLabel = { coworking: 'officeCoworking', 'private-office': 'officePrivate' } as const;
-const serviceLabel = {
-  domiciliation: 'serviceDomiciliation',
-  accounting: 'serviceAccounting',
-  parking: 'serviceParking',
-  mail: 'serviceMail',
-  'meeting-rooms': 'serviceMeetingRooms',
-  'private-cloud': 'servicePrivateCloud',
-  other: 'serviceOther',
-} as const;
+/** An answer in the page's language. */
+export type FormChoice = Omit<ContactChoice, 'label'> & { label: string };
+
+/** The form's words and answers in the page's language, from the admin (Contact page → 2. Form). */
+export type FormTexts = {
+  formTitle: string;
+  firstName: string;
+  lastName: string;
+  company: string;
+  email: string;
+  phone: string;
+  officeQuestion: string;
+  teamSizeQuestion: string;
+  servicesQuestion: string;
+  servicesHint: string;
+  messageLabel: string;
+  submit: string;
+  successTitle: string;
+  successBody: string;
+  officeTypes: FormChoice[];
+  services: FormChoice[];
+};
 
 const emptyForm: ContactInput = {
   firstName: '',
@@ -56,14 +67,7 @@ const emptyForm: ContactInput = {
   message: '',
 };
 
-export function ContactForm({
-  fallbackEmail,
-  success,
-}: {
-  fallbackEmail: string;
-  /** Message after sending, from the admin; the built-in text otherwise. */
-  success?: { title: string; body: string };
-}) {
+export function ContactForm({ fallbackEmail, texts }: { fallbackEmail: string; texts: FormTexts }) {
   const t = useTranslations('Contact');
   const locale = useLocale();
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
@@ -95,12 +99,12 @@ export function ContactForm({
   useEffect(() => {
     openedAt.current = Date.now();
     const q = new URLSearchParams(window.location.search);
-    const prefill = prefillFromQuery({
-      workspace: q.get('workspace') ?? undefined,
-      team: q.get('team') ?? undefined,
-    });
+    const prefill = prefillFromQuery(
+      { workspace: q.get('workspace') ?? undefined, team: q.get('team') ?? undefined },
+      texts,
+    );
     if (Object.keys(prefill).length) reset({ ...emptyForm, ...prefill });
-  }, [reset]);
+  }, [reset, texts]);
 
   useEffect(() => {
     if (status.kind === 'sent') successRef.current?.focus();
@@ -108,6 +112,7 @@ export function ContactForm({
   }, [status]);
 
   const officeType = useWatch({ control, name: 'officeType' });
+  const asksTeamSize = !!texts.officeTypes.find((o) => o.id === officeType)?.askTeamSize;
   const message = (field: keyof ContactInput) => {
     const code = errors[field]?.message;
     return code ? t(errorKey[code] ?? 'errInvalid') : undefined;
@@ -122,7 +127,7 @@ export function ContactForm({
         body: JSON.stringify({
           form: {
             ...data,
-            teamSize: data.officeType === 'private-office' ? data.teamSize : undefined,
+            teamSize: asksTeamSize ? data.teamSize : undefined,
           },
           meta: {
             locale,
@@ -167,9 +172,9 @@ export function ContactForm({
           </svg>
         </span>
         <h2 ref={successRef} tabIndex={-1} className={`xl ${styles.successTitle}`}>
-          {success?.title || t('successTitle')}
+          {texts.successTitle}
         </h2>
-        <p>{success?.body || t('successBody')}</p>
+        <p>{texts.successBody}</p>
         <button
           type="button"
           className={styles.linkBtn}
@@ -245,7 +250,7 @@ export function ContactForm({
       aria-labelledby="contact-form-title"
     >
       <h2 id="contact-form-title" className={styles.formTitle}>
-        {t('formTitle')}
+        {texts.formTitle}
       </h2>
       <p className={styles.legend}>
         <span aria-hidden="true">*</span> {t('required')}
@@ -258,16 +263,16 @@ export function ContactForm({
       )}
 
       <div className={styles.grid}>
-        {field('firstName', t('firstName'), { auto: 'given-name', required: true })}
-        {field('lastName', t('lastName'), { auto: 'family-name', required: true })}
-        {field('company', t('company'), { auto: 'organization', span: true })}
-        {field('email', t('email'), {
+        {field('firstName', texts.firstName, { auto: 'given-name', required: true })}
+        {field('lastName', texts.lastName, { auto: 'family-name', required: true })}
+        {field('company', texts.company, { auto: 'organization', span: true })}
+        {field('email', texts.email, {
           type: 'email',
           auto: 'email',
           required: true,
           inputMode: 'email',
         })}
-        {field('phone', t('phone'), { type: 'tel', auto: 'tel', inputMode: 'tel' })}
+        {field('phone', texts.phone, { type: 'tel', auto: 'tel', inputMode: 'tel' })}
 
         <fieldset
           className={`${styles.field} ${styles.span} ${styles.choices}`}
@@ -275,17 +280,17 @@ export function ContactForm({
           aria-describedby={officeErr ? 'contact-officeType-error' : undefined}
         >
           <legend>
-            {t('officeType')}
+            {texts.officeQuestion}
             <span className={styles.req} aria-hidden="true">
               {' '}
               *
             </span>
           </legend>
           <div className={styles.pills}>
-            {officeTypes.map((o) => (
-              <label key={o} className={styles.pill}>
-                <input type="radio" value={o} {...register('officeType')} />
-                <span>{t(officeLabel[o])}</span>
+            {texts.officeTypes.map((o) => (
+              <label key={o.id} className={styles.pill}>
+                <input type="radio" value={o.id} {...register('officeType')} />
+                <span>{o.label}</span>
               </label>
             ))}
           </div>
@@ -296,10 +301,10 @@ export function ContactForm({
           )}
         </fieldset>
 
-        {officeType === 'private-office' && (
+        {asksTeamSize && (
           <fieldset className={`${styles.field} ${styles.span} ${styles.choices}`}>
             <legend>
-              {t('teamSize')}
+              {texts.teamSizeQuestion}
               <span className={styles.opt}> ({t('optional')})</span>
             </legend>
             <div className={styles.pills}>
@@ -320,20 +325,20 @@ export function ContactForm({
           }
         >
           <legend>
-            {t('services')}
+            {texts.servicesQuestion}
             <span className={styles.req} aria-hidden="true">
               {' '}
               *
             </span>
           </legend>
           <p id="contact-services-hint" className={styles.hint}>
-            {t('servicesHint')}
+            {texts.servicesHint}
           </p>
           <div className={styles.checks}>
-            {services.map((s) => (
-              <label key={s} className={styles.check2}>
-                <input type="checkbox" value={s} {...register('services')} />
-                <span>{t(serviceLabel[s])}</span>
+            {texts.services.map((s) => (
+              <label key={s.id} className={styles.check2}>
+                <input type="checkbox" value={s.id} {...register('services')} />
+                <span>{s.label}</span>
               </label>
             ))}
           </div>
@@ -346,7 +351,7 @@ export function ContactForm({
 
         <div className={`${styles.field} ${styles.span}`}>
           <label htmlFor="contact-message">
-            {t('message')}
+            {texts.messageLabel}
             <span className={styles.opt}> ({t('optional')})</span>
           </label>
           <textarea
@@ -390,7 +395,7 @@ export function ContactForm({
         disabled={status.kind === 'sending'}
         aria-busy={status.kind === 'sending'}
       >
-        {status.kind === 'sending' ? t('sending') : t('submit')}
+        {status.kind === 'sending' ? t('sending') : texts.submit}
         <Icon name="arrowUpRight" />
       </button>
     </form>

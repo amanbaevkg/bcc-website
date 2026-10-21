@@ -160,6 +160,39 @@ export type NewsSummary = {
 
 export type NewsPost = NewsSummary & { body: RichDoc; author?: string };
 
+/** What the home page search can pre-select in the contact form (?workspace=…). */
+export type FinderChoice = 'private-office' | 'coworking' | 'meeting-room' | 'domiciliation';
+
+/** One answer of a contact form question; its id is what the form sends. */
+export type ContactChoice = {
+  id: string;
+  label: Localized;
+  /** Pre-selected when the home page search sends this choice. */
+  finder?: FinderChoice;
+  /** Office types only: also ask how many people will work there. */
+  askTeamSize?: boolean;
+};
+
+/** The texts beside, in and after the contact form. */
+export type ContactFormTexts = {
+  title: Localized;
+  body: Localized;
+  formTitle: Localized;
+  firstName: Localized;
+  lastName: Localized;
+  company: Localized;
+  email: Localized;
+  phone: Localized;
+  officeQuestion: Localized;
+  teamSizeQuestion: Localized;
+  servicesQuestion: Localized;
+  servicesHint: Localized;
+  messageLabel: Localized;
+  submit: Localized;
+  successTitle: Localized;
+  successBody: Localized;
+};
+
 export type ContactPage = {
   top: {
     eyebrow: Localized;
@@ -169,7 +202,10 @@ export type ContactPage = {
     visitUs: Localized;
     writeUs: Localized;
   };
-  form: { title: Localized; body: Localized; successTitle: Localized; successBody: Localized };
+  form: ContactFormTexts & {
+    officeTypes: ContactChoice[];
+    services: ContactChoice[];
+  };
   gallery: { title: Localized; photos: ImageAsset[] };
   cta: { title: Localized; body: Localized; mapButton: Localized; image: ImageAsset };
 };

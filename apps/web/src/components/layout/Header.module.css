@@ -65,7 +65,7 @@
 .nav {
   display: flex;
   gap: 44px;
-  font: 400 13.5px/1 var(--display);
+  font: 400 15.5px/1 var(--display);
   letter-spacing: 0.06em;
 }
 
@@ -110,7 +110,7 @@
   align-items: center;
   gap: 10px;
   min-height: 44px;
-  font: 500 12px/1 var(--mono);
+  font: 500 13px/1 var(--mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   text-decoration: none;
