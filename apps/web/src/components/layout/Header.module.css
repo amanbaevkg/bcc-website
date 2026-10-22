@@ -2,6 +2,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
+  will-change: transform;
   height: var(--header-h);
   transition:
     background-color var(--dur) ease,
@@ -40,6 +41,15 @@
 
 .away {
   transform: translateY(-100%);
+}
+
+/* Phones and tablets: no blur behind the header (it slows scrolling down); a nearly solid colour instead. */
+@media (hover: none), (width < 900px) {
+  .header {
+    background: rgb(239 235 229 / 97%);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
 .inner {
