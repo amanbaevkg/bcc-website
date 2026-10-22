@@ -231,7 +231,7 @@ export interface LegalPage {
   createdAt: string;
 }
 /**
- * Adding someone: enter their e-mail and any password. They get an e-mail with a link to choose their own password.
+ * Adding someone: enter their e-mail and any text in the password field: it is replaced by a random one. They get an e-mail with a link to choose their own password.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".

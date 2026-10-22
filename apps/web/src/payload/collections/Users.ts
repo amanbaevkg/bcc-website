@@ -1,9 +1,13 @@
-import type { CollectionConfig } from 'payload';
+import { randomBytes } from 'node:crypto';
+import { ValidationError, type CollectionConfig } from 'payload';
 import { adminOrSelf, isAdmin, isAdminField } from '../access';
 import { resetPasswordEmail, welcomeEmail } from '../email';
 
 /** How long the link in the welcome e-mail works (password reset links: one hour). */
 const WELCOME_LINK_MS = 3 * 24 * 60 * 60 * 1000;
+
+/** Shortest password someone may choose for themselves (or an admin may set for them). */
+export const MIN_PASSWORD_LENGTH = 12;
 
 /**
  * People who can sign in to /admin with e-mail and password.
@@ -21,7 +25,7 @@ export const Users: CollectionConfig = {
     group: 'Settings',
     defaultColumns: ['email', 'name', 'role'],
     description:
-      'Adding someone: enter their e-mail and any password. They get an e-mail with a link to choose their own password.',
+      'Adding someone: enter their e-mail and any text in the password field: it is replaced by a random one. They get an e-mail with a link to choose their own password.',
   },
   auth: {
     maxLoginAttempts: 5,
@@ -50,6 +54,36 @@ export const Users: CollectionConfig = {
           overrideAccess: true,
         });
         return totalDocs === 0 ? { ...data, role: 'admin' } : data;
+      },
+      // Someone an admin adds must not be able to sign in with what the admin typed (often a
+      // placeholder): the account gets a random password, and the welcome e-mail's link is the
+      // way in. The start-up admin (no signed-in user) keeps PAYLOAD_ADMIN_PASSWORD.
+      ({ data, operation, req }) => {
+        if (operation === 'create' && req.user) {
+          return { ...data, password: randomBytes(32).toString('base64url') };
+        }
+        return data;
+      },
+      // A password chosen later (own account, or set by an admin) must not be trivially short.
+      ({ data, operation, req }) => {
+        const password = (data as { password?: unknown }).password;
+        if (
+          operation === 'update' &&
+          typeof password === 'string' &&
+          password.length < MIN_PASSWORD_LENGTH
+        ) {
+          throw new ValidationError({
+            collection: 'users',
+            errors: [
+              {
+                path: 'password',
+                message: `Use at least ${MIN_PASSWORD_LENGTH} characters.`,
+              },
+            ],
+            req,
+          });
+        }
+        return data;
       },
     ],
     // Someone added by an admin gets an e-mail with a link to choose their own password,
@@ -92,6 +126,8 @@ export const Users: CollectionConfig = {
     read: adminOrSelf,
     update: adminOrSelf,
     delete: isAdmin,
+    // Payload's default lets any signed-in user reset another account's failed-login count.
+    unlock: isAdmin,
     admin: ({ req }) => Boolean(req.user),
   },
   fields: [
