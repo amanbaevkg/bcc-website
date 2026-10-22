@@ -1,0 +1,27 @@
+{
+  "enabledPlugins": {
+    "security-guidance@claude-plugins-official": true
+  },
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./**/.env)",
+      "Read(./**/.env.local)",
+      "Read(./**/.env.production)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(./apps/web/data/**)",
+      "Edit(./.env)",
+      "Edit(./**/.env*)",
+      "Bash(docker volume rm:*)",
+      "Bash(docker volume prune:*)",
+      "Bash(docker system prune:*)",
+      "Bash(docker compose down -v:*)",
+      "Bash(docker-compose down -v:*)",
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)"
+    ]
+  }
+}
