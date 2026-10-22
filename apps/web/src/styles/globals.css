@@ -13,6 +13,11 @@ html {
   text-size-adjust: 100%;
 }
 
+/* While the full-screen menu (a modal <dialog>) is open, the page behind it stays still. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   background: var(--paper);

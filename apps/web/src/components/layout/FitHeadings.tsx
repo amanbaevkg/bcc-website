@@ -22,9 +22,22 @@ export function fitHeading(el: HTMLElement) {
   }
   el.style.fontSize = '';
   if (getComputedStyle(el).display === 'inline') return;
-  for (let i = 0; i < 6 && el.scrollWidth > el.clientWidth + 1; i++) {
+  for (let i = 0; i < 6; i++) {
+    // Where the text ends against the room it has: its own box, and never past the screen's
+    // edge (keeping the page's 16 px phone margin there too); a long word can also widen the
+    // column around the heading.
+    const box = el.getBoundingClientRect();
+    const screen = document.documentElement.clientWidth - Math.min(Math.max(box.left, 0), 16);
+    // A heading that starts off screen (in a sideways-scrolling row) is measured by its box only.
+    const limit = box.left < screen - 40 ? Math.min(box.right, screen) : box.right;
+    const text = document.createRange();
+    text.selectNodeContents(el);
+    const end = Math.max(...[...text.getClientRects()].map((r) => r.right), box.left);
+    if (end <= limit + 1) break;
     const size = parseFloat(getComputedStyle(el).fontSize);
-    el.style.fontSize = `${Math.floor(size * (el.clientWidth / el.scrollWidth) * 0.98 * 10) / 10}px`;
+    const ratio = (limit - box.left) / (end - box.left);
+    if (!(ratio > 0)) break;
+    el.style.fontSize = `${Math.floor(size * ratio * 0.98 * 10) / 10}px`;
   }
 }
 
