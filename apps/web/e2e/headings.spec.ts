@@ -9,7 +9,11 @@ async function brokenHeadings(page: Page) {
     const problems: string[] = [];
     for (const el of document.querySelectorAll<HTMLElement>('h1, h2, h3, .xl')) {
       if (!el.offsetParent && getComputedStyle(el).position !== 'fixed') continue;
-      if (getComputedStyle(el).display !== 'inline' && el.scrollWidth > el.clientWidth + 1) {
+      const right = el.getBoundingClientRect().left + el.scrollWidth;
+      if (
+        getComputedStyle(el).display !== 'inline' &&
+        (el.scrollWidth > el.clientWidth + 1 || right > document.documentElement.clientWidth + 1)
+      ) {
         problems.push(`too wide: "${el.textContent?.trim()}"`);
       }
       const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);

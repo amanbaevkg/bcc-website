@@ -36,3 +36,13 @@ test('the header does not flicker while a phone scrolls in small steps', async (
     hidden: false,
   });
 });
+
+test('the page behind the phone menu does not scroll', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'The full-screen menu is for phones.');
+  await page.goto('/en');
+  await page.getByRole('button', { name: 'Open menu' }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.mouse.wheel(0, 600);
+  await page.waitForTimeout(300);
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+});

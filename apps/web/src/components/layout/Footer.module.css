@@ -166,3 +166,26 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Touch screens: every link at least 44 px tall, so a finger hits the right one. */
+@media (pointer: coarse) {
+  .list {
+    gap: 0;
+  }
+
+  .list a,
+  .big a,
+  .bottom a {
+    min-height: 44px;
+  }
+
+  .bottom a {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .big a {
+    display: inline-flex;
+    align-items: center;
+  }
+}
