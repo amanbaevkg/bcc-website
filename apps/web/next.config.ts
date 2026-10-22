@@ -70,7 +70,13 @@ const nextConfig: NextConfig = {
   },
   poweredByHeader: false,
   // Development only: open the dev server from a phone or tablet on the same Wi-Fi.
-  allowedDevOrigins: ['192.168.*.*', '10.*.*.*', '172.*.*.*', '*.local'],
+  // Private addresses only (172.16–172.31, not the public rest of 172.*).
+  allowedDevOrigins: [
+    '192.168.*.*',
+    '10.*.*.*',
+    ...Array.from({ length: 16 }, (_, i) => `172.${16 + i}.*.*`),
+    '*.local',
+  ],
   reactStrictMode: true,
   typescript: { ignoreBuildErrors: lowMemory },
   experimental: {
