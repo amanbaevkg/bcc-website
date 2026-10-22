@@ -30,14 +30,37 @@ export function Header({
   const [away, setAway] = useState(false);
 
   useEffect(() => {
-    let lastY = window.scrollY;
+    // The header hides only after a clear scroll down and comes back after a clear scroll up.
+    // Phones scroll in steps of a few pixels (and bounce at the ends), so direction is decided
+    // over a distance, not per frame: otherwise the header flickers in and out.
+    const HIDE_AFTER = 48;
+    const SHOW_AFTER = 24;
+    // While shown: the highest point reached; while hidden: the lowest. A small bounce the
+    // other way does not count until it is larger than the threshold.
+    let turn = Math.max(0, window.scrollY);
+    let hidden = false;
     let frame = 0;
     const update = () => {
       frame = 0;
-      const y = window.scrollY;
+      const y = Math.max(0, window.scrollY);
       setScrolled(y > 40);
-      setAway(y > 400 && y > lastY + 4);
-      if (Math.abs(y - lastY) > 4) lastY = y;
+      if (y < 200) {
+        hidden = false;
+        turn = y;
+      } else if (!hidden) {
+        turn = Math.min(turn, y);
+        if (y - turn > HIDE_AFTER) {
+          hidden = true;
+          turn = y;
+        }
+      } else {
+        turn = Math.max(turn, y);
+        if (turn - y > SHOW_AFTER) {
+          hidden = false;
+          turn = y;
+        }
+      }
+      setAway(hidden);
     };
     update();
     const onScroll = () => {
