@@ -7,7 +7,11 @@ onlyBuiltDependencies:
   - esbuild
 # Security fixes in dependencies of dependencies (pnpm audit).
 overrides:
-  undici@>=7.0.0 <7.29.1: ^7.29.1
+  undici@>=7.0.0 <7.30.1: ^7.30.1
+  # vitest (tests and local development only, never on the live site).
+  happy-dom@>=17.0.0 <21.0.4: ^21.0.4
+  # ajv (form validation helper) URI parsing.
+  fast-uri@>=3.0.0 <3.1.9: ^3.1.9
   source-map-js@<1.2.2: ^1.2.2
   # monaco-editor (admin code field editor) pins an older DOMPurify.
   dompurify@<3.4.16: ^3.4.16
@@ -20,3 +24,6 @@ auditConfig:
     # braces (via sass → chokidar, used by the admin's build tooling to watch files): the
     # patterns come from the code, never from visitors. No fixed version exists yet.
     - GHSA-vfj7-8cjw-p6xm
+    # deepmerge (low, no fixed version): Payload only merges data while validating a save in the
+    # admin, which needs a signed-in editor; visitors' contact messages never go through Payload.
+    - GHSA-gcqx-w48m-w2h4
