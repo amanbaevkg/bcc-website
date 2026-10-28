@@ -5,6 +5,19 @@ import { z } from 'zod';
  * Server environment. Secrets are read here only and never reach client bundles
  * ("server-only" makes any client import fail the build).
  */
+const emailList = z
+  .string()
+  .transform((v) =>
+    v
+      .split(',')
+      .map((a) => a.trim())
+      .filter(Boolean),
+  )
+  .refine((list) => list.length > 0 && list.every((a) => z.email().safeParse(a).success), {
+    message: 'Invalid email address (separate several addresses with commas)',
+  })
+  .transform((list) => list.join(', '));
+
 const schema = z.object({
   SITE_ENV: z.enum(['development', 'staging', 'production']).default('development'),
   SITE_URL: z.url().default('http://localhost:3000'),
@@ -12,11 +25,12 @@ const schema = z.object({
 
   // Contact form e-mail (phase 3). "log" only writes to the server log.
   EMAIL_PROVIDER: z.enum(['log', 'smtp', 'resend', 'postmark']).default('log'),
-  CONTACT_TO: z.email().optional(),
+  CONTACT_TO: emailList.optional(),
   CONTACT_FROM: z.string().optional(),
   SMTP_HOST: z.string().optional(),
   SMTP_PORT: z.coerce.number().int().positive().optional(),
   SMTP_SECURE: z.stringbool().optional(),
+  SMTP_TLS: z.enum(['on', 'off']).default('on'),
   SMTP_USER: z.string().optional(),
   SMTP_PASSWORD: z.string().optional(),
   RESEND_API_KEY: z.string().optional(),

@@ -25,7 +25,7 @@ const logProvider: EmailProvider = {
   async send(m) {
     // Only metadata: the log must not become a copy of people's personal data.
     console.info('[contact] EMAIL_PROVIDER=log, message not sent', {
-      to: m.to,
+      to: m.to.split(',').map((a) => a.trim()),
       subject: m.subject,
       bytes: m.text.length,
     });
@@ -37,11 +37,13 @@ function smtpProvider(e: Env): EmailProvider {
     name: 'smtp',
     async send(m) {
       const { createTransport } = await import('nodemailer');
+      const plain = e.SMTP_TLS === 'off';
       const transport = createTransport({
         host: e.SMTP_HOST,
-        port: e.SMTP_PORT ?? 587,
-        secure: e.SMTP_SECURE ?? false,
-        requireTLS: !(e.SMTP_SECURE ?? false),
+        port: e.SMTP_PORT ?? (plain ? 25 : 587),
+        secure: plain ? false : (e.SMTP_SECURE ?? false),
+        requireTLS: !plain && !(e.SMTP_SECURE ?? false),
+        ignoreTLS: plain,
         auth: e.SMTP_USER ? { user: e.SMTP_USER, pass: e.SMTP_PASSWORD } : undefined,
       });
       await transport.sendMail(m);
