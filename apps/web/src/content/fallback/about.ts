@@ -26,7 +26,18 @@ export const aboutFallback: AboutPage = {
       de: 'Im Business Center Capellen ist Flexibilität kein Extra, sondern unser Fundament. Ob Sie wachsen, sich verkleinern oder Ihr Unternehmen gründen: Unsere Räume passen sich Ihrem Tempo an.',
       lu: 'Am Business Center Capellen ass Flexibilitéit keen Extra, mee eist Fundament. Egal ob Dir wuesst, méi kleng gitt oder Är Firma lancéiert, eis Raim passe sech Ärem Tempo un.',
     },
-    image: { src: '/media/hero/hero-poster.jpg', width: 1920, height: 1080, alt: alts.buildings },
+    image: {
+      src: '/images/about/building-front.jpg',
+      width: 1280,
+      height: 960,
+      alt: {
+        en: 'Business Center Capellen: the pink building, its shop windows with the BCC sign and the hedges along the forecourt',
+        fr: 'Business Center Capellen : le bâtiment rose, ses vitrines avec le logo BCC et les haies le long du parvis',
+        de: 'Business Center Capellen: das rosa Gebäude, seine Schaufenster mit dem BCC-Logo und die Hecken entlang des Vorplatzes',
+        lu: 'Business Center Capellen: dat rosa Gebai, seng Schaufenster mam BCC-Logo an d’Hecken laanscht de Virplaz',
+      },
+      hotspot: { x: 0.5, y: 0.4 },
+    },
   },
   highlights: [
     {
